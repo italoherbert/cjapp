@@ -40,7 +40,6 @@ export default class Persistence {
                     em_conta_corrente boolean not null,
                     do_jogo boolean boolean default true
                 )` );  
-            this.db!.execAsync( 'alter table lancamento add column do_jogo boolean default true' );
         } );        
     } 
 

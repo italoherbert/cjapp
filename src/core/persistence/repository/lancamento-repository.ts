@@ -4,7 +4,7 @@ import { Lancamento } from '../model/lancamento';
 export const insere = async ( db : SQLite.SQLiteDatabase, lancamento : Lancamento ) => {    
     let result = await db.runAsync( 
         `insert into lancamento ( 
-            descricao, valor, tipo, data_lanc, em_conta_corrente 
+            descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo
         ) values (?, ?, ?, ?, ?, ?)`, [   
             lancamento.descricao,
             lancamento.valor,

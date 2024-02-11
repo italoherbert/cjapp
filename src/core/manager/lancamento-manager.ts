@@ -10,8 +10,7 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     let totCredito = 0;
 
     for( let lanc of lancs ) {
-      if ( lanc.tipo === 'debito' ) {
-        
+      if ( lanc.tipo === 'debito' ) {        
         if ( lanc.emContaCorrente == true ) {
           totEmContaCorrente -= lanc.valor;
         } else {
@@ -20,8 +19,7 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
 
         if ( lanc.doJogo == true )
           totDebito += lanc.valor;
-      } else {
-        
+      } else {        
         if ( lanc.emContaCorrente == true ) {
           totEmContaCorrente += lanc.valor;
         } else {
