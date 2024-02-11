@@ -8,6 +8,8 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     let totEmEspecie = 0;
     let totDebito = 0;
     let totCredito = 0;
+    let totOutrosDebitos = 0;
+    let totOutrosCreditos = 0;
 
     for( let lanc of lancs ) {
       if ( lanc.tipo === 'debito' ) {        
@@ -17,8 +19,11 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
           totEmEspecie -= lanc.valor;
         }
 
-        if ( lanc.doJogo == true )
+        if ( lanc.doJogo == true ) {
           totDebito += lanc.valor;
+        } else {
+          totOutrosDebitos += lanc.valor;
+        }
       } else {        
         if ( lanc.emContaCorrente == true ) {
           totEmContaCorrente += lanc.valor;
@@ -26,8 +31,11 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
           totEmEspecie += lanc.valor;
         }
         
-        if ( lanc.doJogo == true )
+        if ( lanc.doJogo == true ) {
           totCredito += lanc.valor;
+        } else {
+          totOutrosCreditos += lanc.valor;
+        }
       }
     };
     
@@ -39,6 +47,8 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     lancTotais.totalEmContaCorrente = totEmContaCorrente;
     lancTotais.debitoTotal = totDebito;
     lancTotais.creditoTotal = totCredito;
+    lancTotais.outrosDebitosTotal = totOutrosDebitos;
+    lancTotais.outrosCreditosTotal = totOutrosCreditos;
     lancTotais.total = total;
     lancTotais.lucroTotal = lucroTotal;
 

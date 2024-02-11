@@ -14,9 +14,9 @@ import { useIsFocused } from '@react-navigation/native';
 
 import {Picker} from '@react-native-picker/picker';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
 import { persistence } from '../../core/persistence/persistence';
 import {Lancamento} from '../../core/persistence/model/lancamento';

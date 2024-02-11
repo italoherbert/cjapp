@@ -12,9 +12,9 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { useIsFocused } from '@react-navigation/native';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
 import {Devedor} from '../../core/persistence/model/devedor';
 import { persistence } from '../../core/persistence/persistence';

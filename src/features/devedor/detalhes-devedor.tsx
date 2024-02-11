@@ -13,9 +13,9 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Dialog from 'react-native-dialog';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
 import { persistence } from '../../core/persistence/persistence';
 import * as converter from '../../core/converter/converter';

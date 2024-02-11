@@ -7,16 +7,17 @@ import {
   View,
 } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import { persistence } from '../../core/persistence/persistence';
-import FiltraLancamentosUI from '../../shared/lancamento/filtra-lancamentos-ui';
 import { Lancamento } from '../../core/persistence/model/lancamento';
-import { useIsFocused } from '@react-navigation/native';
+
+import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
@@ -55,6 +56,13 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
               title="Filtrar lançamentos" 
               color={globalStyle.buttonPrimary.color} 
               onPress={() => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) } /> 
+        </View> 
+
+        <View style={globalStyle.buttonPanel}>
+            <Button 
+              title="Ver balanço" 
+              color={globalStyle.buttonPrimary.color} 
+              onPress={() => navigation.navigate( 'MostraBalanco' ) } /> 
         </View>    
 
         <FiltraLancamentosUI 

@@ -12,7 +12,7 @@ import {
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 import * as formatter from '../../core/converter/converter';
-import globalStyle from "../../core/style/global-style";
+import globalStyle from "../style/global-style";
 
 export type DateUIProps = {
     date : Date,

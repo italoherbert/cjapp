@@ -15,9 +15,9 @@ import { useIsFocused } from '@react-navigation/native';
 
 import * as formatter from '../../core/converter/converter';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import { persistence } from '../../core/persistence/persistence';
 import {Devedor} from '../../core/persistence/model/devedor';

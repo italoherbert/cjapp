@@ -6,12 +6,12 @@ import {
   View
 } from 'react-native';
 
-import * as formatter from '../../core/converter/converter';
+import * as converter from '../../core/converter/converter';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../style/global-style';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
-import * as lancamentoManager from '../../core/manager/lancamento-manager';
+import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 export type FiltraLancamentosProps = {
     lancamentos : Lancamento[],
@@ -26,7 +26,6 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     const [dataLancMaisAntigo, setDataLancMaisAntigo] = useState<Date>(new Date());
     const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
     const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
     const [lucroTotal, setLucroTotal] = useState<number>(0);
     const [debitoTotal, setDebitoTotal] = useState<number>(0);
     const [creditoTotal, setCreditoTotal] = useState<number>(0);
@@ -46,15 +45,14 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         for( let i = 0; i < lancs.length; i++ )
             gpLancsExpandir.push( false );        
 
-        let lancTotais = await lancamentoManager.carregaTotais( lancs );
-        let gruposLancs = await lancamentoManager.carregaGruposLancs( lancs )
-        let dtLancMaisAntigo = await lancamentoManager.dataLancMaisAntigo( lancs );
+        let lancTotais = await lancamentoLogica.carregaTotais( lancs );
+        let gruposLancs = await lancamentoLogica.carregaGruposLancs( lancs )
+        let dtLancMaisAntigo = await lancamentoLogica.dataLancMaisAntigo( lancs );
 
         setTotalEmContaCorrente( lancTotais.totalEmContaCorrente );
         setTotalEmEspecie( lancTotais.totalEmEspecie );
         setCreditoTotal( lancTotais.creditoTotal );
         setDebitoTotal( lancTotais.debitoTotal );
-        setTotal( lancTotais.total );
         setLucroTotal( lancTotais.lucroTotal );
 
         setDataLancMaisAntigo( dtLancMaisAntigo );
@@ -70,7 +68,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
       <View style={{marginBottom: 20}}>                          
         <View style={[{marginTop: 10}]}>
             <Text style={globalStyle.fieldValue}>
-              De {formatter.formatDate( dataLancMaisAntigo )} até {formatter.formatDate( new Date() )}
+              De {converter.formatDate( dataLancMaisAntigo )} até {converter.formatDate( new Date() )}
             </Text>
             <View style={[styles.row, { flex: 2, marginTop: 5}]}>
               <View style={{flex: 1}}>           
@@ -78,7 +76,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                   Crédito: 
                 </Text>
                 <Text style={[styles.fieldValue, {color: '#00F'}]}>
-                  {formatter.formatBRL( creditoTotal )}
+                  {converter.formatBRL( creditoTotal )}
                 </Text>
               </View>
               <View style={{flex: 1}}>
@@ -86,7 +84,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                   Débito: 
                 </Text>
                 <Text style={[styles.fieldValue, {color: '#F00'}]}>
-                  {formatter.formatBRL( debitoTotal )}
+                  {converter.formatBRL( debitoTotal )}
                 </Text>
               </View>              
             </View>
@@ -96,7 +94,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                   Em espécie:
                 </Text>
                 <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#00F'}]}>
-                  {formatter.formatBRL( totalEmEspecie )}
+                  {converter.formatBRL( totalEmEspecie )}
                 </Text>
               </View>
               <View style={{flex: 1}}>
@@ -104,25 +102,17 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                   Na conta: 
                 </Text>
                 <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#00F'}]}>
-                  {formatter.formatBRL( totalEmContaCorrente )}
+                  {converter.formatBRL( totalEmContaCorrente )}
                 </Text>
               </View>              
             </View>
-            <View style={[styles.total, { marginTop: 5}]}>             
-              <View>
-                <Text style={{fontWeight: 'bold'}}>
-                  Total: 
-                </Text>
-                <Text style={[styles.fieldValue, {color: total < 0 ? '#F00' : '#00F'}]}>
-                  {formatter.formatBRL( total )}
-                </Text>
-              </View>
+            <View style={[styles.total, { marginTop: 5}]}>                           
               <View>
                 <Text style={{fontWeight: 'bold'}}>
                   Lucro: 
                 </Text>
                 <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#00F'}]}>
-                  {formatter.formatBRL( lucroTotal )}
+                  {converter.formatBRL( lucroTotal )}
                 </Text>
               </View>  
             </View>
@@ -147,10 +137,10 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                     onPress={() => setExpandirGrupo(index) }>
                       <View style={styles.listaField}>
                         <Text style={styles.listaValue}>
-                          {formatter.formatDate( grupo.dataLanc )}
+                          {converter.formatDate( grupo.dataLanc )}
                         </Text>
                         <Text style={[styles.listaValue, {color: grupo.valor < 0 ? '#F00' : '#00F'}]}>
-                          {formatter.formatBRL( grupo.valor )}
+                          {converter.formatBRL( grupo.valor )}
                         </Text>                                                
                     </View>
                   </Pressable>  
@@ -166,7 +156,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                                 {lancamento.tipo === 'debito' ? 'Débito' : 'Crédito'}
                               </Text>
                               <Text style={[styles.listaValue, {color: lancamento.tipo === 'debito' ? '#F00' : '#00F'}]}>
-                                {formatter.formatBRL( lancamento.valor )}
+                                {converter.formatBRL( lancamento.valor )}
                               </Text>
                             </View>
                           </Pressable>

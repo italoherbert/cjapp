@@ -9,15 +9,15 @@ import {
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import { persistence } from '../../core/persistence/persistence';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 
 import DateUI from '../../shared/ui/DateUI';
-import FiltraLancamentosUI from '../../shared/lancamento/filtra-lancamentos-ui';
+import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {

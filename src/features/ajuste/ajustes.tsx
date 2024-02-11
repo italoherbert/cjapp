@@ -11,9 +11,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import Dialog from 'react-native-dialog';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../core/style/global-style';
+import globalStyle from '../../shared/style/global-style';
 
 import { persistence } from '../../core/persistence/persistence';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
@@ -32,6 +32,16 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
           Alert.alert( ''+error.message );
         }
     };
+
+    const addColumnDoJogoOnPress = async () => {
+        try {
+            await persistence.ajustesService.addColumnDoJogo();  
+    
+            SnackbarUI.showInfo( 'Coluna adicionada com sucesso.' );
+        } catch ( error : any ) {
+            Alert.alert( ''+error.message );
+        }
+    }
 
     return (
         <ScrollView
@@ -59,6 +69,11 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
                         <Dialog.Button label="Cancelar" onPress={() => setResetarDialogVisivel( false )} />                  
                     </Dialog.Container>
                 </View> 
+
+                <Button 
+                        title="Adicionar coluna 'Do Jogo'" 
+                        color={globalStyle.buttonPrimary.color} 
+                        onPress={addColumnDoJogoOnPress} /> 
             </View>
         </ScrollView>
     )

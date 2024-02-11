@@ -1,3 +1,4 @@
+import { Lancamento } from "../../core/persistence/model/lancamento";
 
 export type StackParamsList = {
     SalvaDevedor : { id : number },
@@ -8,6 +9,7 @@ export type StackParamsList = {
     DetalhesLancamento : { id : number },
     TelaLancamentos : any,
     FiltraLancamentos : any,
+    MostraBalanco : any
     
     Ajustes: any
 }; 
