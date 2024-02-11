@@ -1,118 +1,94 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
+import React, { useCallback, useEffect, useState } from 'react';
+import {  
+  Alert,
   StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  StatusBarStyle,
+  StyleSheet
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import BootSplash from 'react-native-bootsplash';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCircleDollarToSlot, faGear, faUserTag } from '@fortawesome/free-solid-svg-icons';
+
+import DevedorScreens from './app/shared/screens/screens-devedor';
+import LancamentoScreens from './app/shared/screens/screens-lancamento';
+
+import Ajustes from './app/features/ajuste/ajustes';
+
+const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  
+  const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>(
+    'light-content'
+  );
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect( () => {                
+    const init = async () => {}
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    init().finally( () => {
+      BootSplash.hide( { fade: true } );
+    } );
+  }, [] );
+
+  return (    
+      <React.Fragment>
+        <StatusBar
+          barStyle={statusBarStyle}
+          backgroundColor='#08F'
+        />  
+        <NavigationContainer>            
+          <Tab.Navigator initialRouteName="Devedores" screenOptions={{headerShown: false}} >
+            <Tab.Screen name="Devedores" 
+                component={DevedorScreens} 
+                options={{ 
+                  tabBarLabel: 'Devedores',                   
+                  tabBarIcon: ({focused, color, size} ) => {
+                    return <FontAwesomeIcon icon={faUserTag} color={color} size={size} />
+                  },
+                }}/>
+            <Tab.Screen name="Lancamentos" 
+                component={LancamentoScreens} 
+                options={{ 
+                  tabBarLabel: 'Lançamentos',                   
+                  tabBarIcon: ({focused, color, size} ) => {
+                    return <FontAwesomeIcon icon={faCircleDollarToSlot} color={color} size={size} />
+                  },
+                }}/>
+            <Tab.Screen name="Ajustes"
+                component={Ajustes} options={{ 
+                  tabBarLabel: 'Ajustes',                   
+                  tabBarIcon: ({focused, color, size} ) => {
+                    return <FontAwesomeIcon icon={faGear} color={color} size={size} />
+                  },
+                }}/>
+          </Tab.Navigator>          
+        </NavigationContainer>
+      </React.Fragment>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+const styles = StyleSheet.create({ 
+  tabBarItem: {
+    fontSize: 24
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  mainContainer: {
+    padding: 5
   },
-  sectionDescription: {
-    marginTop: 8,
+  mainScrollView: {
+
+  },
+  mainView: {
+
+  },
+  tabOption: {
     fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+    color: '#333'
+  }
 });
 
 export default App;
