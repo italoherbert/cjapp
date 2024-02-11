@@ -14,10 +14,10 @@ import BootSplash from 'react-native-bootsplash';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleDollarToSlot, faGear, faUserTag } from '@fortawesome/free-solid-svg-icons';
 
-import DevedorScreens from './app/shared/screens/screens-devedor';
-import LancamentoScreens from './app/shared/screens/screens-lancamento';
+import DevedorScreens from './src/shared/screens/screens-devedor';
+import LancamentoScreens from './src/shared/screens/screens-lancamento';
 
-import Ajustes from './app/features/ajuste/ajustes';
+import Ajustes from './src/features/ajuste/ajustes';
 
 const Tab = createBottomTabNavigator();
 

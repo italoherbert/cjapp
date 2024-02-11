@@ -5,12 +5,13 @@ export const insere = async ( db : SQLite.SQLiteDatabase, lancamento : Lancament
     let result = await db.runAsync( 
         `insert into lancamento ( 
             descricao, valor, tipo, data_lanc, em_conta_corrente 
-        ) values (?, ?, ?, ?, ?)`, [   
+        ) values (?, ?, ?, ?, ?, ?)`, [   
             lancamento.descricao,
             lancamento.valor,
             lancamento.tipo,
             lancamento.dataLanc.toISOString(),
-            lancamento.emContaCorrente
+            lancamento.emContaCorrente,
+            lancamento.doJogo
         ] 
     ); 
     lancamento.id = result.lastInsertRowId;
@@ -19,13 +20,14 @@ export const insere = async ( db : SQLite.SQLiteDatabase, lancamento : Lancament
 export const atualiza = async ( db : SQLite.SQLiteDatabase, lancamento : Lancamento ) => {
     await db.runAsync( 
         `update lancamento set 
-            descricao=?, valor=?, tipo=?, data_lanc=?, em_conta_corrente=?  
+            descricao=?, valor=?, tipo=?, data_lanc=?, em_conta_corrente=?, do_jogo=?  
         where id=?`, [
             lancamento.descricao,
             lancamento.valor,
             lancamento.tipo,
             lancamento.dataLanc.toISOString(),
             lancamento.emContaCorrente,
+            lancamento.doJogo,
             lancamento.id
         ]
     );    
@@ -34,7 +36,7 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, lancamento : Lancame
 export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente 
+            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo 
          from lancamento`, [] );         
     
     return rowsToLancamentos( result );
@@ -43,7 +45,7 @@ export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {
 export const filtraPorMes = async ( db : SQLite.SQLiteDatabase, dataMes : string ) => {
     let result = await db.getAllAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente 
+            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo  
          from lancamento 
          where strftime(\'%Y-%m\', date( data_lanc ) ) = ?`, [ 
             dataMes
@@ -70,7 +72,7 @@ export const filtraPorIntervalo = async ( db : SQLite.SQLiteDatabase, dataLancIn
 export const findById = async ( db : SQLite.SQLiteDatabase, id : number ) => {
     let result = await db.getFirstAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente 
+            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo  
          from lancamento 
          where id=?`, [ id ] 
     );         
@@ -111,5 +113,6 @@ const rowToLancamento = ( row : any ) => {
     lanc.valor = row['valor'];
     lanc.dataLanc = row['data_lanc'];
     lanc.emContaCorrente = row['em_conta_corrente'];
+    lanc.doJogo = row['do_jogo'];
     return lanc;
 };

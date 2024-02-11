@@ -110,6 +110,14 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
                     {lancamento.emContaCorrente == true ? 'Em conta' : 'Em espécie' }
                 </Text>
             </View>
+            <View style={globalStyle.field}>
+                <Text style={globalStyle.fieldName}>
+                    Do Jogo: 
+                </Text>
+                <Text style={[globalStyle.fieldValue, globalStyle.success]}>
+                    {lancamento.doJogo == true ? 'Sim' : 'Não' }
+                </Text>
+            </View>
             { removido === true && 
               <Text style={globalStyle.danger}>
                     Removido!

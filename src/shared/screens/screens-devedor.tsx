@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SalvaDevedor from '../../features/devedor/salva-devedor';
 import DetalhesDevedor from '../../features/devedor/detalhes-devedor';
 import TelaDevedores from '../../features/devedor/tela-devedores';
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../StackParamsList';
 
 const Stack = createNativeStackNavigator<StackParamsList>();
 

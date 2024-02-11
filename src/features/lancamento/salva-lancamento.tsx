@@ -30,6 +30,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     const [dataLanc, setDataLanc] = useState<Date>(new Date());
     const [tipo, setTipo] = useState<string>('debito');     
     const [dinheiroTipo, setDinheiroTipo] = useState<string>('especie'); // especie ou conta
+    const [deOndeTipo, setDeOndeTipo] = useState<string>('do-jogo');
     const isFocused = useIsFocused();
 
     const loadTela = useCallback( async () => {
@@ -41,6 +42,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         setTipo( lancamento.tipo );
 
         setDinheiroTipo( lancamento.emContaCorrente == true ? 'conta' : 'especie' );
+        setDeOndeTipo( lancamento.doJogo == true ? 'do-jogo' : 'outro' );
       }
     }, [route.params.id] );
 
@@ -71,6 +73,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         lancamento.valor = parseFloat( val );
         lancamento.tipo = tipo;
         lancamento.emContaCorrente = dinheiroTipo === 'conta';
+        lancamento.doJogo = deOndeTipo === 'do-jogo';
 
         await persistence.lancamentoService.salvaLancamento( lancamento );
 
@@ -119,6 +122,13 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
                 onValueChange={setDinheiroTipo}>
             <Picker.Item label='Em especie' value='especie' />
             <Picker.Item label='Em conta corrente' value='conta' />
+          </Picker>
+
+          <Picker
+                selectedValue={deOndeTipo}                
+                onValueChange={setDeOndeTipo}>
+            <Picker.Item label='Do Jogo' value='do-jogo' />
+            <Picker.Item label='Outro' value='outro' />
           </Picker>
 
           <View style={globalStyle.buttonPanel}>             

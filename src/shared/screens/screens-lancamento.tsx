@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import { StackParamsList } from '../../shared/StackParamsList';
+import { StackParamsList } from '../StackParamsList';
 import TelaLancamentos from '../../features/lancamento/tela-lancamentos';
 import SalvaLancamento from '../../features/lancamento/salva-lancamento';
 import DetalhesLancamento from '../../features/lancamento/detalhes-lancamento';

@@ -6,4 +6,5 @@ export class Lancamento {
     tipo : string = 'credito';
     dataLanc : Date = new Date();
     emContaCorrente : boolean = false;
+    doJogo : boolean = false;
 }

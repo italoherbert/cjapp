@@ -11,6 +11,7 @@ import * as formatter from '../../core/converter/converter';
 import globalStyle from '../../core/style/global-style';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
+import * as lancamentoManager from '../../core/manager/lancamento-manager';
 
 export type FiltraLancamentosProps = {
     lancamentos : Lancamento[],
@@ -26,6 +27,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
     const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
+    const [lucroTotal, setLucroTotal] = useState<number>(0);
     const [debitoTotal, setDebitoTotal] = useState<number>(0);
     const [creditoTotal, setCreditoTotal] = useState<number>(0);
 
@@ -40,79 +42,24 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     const carregaTela = async () => {
         let lancs = props.lancamentos;
 
-        let date = new Date();
-        let totEmContaCorrente = 0;
-        let totEmEspecie = 0;
-        let totDebito = 0;
-        let totCredito = 0;
+        let gpLancsExpandir : boolean[] = [];
+        for( let i = 0; i < lancs.length; i++ )
+            gpLancsExpandir.push( false );        
 
-        let map = new Map<string, any>();
-        for( let lanc of lancs ) {
-            let valor = 0;                    
-            if ( lanc.tipo === 'debito' ) {
-              
-              if ( lanc.emContaCorrente == true ) {
-                totEmContaCorrente -= lanc.valor;
-              } else {
-                totEmEspecie -= lanc.valor;
-              }
+        let lancTotais = await lancamentoManager.carregaTotais( lancs );
+        let gruposLancs = await lancamentoManager.carregaGruposLancs( lancs )
+        let dtLancMaisAntigo = await lancamentoManager.dataLancMaisAntigo( lancs );
 
-              totDebito += lanc.valor;
-              valor = -lanc.valor;
-            } else {
-              
-              if ( lanc.emContaCorrente == true ) {
-                totEmContaCorrente += lanc.valor;
-              } else {
-                totEmEspecie += lanc.valor;
-              }
-              
-              totCredito += lanc.valor;
-              valor = lanc.valor;
-            }
+        setTotalEmContaCorrente( lancTotais.totalEmContaCorrente );
+        setTotalEmEspecie( lancTotais.totalEmEspecie );
+        setCreditoTotal( lancTotais.creditoTotal );
+        setDebitoTotal( lancTotais.debitoTotal );
+        setTotal( lancTotais.total );
+        setLucroTotal( lancTotais.lucroTotal );
 
-            if ( new Date( lanc.dataLanc ).getTime() < date.getTime() )
-                date = new Date( lanc.dataLanc );
-
-            let dataLancStr = formatter.formatDate( lanc.dataLanc );
-
-            let grupo = map.get( dataLancStr );
-            if ( grupo === null || grupo === undefined ) {
-                map.set( dataLancStr, {
-                  valor : valor,
-                  dataLanc : lanc.dataLanc,
-                  expandir: true,
-                  lancamentos: [ lanc ]
-                } );
-            } else {
-                map.set( dataLancStr, {
-                  valor : grupo.valor + valor,
-                  dataLanc : grupo.dataLanc,
-                  expandir : grupo.expandir,
-                  lancamentos: [...grupo.lancamentos, lanc ]
-                } );
-            }
-            gruposLancsExpandir.push( false );
-        };
-        
-        setGruposLancs( [...map.values()].sort( (g1, g2) => {
-            let d1 = formatter.formatInvertDate( g1.dataLanc );
-            let d2 = formatter.formatInvertDate( g2.dataLanc );
-            if ( d1 < d2 )
-              return 1;
-            if ( d1 > d2 )
-              return -1;
-            return 0;
-        } ) );
-
-        let total = totCredito - totDebito;
-
-        setTotalEmContaCorrente( totEmContaCorrente );
-        setTotalEmEspecie( totEmEspecie );  
-        setDebitoTotal( totDebito );
-        setCreditoTotal( totCredito );
-        setTotal( total );
-        setDataLancMaisAntigo( date );
+        setDataLancMaisAntigo( dtLancMaisAntigo );
+        setGruposLancs( gruposLancs );                
+        setGruposLancsExpandir( gpLancsExpandir );
     };
 
     useEffect( () => {
@@ -168,6 +115,14 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 </Text>
                 <Text style={[styles.fieldValue, {color: total < 0 ? '#F00' : '#00F'}]}>
                   {formatter.formatBRL( total )}
+                </Text>
+              </View>
+              <View>
+                <Text style={{fontWeight: 'bold'}}>
+                  Lucro: 
+                </Text>
+                <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#00F'}]}>
+                  {formatter.formatBRL( lucroTotal )}
                 </Text>
               </View>  
             </View>
