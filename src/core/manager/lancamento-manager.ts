@@ -8,7 +8,6 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     let totEmEspecie = 0;
     let totDebito = 0;
     let totCredito = 0;
-    let totLucro = 0;
 
     for( let lanc of lancs ) {
       if ( lanc.tipo === 'debito' ) {
