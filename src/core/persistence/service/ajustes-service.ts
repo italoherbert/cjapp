@@ -8,10 +8,4 @@ export default class AjustesService {
         this.db = db;
     }
 
-    addColumnDoJogo = async () => {
-        await this.db?.withTransactionAsync( async () => {
-            await this.db?.execAsync( 'alter table lancamento add column do_jogo boolean default trues' );
-        } );
-    };
-
 }

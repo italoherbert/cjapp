@@ -30,6 +30,7 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
         try {      
             let lancs = await persistence.lancamentoService.filtraPorIntervaloIgnoreTime( dataIni, dataFim );      
             setLancamentos( lancs );
+
             if ( lancs.length === 0 )
                 SnackbarUI.showInfo( 'Nenhum lancamento encontrado.' );
         } catch ( error : any ) {
@@ -42,6 +43,10 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             contentInsetAdjustmentBehavior="automatic"
             style={globalStyle.mainScroll}>                   
         
+        <Button title='Voltar' 
+            color={globalStyle.buttonPrimary.color} 
+            onPress={ () => navigation.goBack() } />
+
         <View style={{marginVertical: 5 }}>
             <DateUI date={dataIni} setDate={setDataIni} rotulo="inicial" />
         </View>
@@ -51,12 +56,13 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
 
         <Button title='Filtrar' 
             color={globalStyle.buttonPrimary.color} 
-            onPress={ () => filtra() } />
+            onPress={ filtra } />
 
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
+            navigateToMostraBalanco={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) }
         />           
       </ScrollView>
     );

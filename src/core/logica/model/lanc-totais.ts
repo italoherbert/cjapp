@@ -6,6 +6,5 @@ export class LancTotais {
     creditoTotal : number = 0;
     outrosDebitosTotal : number = 0;
     outrosCreditosTotal : number = 0;
-    total : number = 0;
     lucroTotal : number = 0;    
 }

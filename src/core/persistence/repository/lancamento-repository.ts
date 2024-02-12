@@ -58,7 +58,7 @@ export const filtraPorMes = async ( db : SQLite.SQLiteDatabase, dataMes : string
 export const filtraPorIntervalo = async ( db : SQLite.SQLiteDatabase, dataLancIni : Date, dataLancFim : Date ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente 
+            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo  
          from lancamento 
          where data_lanc between ? and ?`, [ 
             dataLancIni.toISOString(), 

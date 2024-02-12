@@ -39,7 +39,6 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
       }
     };
     
-    let total = totEmEspecie + totEmContaCorrente;
     let lucroTotal = totCredito - totDebito;
 
     let lancTotais = new LancTotais();
@@ -49,7 +48,6 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     lancTotais.creditoTotal = totCredito;
     lancTotais.outrosDebitosTotal = totOutrosDebitos;
     lancTotais.outrosCreditosTotal = totOutrosCreditos;
-    lancTotais.total = total;
     lancTotais.lucroTotal = lucroTotal;
 
     return lancTotais;

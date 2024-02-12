@@ -1,4 +1,3 @@
-import { Lancamento } from "../../core/persistence/model/lancamento";
 
 export type StackParamsList = {
     SalvaDevedor : { id : number },

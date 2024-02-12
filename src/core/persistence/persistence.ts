@@ -38,7 +38,7 @@ export default class Persistence {
                     data_lanc date not null,
                     valor double precision not null,
                     em_conta_corrente boolean not null,
-                    do_jogo boolean boolean default true
+                    do_jogo boolean default true
                 )` );  
         } );        
     } 

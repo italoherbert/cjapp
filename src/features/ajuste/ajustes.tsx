@@ -29,19 +29,9 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
   
           SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
         } catch ( error : any ) {
-          Alert.alert( ''+error.message );
+          SnackbarUI.showInfo( ''+error.message );
         }
     };
-
-    const addColumnDoJogoOnPress = async () => {
-        try {
-            await persistence.ajustesService.addColumnDoJogo();  
-    
-            SnackbarUI.showInfo( 'Coluna adicionada com sucesso.' );
-        } catch ( error : any ) {
-            Alert.alert( ''+error.message );
-        }
-    }
 
     return (
         <ScrollView
@@ -69,11 +59,6 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
                         <Dialog.Button label="Cancelar" onPress={() => setResetarDialogVisivel( false )} />                  
                     </Dialog.Container>
                 </View> 
-
-                <Button 
-                        title="Adicionar coluna 'Do Jogo'" 
-                        color={globalStyle.buttonPrimary.color} 
-                        onPress={addColumnDoJogoOnPress} /> 
             </View>
         </ScrollView>
     )

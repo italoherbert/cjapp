@@ -58,17 +58,11 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
               onPress={() => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) } /> 
         </View> 
 
-        <View style={globalStyle.buttonPanel}>
-            <Button 
-              title="Ver balanço" 
-              color={globalStyle.buttonPrimary.color} 
-              onPress={() => navigation.navigate( 'MostraBalanco' ) } /> 
-        </View>    
-
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
+            navigateToMostraBalanco={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } )}
         />           
       </ScrollView>
     );

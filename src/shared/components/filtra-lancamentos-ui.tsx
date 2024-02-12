@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
+  Alert,
+  Button,
   Pressable,
   StyleSheet,
   Text,
@@ -17,6 +19,7 @@ export type FiltraLancamentosProps = {
     lancamentos : Lancamento[],
     navigateToSaveLancamentos : Function,
     navigateToDetalhesLancamentos : Function,
+    navigateToMostraBalanco : Function
 };
 
 const MAX_SHOW_REGS = 200;
@@ -64,9 +67,15 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
       carregaTela();      
     }, [props.lancamentos] );
   
-    return (
-      <View style={{marginBottom: 20}}>                          
-        <View style={[{marginTop: 10}]}>
+    return (      
+      <View style={{marginTop: 5}}>
+        <View style={globalStyle.buttonPanel}>
+            <Button 
+              title="Ver balanço" 
+              color={globalStyle.buttonPrimary.color} 
+              onPress={ () => props.navigateToMostraBalanco() } /> 
+        </View>                           
+        <View style={[{marginTop: 10}]}>            
             <Text style={globalStyle.fieldValue}>
               De {converter.formatDate( dataLancMaisAntigo )} até {converter.formatDate( new Date() )}
             </Text>
@@ -118,7 +127,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
             </View>
         </View>   
 
-        <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
+        <View style={[globalStyle.titlePanel, {marginTop: 10, marginBottom: 20}]}>
             <Text style={globalStyle.title}>
                 Lista de lançamentos
             </Text>
