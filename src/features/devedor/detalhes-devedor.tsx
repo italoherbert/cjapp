@@ -22,6 +22,8 @@ import * as converter from '../../core/converter/converter';
 
 import {Devedor} from '../../core/persistence/model/devedor';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
   
 const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesDevedor'> ): React.JSX.Element => {
     
@@ -108,42 +110,52 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                     Removido!
               </Text>
             }
-            { removido === false && 
-              <View>
-                <View style={globalStyle.buttonPanel}>             
-                    <Button
-                        color={globalStyle.buttonPrimary.color}
-                        title='Remover'
-                        onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                    />            
+            
+            <View style={{flexDirection: 'row'}}>
+              { removido === false && 
+                <View style={{flex: 2, flexDirection: 'row'}}>                  
+                  <ButtonUI 
+                      label='Remover'
+                      icon={faX}
+                      color={globalStyle.buttonDanger.color} 
+                      size={14}
+                      style={{flex : 1, marginRight: 5 }}
+                      onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
+                  />
+                  
+                  <ButtonUI 
+                      label='Editar'
+                      icon={faEdit}
+                      color={globalStyle.buttonPrimary.color} 
+                      size={14}
+                      style={{flex : 1, marginHorizontal: 5}}
+                      marginType='both'
+                      onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
+                  />
                 </View>
+              }     
 
-                <Dialog.Container visible={removerDialogVisivel}>
-                    <Dialog.Title>Remoção de devedor</Dialog.Title>
-                    <Dialog.Description>
-                      Tem certeza que deseja remover este devedor?
-                    </Dialog.Description>
-                    <Dialog.Button label="Remover" onPress={removerOnPress} />
-                    <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
-                </Dialog.Container>
-
-                <View style={globalStyle.buttonPanel}>             
-                    <Button
-                        color={globalStyle.buttonPrimary.color}
-                        title='Editar'
-                        onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
-                    />            
-                </View>
-              </View>
-            }            
-            <View style={globalStyle.buttonPanel}>
-                <Button
-                    color={globalStyle.buttonPrimary.color}
-                    title='Listar devedores'
-                    onPress={() => navigation.navigate( 'TelaDevedores' )}
-                />
-            </View>
+              <ButtonUI 
+                  label='Devedores'
+                  icon={faList}
+                  color={globalStyle.buttonPrimary.color} 
+                  size={14}
+                  style={{flex : 1}}
+                  onPress={() => navigation.navigate( 'TelaDevedores' )}
+              />
+            
+          </View>          
         </View>
+
+        <Dialog.Container visible={removerDialogVisivel}>
+            <Dialog.Title>Remoção de devedor</Dialog.Title>
+            <Dialog.Description>
+              Tem certeza que deseja remover este devedor?
+            </Dialog.Description>
+            <Dialog.Button label="Remover" onPress={removerOnPress} />
+            <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
+        </Dialog.Container>
+
       </ScrollView>
     );
     

@@ -20,6 +20,8 @@ import {Devedor} from '../../core/persistence/model/devedor';
 import { persistence } from '../../core/persistence/persistence';
 import { Picker } from '@react-native-picker/picker';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faList } from '@fortawesome/free-solid-svg-icons';
 
 const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaDevedor'> ): React.JSX.Element => {
     
@@ -75,7 +77,18 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
           contentInsetAdjustmentBehavior="automatic"
           style={globalStyle.mainScroll}>
         <View>
-          <View style={globalStyle.titlePanel}>
+          <View style={{flexDirection: 'row'}}>                                                                   
+              <ButtonUI
+                  label='Devedores'
+                  icon={faList}
+                  color={globalStyle.buttonPrimary.color} 
+                  size={14}
+                  style={{flex : 1}}
+                  onPress={() => navigation.navigate( 'TelaDevedores' )}
+              />
+          </View>
+
+          <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
               <Text style={globalStyle.title}>
                 Salvar devedor
               </Text>
@@ -107,13 +120,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
                 onPress={salvarOnPress}
             />            
           </View>                    
-          <View style={globalStyle.buttonPanel}>
-            <Button
-                color={globalStyle.buttonPrimary.color}
-                title='Listar devedores'
-                onPress={() => navigation.navigate( 'TelaDevedores' )}
-            />
-          </View>
+                    
         </View>
       </ScrollView>
     );

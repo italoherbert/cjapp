@@ -54,6 +54,10 @@ export default StyleSheet.create({
        color: '#08F'
     },
 
+    buttonDanger: {
+      color: '#F66'
+   },
+
     field: {
       flex: 1,
       flexDirection: 'row',

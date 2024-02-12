@@ -22,6 +22,8 @@ import * as converter from '../../core/converter/converter';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faArrowCircleLeft, faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
@@ -124,40 +126,49 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
               </Text>
             }
 
-            { removido === false && 
-              <View>
-                <View style={globalStyle.buttonPanel}>             
-                    <Button
-                        color={globalStyle.buttonPrimary.color}
-                        title='Remover'
-                        onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                    />            
-                </View>
-                <Dialog.Container visible={removerDialogVisivel}>
-                  <Dialog.Title>Remoção de lançamento</Dialog.Title>
-                  <Dialog.Description>
-                    Tem certeza que deseja remover este lançamento?
-                  </Dialog.Description>
-                    <Dialog.Button label="Remover" onPress={removerOnPress} />
-                    <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
-                </Dialog.Container>
-                <View style={globalStyle.buttonPanel}>             
-                    <Button
-                        color={globalStyle.buttonPrimary.color}
-                        title='Editar'
-                        onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
-                    />            
-                </View>
-              </View>
-            }
-            <View style={globalStyle.buttonPanel}>
-                <Button
-                    color={globalStyle.buttonPrimary.color}
-                    title='Listar lancamentos'
+            <View style={{flexDirection: 'row'}}>                                     
+                { removido === false && 
+                  <View style={{flex: 2, flexDirection: 'row'}}>                
+                      <ButtonUI 
+                          label='Remover'
+                          icon={faX}
+                          color={globalStyle.buttonDanger.color} 
+                          size={14}
+                          style={{flex : 1}}
+                          onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
+                      />
+
+                      <ButtonUI 
+                          label='Editar'
+                          icon={faEdit}
+                          color={globalStyle.buttonPrimary.color} 
+                          size={14}
+                          style={{flex : 1}}
+                          marginType='both'
+                          onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
+                      />
+                  </View>
+                }
+                
+                <ButtonUI 
+                    label='Lançamentos'
+                    icon={faList}
+                    color={globalStyle.buttonPrimary.color} 
+                    size={14}
+                    style={{flex : 1}}
                     onPress={() => navigation.navigate( 'TelaLancamentos' )}
                 />
             </View>
         </View>
+
+        <Dialog.Container visible={removerDialogVisivel}>
+          <Dialog.Title>Remoção de lançamento</Dialog.Title>
+          <Dialog.Description>
+            Tem certeza que deseja remover este lançamento?
+          </Dialog.Description>
+            <Dialog.Button label="Remover" onPress={removerOnPress} />
+            <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
+        </Dialog.Container>
       </ScrollView>
     );
     

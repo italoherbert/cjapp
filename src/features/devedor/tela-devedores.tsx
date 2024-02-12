@@ -22,6 +22,8 @@ import { StackParamsList } from '../../shared/screens/StackParamsList';
 import { persistence } from '../../core/persistence/persistence';
 import {Devedor} from '../../core/persistence/model/devedor';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faPlug, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
@@ -72,13 +74,17 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
     return (
       <ScrollView
             contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>
+            style={globalStyle.mainScroll}>        
 
-        <View style={globalStyle.buttonPanel}>
-            <Button 
-              title="Novo devedor" 
-              color={globalStyle.buttonPrimary.color} 
-              onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) } /> 
+        <View style={{flexDirection: 'row'}}>                                                                   
+            <ButtonUI 
+                label='Novo devedor'
+                icon={faPlus}
+                color={globalStyle.buttonPrimary.color} 
+                size={14}
+                style={{flex : 1}}
+                onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) }
+            />
         </View>
 
         <View style={[globalStyle.titlePanel, {marginTop: 10}]}>

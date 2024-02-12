@@ -19,7 +19,6 @@ export type FiltraLancamentosProps = {
     lancamentos : Lancamento[],
     navigateToSaveLancamentos : Function,
     navigateToDetalhesLancamentos : Function,
-    navigateToMostraBalanco : Function
 };
 
 const MAX_SHOW_REGS = 200;
@@ -68,13 +67,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     }, [props.lancamentos] );
   
     return (      
-      <View style={{marginTop: 5}}>
-        <View style={globalStyle.buttonPanel}>
-            <Button 
-              title="Ver balanço" 
-              color={globalStyle.buttonPrimary.color} 
-              onPress={ () => props.navigateToMostraBalanco() } /> 
-        </View>                           
+      <View style={{marginTop: 5}}>                                   
         <View style={[{marginTop: 10}]}>            
             <Text style={globalStyle.fieldValue}>
               De {converter.formatDate( dataLancMaisAntigo )} até {converter.formatDate( new Date() )}

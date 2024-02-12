@@ -18,6 +18,8 @@ import { persistence } from '../../core/persistence/persistence';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faBalanceScale, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
@@ -42,27 +44,41 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
     return (
       <ScrollView
             contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>                   
+            style={globalStyle.mainScroll}>   
+
+        <View style={{flexDirection: 'row', flex: 3}}>
+            <ButtonUI 
+                label='Novo'
+                icon={faPlus}
+                color={globalStyle.buttonPrimary.color} 
+                size={14}
+                style={{flex : 1}}
+                onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
+            />
+            
+            <ButtonUI 
+                label='Filtrar'
+                icon={faFilter}
+                color={globalStyle.buttonPrimary.color} 
+                size={14}
+                style={{flex : 1}}
+                marginType='both'
+                onPress={ () => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) }
+            />
+
+            <ButtonUI
+                label="Ver balanço" 
+                icon={faBalanceScale}
+                color={globalStyle.buttonPrimary.color} 
+                size={14}
+                style={{flex : 1}}
+                onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
+        </View>        
         
-        <View style={globalStyle.buttonPanel}>
-            <Button 
-              title="Novo lançamento" 
-              color={globalStyle.buttonPrimary.color} 
-              onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } ) } /> 
-        </View> 
-
-        <View style={globalStyle.buttonPanel}>
-            <Button 
-              title="Filtrar lançamentos" 
-              color={globalStyle.buttonPrimary.color} 
-              onPress={() => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) } /> 
-        </View> 
-
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
-            navigateToMostraBalanco={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } )}
         />           
       </ScrollView>
     );

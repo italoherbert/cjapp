@@ -7,10 +7,7 @@ import {
   View
 } from 'react-native';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 import * as converter from '../../core/converter/converter';
-import { persistence } from '../../core/persistence/persistence';
 
 import globalStyle from '../style/global-style';
 
@@ -18,8 +15,7 @@ import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 
 export type MostraBalancoProps = {
-    lancamentos : Lancamento[],
-    goBack : Function
+    lancamentos : Lancamento[]
 }
 
 function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
@@ -56,15 +52,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
     }, [props.lancamentos] );
   
     return (
-        <View style={[{padding: 10}]}> 
-            <View style={globalStyle.buttonPanel}>
-                <Button                                
-                    color={globalStyle.buttonPrimary.color}
-                    title='Voltar'
-                    onPress={() => props.goBack() }
-                />
-            </View>
-
+        <View>             
             <View style={[globalStyle.titlePanel]}>
                 <Text style={[globalStyle.title, { textAlign: 'center'}]}>
                     Balanço
@@ -125,7 +113,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 </View>              
             </View>
             <View style={[styles.total, { marginTop: 5}]}>                             
-                <View style={{flex:1}}>
+                <View style={{justifyContent: 'space-around'}}>
                     <Text style={{fontWeight: 'bold'}}>
                         Lucro: 
                     </Text>

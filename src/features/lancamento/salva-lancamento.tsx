@@ -22,6 +22,8 @@ import { persistence } from '../../core/persistence/persistence';
 import {Lancamento} from '../../core/persistence/model/lancamento';
 import DateUI from '../../shared/ui/DateUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faList } from '@fortawesome/free-solid-svg-icons';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
@@ -88,7 +90,20 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
           contentInsetAdjustmentBehavior="automatic"
           style={globalStyle.mainScroll}>
         <View>
-          <View style={globalStyle.titlePanel}>
+
+          <View style={{flexDirection: 'row'}}>
+              <ButtonUI 
+                  label='Lançamentos'
+                  icon={faList}
+                  color={globalStyle.buttonPrimary.color} 
+                  size={14}
+                  style={{flex : 1}}
+                  onPress={() => navigation.navigate( 'TelaLancamentos' )}
+              />
+          </View>
+
+
+          <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
               <Text style={globalStyle.title}>
                 Salvar lancamento
               </Text>
@@ -137,14 +152,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
                 title='Salvar'
                 onPress={salvarOnPress}
             />            
-          </View>                    
-          <View style={globalStyle.buttonPanel}>
-            <Button
-                color={globalStyle.buttonPrimary.color}
-                title='Ver lançamentos'
-                onPress={() => navigation.navigate( 'TelaLancamentos' )}
-            />
-          </View>
+          </View>            
         </View>
       </ScrollView>
     );

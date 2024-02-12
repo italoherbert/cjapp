@@ -19,6 +19,9 @@ import { Lancamento } from '../../core/persistence/model/lancamento';
 import DateUI from '../../shared/ui/DateUI';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ButtonUI from '../../shared/ui/ButtonUI';
+import { faBackward, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {
     
@@ -43,16 +46,23 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             contentInsetAdjustmentBehavior="automatic"
             style={globalStyle.mainScroll}>                   
         
-        <Button title='Voltar' 
-            color={globalStyle.buttonPrimary.color} 
-            onPress={ () => navigation.goBack() } />
+        <View style={{flexDirection: 'row', flex: 3}}>
+            <ButtonUI 
+                label='Voltar'
+                icon={faArrowAltCircleLeft}
+                color={globalStyle.buttonPrimary.color} 
+                size={14}
+                style={{flex : 1}}
+                onPress={() => navigation.goBack() }
+            />                        
+        </View>     
 
         <View style={{marginVertical: 5 }}>
             <DateUI date={dataIni} setDate={setDataIni} rotulo="inicial" />
         </View>
         <View style={{marginVertical: 5 }}>
             <DateUI date={dataFim} setDate={setDataFim} rotulo="final" />
-        </View>
+        </View>       
 
         <Button title='Filtrar' 
             color={globalStyle.buttonPrimary.color} 
@@ -62,7 +72,6 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             lancamentos={ lancamentos } 
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
-            navigateToMostraBalanco={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) }
         />           
       </ScrollView>
     );
