@@ -50,18 +50,14 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
             <ButtonIconUI 
                 label='Novo'
                 icon={faPlus}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
+                flex={1}
                 onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
             />
             
             <ButtonIconUI 
                 label='Filtrar'
                 icon={faFilter}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
+                flex={1}
                 marginType='both'
                 onPress={ () => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) }
             />
@@ -69,9 +65,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
             <ButtonIconUI
                 label="Ver balanço" 
                 icon={faBalanceScale}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
+                flex={1}
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </View>        
         

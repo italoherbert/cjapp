@@ -47,16 +47,12 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             contentInsetAdjustmentBehavior="automatic"
             style={globalStyle.mainScroll}>                   
         
-        <View style={{flexDirection: 'row', flex: 3}}>
-            <ButtonIconUI 
-                label='Voltar'
-                icon={faArrowAltCircleLeft}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
-                onPress={() => navigation.goBack() }
-            />                        
-        </View>     
+        <ButtonIconUI 
+            label='Voltar'
+            icon={faArrowAltCircleLeft}
+            flex={1}
+            onPress={() => navigation.goBack() }
+        />                        
 
         <View style={{marginVertical: 5 }}>
             <DateUI date={dataIni} setDate={setDataIni} rotulo="inicial" />
@@ -65,10 +61,7 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             <DateUI date={dataFim} setDate={setDataFim} rotulo="final" />
         </View>       
 
-        <ButtonClickUI
-            label='Filtrar'
-            onPress={filtra}
-        />
+        <ButtonClickUI label='Filtrar' onPress={filtra} />
         
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 

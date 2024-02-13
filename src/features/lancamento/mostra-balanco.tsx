@@ -21,16 +21,12 @@ return (
             contentInsetAdjustmentBehavior="automatic"
             style={globalStyle.mainScroll}>                   
         
-        <View style={{flexDirection: 'row', flex: 3}}>
-            <ButtonIconUI
-                label='Voltar'
-                icon={faArrowAltCircleLeft}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
-                onPress={() => navigation.goBack() }
-            />                        
-        </View>  
+        <ButtonIconUI
+            label='Voltar'
+            icon={faArrowAltCircleLeft}
+            flex={1}
+            onPress={() => navigation.goBack() }
+        />                        
 
         <MostraBalancoUI 
             lancamentos={ route.params!.lancamentos } 

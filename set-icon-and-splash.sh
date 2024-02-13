@@ -1,7 +1,7 @@
 
-npx icon-set-creator create icon-and-splash.png
+npx icon-set-creator create icon.png
 
-npx react-native generate-bootsplash icon-and-splash.png \
+npx react-native generate-bootsplash splash.png \
   --platforms=android,ios,web \
   --background=F5FCFF \
   --logo-width=90 \

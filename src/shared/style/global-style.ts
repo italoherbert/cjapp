@@ -8,8 +8,7 @@ export default StyleSheet.create({
       marginBottom: 5
     },
     title: {
-      fontSize: 24,
-      fontVariant: ['small-caps']
+      fontSize: 24
     },
 
     primary: {
@@ -21,26 +20,8 @@ export default StyleSheet.create({
     success : {
       color: '#080'
     },
-    lineLayout: {
-      flex: 1,
-      flexDirection: 'row'
-    },
-
-    buttonPanel: {
-      marginTop: 5,
-      marginBottom: 5,
-    },
-    
-    buttonPrimary: {
-       color: '#08F'
-    },
-
-    buttonDanger: {
-      color: '#F66'
-    },
 
     field: {
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',

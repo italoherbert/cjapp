@@ -117,18 +117,14 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                   <ButtonIconUI 
                       label='Remover'
                       icon={faX}
-                      color={globalStyle.buttonDanger.color} 
-                      size={14}
-                      style={{flex : 1, marginRight: 5 }}
+                      flex={1}
                       onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
                   />
                   
                   <ButtonIconUI 
                       label='Editar'
                       icon={faEdit}
-                      color={globalStyle.buttonPrimary.color} 
-                      size={14}
-                      style={{flex : 1, marginHorizontal: 5}}
+                      flex={1}
                       marginType='both'
                       onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
                   />
@@ -138,9 +134,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
               <ButtonIconUI 
                   label='Devedores'
                   icon={faList}
-                  color={globalStyle.buttonPrimary.color} 
-                  size={14}
-                  style={{flex : 1}}
+                  flex={1}
                   onPress={() => navigation.navigate( 'TelaDevedores' )}
               />
             

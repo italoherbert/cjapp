@@ -80,16 +80,12 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
           contentInsetAdjustmentBehavior="automatic"
           style={globalStyle.mainScroll}>
         <View>
-          <View style={{flexDirection: 'row'}}>                                                                   
-              <ButtonIconUI
-                  label='Devedores'
-                  icon={faList}
-                  color={globalStyle.buttonPrimary.color} 
-                  size={14}
-                  style={{flex : 1}}
-                  onPress={() => navigation.navigate( 'TelaDevedores' )}
-              />
-          </View>
+          <ButtonIconUI
+              label='Devedores'
+              icon={faList}
+              flex={1}
+              onPress={() => navigation.navigate( 'TelaDevedores' )}
+          />
 
           <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
               <Text style={globalStyle.title}>

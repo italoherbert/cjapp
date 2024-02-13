@@ -95,17 +95,12 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
           style={globalStyle.mainScroll}>
         <View>
 
-          <View style={{flexDirection: 'row'}}>
-              <ButtonIconUI 
-                  label='Lançamentos'
-                  icon={faList}
-                  color={globalStyle.buttonPrimary.color} 
-                  size={14}
-                  style={{flex : 1}}
-                  onPress={() => navigation.navigate( 'TelaLancamentos' )}
-              />
-          </View>
-
+          <ButtonIconUI 
+              label='Lançamentos'
+              icon={faList}
+              flex={1}
+              onPress={() => navigation.navigate( 'TelaLancamentos' )}
+          />
 
           <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
               <Text style={globalStyle.title}>

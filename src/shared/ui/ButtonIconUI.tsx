@@ -11,28 +11,34 @@ import {
 import globalStyle from '../style/global-style';
 
 export type ButtonProps = {
-    color: string,
     icon: any,
-    size : number,
     label : string,
     textStyle? : any,
-    style? : any,
+    flex? : number,
     onPress : Function,
     marginType? : string
 }
 
-function ButtonIconUI ( { color, icon, size, label, textStyle, style, onPress, marginType } : ButtonProps ): React.JSX.Element {
+function ButtonIconUI ( { icon, label, textStyle, flex, onPress, marginType } : ButtonProps ): React.JSX.Element {
 
     return (
         <Pressable onPress={() => onPress()} style={[
-                    styles.pressable, style,
+                    styles.pressable, 
                     {marginLeft: marginType === 'left' || marginType === 'both' ? 5 : 0 },
-                    {marginRight: marginType === 'right' || marginType === 'both' ? 5 : 0 }
+                    {marginRight: marginType === 'right' || marginType === 'both' ? 5 : 0 },
+                    {flex: flex}
                 ]}>
-            <View style={[styles.view, {borderColor: color}]}>
+            <View style={[styles.view]}>
                 <View style={{alignItems: 'center'}}>
-                    <FontAwesomeIcon icon={icon} size={size+12} color={color} />
-                    <Text style={[textStyle, {fontSize: size, fontWeight: 'normal'}]}>{label}</Text>
+                    
+                    <FontAwesomeIcon icon={icon} 
+                        size={styles.icon.fontSize} 
+                        color={styles.icon.color} />
+
+                    <Text style={[styles.text, textStyle]}>
+                        {label}
+                    </Text>
+                    
                 </View>
             </View>
         </Pressable>
@@ -48,7 +54,17 @@ const styles = StyleSheet.create({
     },
     view: {       
         flexDirection: 'column',        
-        padding: 5,        
+        padding: 5,         
+    },
+
+    icon: {
+        color: '#08F',
+        fontSize: 26
+    },
+
+    text: {
+        fontSize: 14,
+        fontWeight: 'normal'
     }
 });
 

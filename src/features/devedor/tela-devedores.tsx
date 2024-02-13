@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Pressable,
@@ -77,29 +77,25 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             contentInsetAdjustmentBehavior="automatic"
             style={globalStyle.mainScroll}>        
 
-        <View style={{flexDirection: 'row'}}>                                                                   
-            <ButtonIconUI 
-                label='Novo devedor'
-                icon={faPlus}
-                color={globalStyle.buttonPrimary.color} 
-                size={14}
-                style={{flex : 1}}
-                onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) }
-            />
-        </View>
+        <ButtonIconUI 
+            label='Novo devedor'
+            icon={faPlus}
+            flex={1}
+            onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) }
+        />
 
         <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
             <Text style={globalStyle.title}>
                 Lista de devedores
             </Text>
-        </View>    
-        <View style={globalStyle.lineLayout}>
-          <SelectBoxUI op1Rotulo="Novo"
-              op1OnSelect={novoSelectOnPress} 
-              op2Rotulo='Antigo' 
-              op2OnSelect={antigoSelectOnPress} 
-              defaultOpSelectedIndex={1} />          
-        </View>
+        </View> 
+
+        <SelectBoxUI op1Rotulo="Novo"
+            op1OnSelect={novoSelectOnPress} 
+            op2Rotulo='Antigo' 
+            op2OnSelect={antigoSelectOnPress} 
+            defaultOpSelectedIndex={1} />          
+
         <View>
           <TextInputUI
               defaultValue={nomeLike} 

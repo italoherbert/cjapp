@@ -77,7 +77,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Crédito: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: '#669'}]}>
+                <Text style={[styles.fieldValue, {color: '#666'}]}>
                   {converter.formatBRL( creditoTotal )}
                 </Text>
               </View>
@@ -95,7 +95,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Em espécie:
                 </Text>
-                <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#669'}]}>
+                <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#666'}]}>
                   {converter.formatBRL( totalEmEspecie )}
                 </Text>
               </View>
@@ -103,7 +103,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Na conta: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#669'}]}>
+                <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#666'}]}>
                   {converter.formatBRL( totalEmContaCorrente )}
                 </Text>
               </View>              
@@ -113,7 +113,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text style={{fontWeight: 'bold'}}>
                   Lucro: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#669'}]}>
+                <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#666'}]}>
                   {converter.formatBRL( lucroTotal )}
                 </Text>
               </View>  
@@ -211,7 +211,6 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     },
 
     sublistaField: {
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
 
