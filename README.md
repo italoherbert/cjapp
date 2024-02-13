@@ -1,81 +1,48 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Aplicativo CJApp
 
-# Getting Started
+!['Telas do Aplicativo'](./readme-images/main.png)
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+Este é um aplicativo para gestão de contas e devedores de uma casa de jogos.
 
-## Step 1: Start the Metro Server
+## Como rodar no emulador
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+Para rodar no emulador é necessário ter instalado na máquina o android studio, e adicionados a variável de ambiente PATH os caminhos das ferramentas binárias do android studio como abaixo:
 
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+export ANDROID_SDK_HOME=/home/italo/Android/Sdk
+export PATH=$PATH:$ANDROID_SDK_HOME/tools:$ANDROID_SDK_HOME/platform-tools
 ```
 
-## Step 2: Start your Application
+Claro, entenda que esta configuração está de acordo com o linux ubuntu 22.0.4. Se for fazer funcionar no windows, será necessária alterar para a configuração equivalente.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Feito isto, é necessário instalar o emulador. Na época que está sendo produzido este app, o android mais recente é o 14 API 34. Logo, está sendo utilizado para testar um emulador correspondente a estas versões. O nome do Android Virtual Device (AVD) utilizado é “Pixel_3a_API_34_extension_level_7_x86_64”.
 
-### For Android
+### Tecnologias utilizadas além do android studio
+   
+    • Node v20.11.0
+    • Npm 10.4.0
+    • React Native 0.73.4
+    • react-native-cli 12.3.2
 
-```bash
-# using npm
-npm run android
+### Instalando as dependências
 
-# OR using Yarn
-yarn android
+Para instalar as dependências, entre no diretório cjapp correspondente ao projeto clonado e execute o seguinte comando:
+
+```
+npm install
 ```
 
-### For iOS
+Se ocorrer algum problema, execute:
 
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### Rodando o projeto
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Para rodar execute o seguinte na raiz do projeto:
 
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-# cjapp
-# CJApp
+```
+npx react-native start
+```
