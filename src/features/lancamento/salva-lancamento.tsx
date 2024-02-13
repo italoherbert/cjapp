@@ -22,8 +22,12 @@ import { persistence } from '../../core/persistence/persistence';
 import {Lancamento} from '../../core/persistence/model/lancamento';
 import DateUI from '../../shared/ui/DateUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faList } from '@fortawesome/free-solid-svg-icons';
+import ButtonClickUI from '../../shared/ui/ButtonClickUI';
+import TextInputUI from '../../shared/ui/TextInputUI';
+import DatePickerUI from '../../shared/ui/SelectOptionUI';
+import SelectOptionUI from '../../shared/ui/SelectOptionUI';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
@@ -92,7 +96,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         <View>
 
           <View style={{flexDirection: 'row'}}>
-              <ButtonUI 
+              <ButtonIconUI 
                   label='Lançamentos'
                   icon={faList}
                   color={globalStyle.buttonPrimary.color} 
@@ -105,54 +109,55 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
 
           <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
               <Text style={globalStyle.title}>
-                Salvar lancamento
+                Salvar lançamento
               </Text>
           </View>
 
-          <TextInput 
-              style={globalStyle.textInput}
-              onChangeText={setDescricao}
+          <TextInputUI
+              setValue={setDescricao}
               defaultValue={descricao}              
               placeholder='Informe a descrição'
           /> 
           
-          <TextInput
-              style={globalStyle.textInput}
+          <TextInputUI
               defaultValue={valor}
-              onChangeText={setValor}
+              setValue={setValor}
               placeholder="Informe o valor"           
           /> 
 
           <DateUI date={dataLanc} setDate={setDataLanc} rotulo="data de lançamento" />
 
-          <Picker
-                selectedValue={tipo}                
-                onValueChange={setTipo}>
-            <Picker.Item label='Débito' value='debito' />
-            <Picker.Item label='Crédito' value='credito' />
-          </Picker>
+          <SelectOptionUI 
+              selectedValue={tipo}
+              setValue={setTipo}
+              itens={[
+                { label: 'Debito', value: 'debito'},
+                { label: 'Crédito', value: 'credito' }
+              ]}
+          />
 
-          <Picker
-                selectedValue={dinheiroTipo}                
-                onValueChange={setDinheiroTipo}>
-            <Picker.Item label='Em especie' value='especie' />
-            <Picker.Item label='Em conta corrente' value='conta' />
-          </Picker>
+          <SelectOptionUI 
+              selectedValue={dinheiroTipo}
+              setValue={setDinheiroTipo}
+              itens={[
+                { label: 'Em especie', value: 'especie'},
+                { label: 'Em conta corrente', value: 'conta' }
+              ]}
+          />
 
-          <Picker
-                selectedValue={deOndeTipo}                
-                onValueChange={setDeOndeTipo}>
-            <Picker.Item label='Do Jogo' value='do-jogo' />
-            <Picker.Item label='Outro' value='outro' />
-          </Picker>
+          <SelectOptionUI 
+              selectedValue={deOndeTipo}
+              setValue={setDeOndeTipo}
+              itens={[
+                { label: 'Do Jogo', value: 'do-jogo'},
+                { label: 'Outro', value: 'outro' }
+              ]}
+          />
 
-          <View style={globalStyle.buttonPanel}>             
-            <Button
-                color={globalStyle.buttonPrimary.color}
-                title='Salvar'
-                onPress={salvarOnPress}
-            />            
-          </View>            
+          <ButtonClickUI
+              label='Salvar'
+              onPress={salvarOnPress}
+          />                       
         </View>
       </ScrollView>
     );

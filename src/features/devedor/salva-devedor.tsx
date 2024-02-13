@@ -20,8 +20,11 @@ import {Devedor} from '../../core/persistence/model/devedor';
 import { persistence } from '../../core/persistence/persistence';
 import { Picker } from '@react-native-picker/picker';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faList } from '@fortawesome/free-solid-svg-icons';
+import ButtonClickUI from '../../shared/ui/ButtonClickUI';
+import TextInputUI from '../../shared/ui/TextInputUI';
+import SelectOptionUI from '../../shared/ui/SelectOptionUI';
 
 const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaDevedor'> ): React.JSX.Element => {
     
@@ -68,7 +71,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
 
         navigation.navigate( 'DetalhesDevedor', { id : devedor.id } );
       } catch ( error : any ) {
-        Alert.alert( ''+error.message );
+        SnackbarUI.showDanger( ''+error.message );
       }
     };
   
@@ -78,7 +81,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
           style={globalStyle.mainScroll}>
         <View>
           <View style={{flexDirection: 'row'}}>                                                                   
-              <ButtonUI
+              <ButtonIconUI
                   label='Devedores'
                   icon={faList}
                   color={globalStyle.buttonPrimary.color} 
@@ -93,33 +96,30 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
                 Salvar devedor
               </Text>
           </View>
-          <TextInput 
-              style={globalStyle.textInput}
-              onChangeText={setNome}
+          <TextInputUI
+              setValue={setNome}
               defaultValue={nome}              
               placeholder='Informe o nome'
           /> 
-          <TextInput
-              style={globalStyle.textInput}
+          <TextInputUI
+              setValue={setValor}
               defaultValue={valor}
-              onChangeText={setValor}
               placeholder="Informe o valor"           
           /> 
 
-          <Picker
-                selectedValue={tempo}                
-                onValueChange={setTempo}>
-            <Picker.Item label='Novo' value='novo' />
-            <Picker.Item label='Antigo' value='antigo' />
-          </Picker>
+          <SelectOptionUI
+              selectedValue={tempo}
+              setValue={setTempo}
+              itens={[
+                { label: 'Novo', value: 'novo'},
+                { label: 'Antigo', value: 'antigo' }
+              ]}
+          />
 
-          <View style={globalStyle.buttonPanel}>             
-            <Button
-                color={globalStyle.buttonPrimary.color}
-                title='Salvar'
-                onPress={salvarOnPress}
-            />            
-          </View>                    
+          <ButtonClickUI
+              label='Salvar'
+              onPress={salvarOnPress}
+          />            
                     
         </View>
       </ScrollView>

@@ -19,9 +19,10 @@ import { Lancamento } from '../../core/persistence/model/lancamento';
 import DateUI from '../../shared/ui/DateUI';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faBackward, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {
     
@@ -47,7 +48,7 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             style={globalStyle.mainScroll}>                   
         
         <View style={{flexDirection: 'row', flex: 3}}>
-            <ButtonUI 
+            <ButtonIconUI 
                 label='Voltar'
                 icon={faArrowAltCircleLeft}
                 color={globalStyle.buttonPrimary.color} 
@@ -64,10 +65,11 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             <DateUI date={dataFim} setDate={setDataFim} rotulo="final" />
         </View>       
 
-        <Button title='Filtrar' 
-            color={globalStyle.buttonPrimary.color} 
-            onPress={ filtra } />
-
+        <ButtonClickUI
+            label='Filtrar'
+            onPress={filtra}
+        />
+        
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }

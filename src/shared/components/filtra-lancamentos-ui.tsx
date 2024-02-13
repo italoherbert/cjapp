@@ -77,7 +77,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Crédito: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: '#00F'}]}>
+                <Text style={[styles.fieldValue, {color: '#669'}]}>
                   {converter.formatBRL( creditoTotal )}
                 </Text>
               </View>
@@ -95,7 +95,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Em espécie:
                 </Text>
-                <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#00F'}]}>
+                <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#669'}]}>
                   {converter.formatBRL( totalEmEspecie )}
                 </Text>
               </View>
@@ -103,7 +103,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text>
                   Na conta: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#00F'}]}>
+                <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#669'}]}>
                   {converter.formatBRL( totalEmContaCorrente )}
                 </Text>
               </View>              
@@ -113,19 +113,19 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 <Text style={{fontWeight: 'bold'}}>
                   Lucro: 
                 </Text>
-                <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#00F'}]}>
+                <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#669'}]}>
                   {converter.formatBRL( lucroTotal )}
                 </Text>
               </View>  
             </View>
         </View>   
 
-        <View style={[globalStyle.titlePanel, {marginTop: 10, marginBottom: 20}]}>
+        <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
             <Text style={globalStyle.title}>
                 Lista de lançamentos
             </Text>
         </View>    
-        <View>
+        <View style={{marginBottom: 20}}>
           {props.lancamentos.length > MAX_SHOW_REGS && 
             <Text style={[globalStyle.primary, {padding: 5}]}>
               Número de lançamentos maior que {MAX_SHOW_REGS}. Por isso, 
@@ -146,7 +146,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                         </Text>                                                
                     </View>
                   </Pressable>  
-                  <View style={{marginVertical: 3}}> 
+                  <View> 
                     { gruposLancsExpandir[ index ] == true &&
                       grupo.lancamentos.map( (lancamento : Lancamento, index2 : number) => {
                         return (
@@ -186,25 +186,23 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     },
 
     total : {
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-around',
-      backgroundColor: '#CCF',
+      backgroundColor: '#DDD',
       borderRadius: 10,
       padding: 5
     },
 
     listaField : {           
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
 
-      padding: 8,
+      padding: 12,
 
       borderWidth: 1,
-      borderColor: '#CCC',
+      borderColor: '#EEE',
 
-      backgroundColor: '#DDD',
+      backgroundColor: '#E4E4E4',
     },
     listaValue: {
       fontSize: 14,
@@ -217,7 +215,8 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
       flexDirection: 'row',
       justifyContent: 'space-between',
 
-      padding: 5
+      paddingHorizontal: 13,
+      paddingVertical: 5
     }, 
   });
   

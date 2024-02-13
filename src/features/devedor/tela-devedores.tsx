@@ -22,8 +22,9 @@ import { StackParamsList } from '../../shared/screens/StackParamsList';
 import { persistence } from '../../core/persistence/persistence';
 import {Devedor} from '../../core/persistence/model/devedor';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faPlug, faPlus } from '@fortawesome/free-solid-svg-icons';
+import TextInputUI from '../../shared/ui/TextInputUI';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
@@ -77,7 +78,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             style={globalStyle.mainScroll}>        
 
         <View style={{flexDirection: 'row'}}>                                                                   
-            <ButtonUI 
+            <ButtonIconUI 
                 label='Novo devedor'
                 icon={faPlus}
                 color={globalStyle.buttonPrimary.color} 
@@ -100,9 +101,9 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
               defaultOpSelectedIndex={1} />          
         </View>
         <View>
-          <TextInput style={globalStyle.textInput}
+          <TextInputUI
               defaultValue={nomeLike} 
-              onChangeText={nomeLikeOnChangeText}
+              setValue={nomeLikeOnChangeText}
               placeholder='Informe o nome' />
         </View>
         <View style={styles.listaPanel}>
@@ -128,19 +129,17 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
   
   const styles = StyleSheet.create({         
     listaPanel : {
-      
+      backgroundColor: '#E4E4E4'
     },
     listaView : {           
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
 
-      padding: 8,
-
       borderWidth: 1,
-      borderColor: '#DDD', 
+      borderColor: '#EEE',
 
-      backgroundColor: '#EEE',
+      padding: 12,
+
     },
     listaItem: {
       fontSize: 14,

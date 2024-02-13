@@ -8,6 +8,7 @@ import {
     Pressable,
     StyleSheet
 } from 'react-native';
+import globalStyle from '../style/global-style';
 
 export type ButtonProps = {
     color: string,
@@ -20,11 +21,11 @@ export type ButtonProps = {
     marginType? : string
 }
 
-function ButtonUI ( { color, icon, size, label, textStyle, style, onPress, marginType } : ButtonProps ): React.JSX.Element {
+function ButtonIconUI ( { color, icon, size, label, textStyle, style, onPress, marginType } : ButtonProps ): React.JSX.Element {
 
     return (
         <Pressable onPress={() => onPress()} style={[
-                    style, styles.pressable,
+                    styles.pressable, style,
                     {marginLeft: marginType === 'left' || marginType === 'both' ? 5 : 0 },
                     {marginRight: marginType === 'right' || marginType === 'both' ? 5 : 0 }
                 ]}>
@@ -41,8 +42,8 @@ function ButtonUI ( { color, icon, size, label, textStyle, style, onPress, margi
 const styles = StyleSheet.create({  
     pressable: {
         borderWidth: 1,
-        borderColor: '#CCF',
         borderRadius: 6,
+        borderColor: '#CCF',
         backgroundColor: '#EEF'
     },
     view: {       
@@ -51,4 +52,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ButtonUI;
+export default ButtonIconUI;

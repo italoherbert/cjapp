@@ -22,7 +22,7 @@ import * as converter from '../../core/converter/converter';
 
 import {Devedor} from '../../core/persistence/model/devedor';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
   
 const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesDevedor'> ): React.JSX.Element => {
@@ -114,7 +114,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
             <View style={{flexDirection: 'row'}}>
               { removido === false && 
                 <View style={{flex: 2, flexDirection: 'row'}}>                  
-                  <ButtonUI 
+                  <ButtonIconUI 
                       label='Remover'
                       icon={faX}
                       color={globalStyle.buttonDanger.color} 
@@ -123,7 +123,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                       onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
                   />
                   
-                  <ButtonUI 
+                  <ButtonIconUI 
                       label='Editar'
                       icon={faEdit}
                       color={globalStyle.buttonPrimary.color} 
@@ -135,7 +135,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                 </View>
               }     
 
-              <ButtonUI 
+              <ButtonIconUI 
                   label='Devedores'
                   icon={faList}
                   color={globalStyle.buttonPrimary.color} 

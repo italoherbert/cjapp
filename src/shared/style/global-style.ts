@@ -8,11 +8,12 @@ export default StyleSheet.create({
       marginBottom: 5
     },
     title: {
-      fontSize: 24
+      fontSize: 24,
+      fontVariant: ['small-caps']
     },
 
     primary: {
-      color: '#08F'
+      color: '#669'
     },
     danger: {
       color: '#F00'
@@ -25,38 +26,18 @@ export default StyleSheet.create({
       flexDirection: 'row'
     },
 
-    textInput : {
-      marginTop: 5,
-      marginBottom: 5,
-
-      borderBottomWidth: 1,
-      borderColor: '#338'      
-    },
-
-    dateInput : {
-      flex: 1,
-      flexDirection: 'row', 
-      alignItems: 'center', 
-      justifyContent: 'space-between',
-
-      borderBottomColor: '#338',
-      borderBottomWidth: 1,
-
-      paddingVertical: 15,
-      paddingLeft: 5
-    },
-
     buttonPanel: {
       marginTop: 5,
       marginBottom: 5,
     },
+    
     buttonPrimary: {
        color: '#08F'
     },
 
     buttonDanger: {
       color: '#F66'
-   },
+    },
 
     field: {
       flex: 1,

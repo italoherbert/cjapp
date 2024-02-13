@@ -22,7 +22,7 @@ import * as converter from '../../core/converter/converter';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faArrowCircleLeft, faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
@@ -129,7 +129,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
             <View style={{flexDirection: 'row'}}>                                     
                 { removido === false && 
                   <View style={{flex: 2, flexDirection: 'row'}}>                
-                      <ButtonUI 
+                      <ButtonIconUI 
                           label='Remover'
                           icon={faX}
                           color={globalStyle.buttonDanger.color} 
@@ -138,7 +138,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
                           onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
                       />
 
-                      <ButtonUI 
+                      <ButtonIconUI 
                           label='Editar'
                           icon={faEdit}
                           color={globalStyle.buttonPrimary.color} 
@@ -150,7 +150,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
                   </View>
                 }
                 
-                <ButtonUI 
+                <ButtonIconUI 
                     label='Lançamentos'
                     icon={faList}
                     color={globalStyle.buttonPrimary.color} 

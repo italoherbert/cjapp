@@ -12,7 +12,6 @@ import {
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 import * as formatter from '../../core/converter/converter';
-import globalStyle from "../style/global-style";
 
 export type DateUIProps = {
     date : Date,
@@ -27,9 +26,9 @@ function DateUI( {date, setDate, rotulo} : DateUIProps ): React.JSX.Element {
     return (
         <View>
             <Pressable onPress={() => setVisible( true )}>
-                <View style={[globalStyle.dateInput]}>
-                    <Text style={globalStyle.fieldValue}>{formatter.formatDate( date )}</Text>
-                    <Text style={globalStyle.fieldValue}>{rotulo}</Text>                                            
+                <View style={[styles.dateInput]}>
+                    <Text style={styles.text}>{formatter.formatDate( date )}</Text>
+                    <Text style={styles.text}>{rotulo}</Text>                                            
                 </View>
             </Pressable>
 
@@ -49,18 +48,27 @@ function DateUI( {date, setDate, rotulo} : DateUIProps ): React.JSX.Element {
 
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({    
     dateInput : {
         flex: 1,
         flexDirection: 'row', 
         alignItems: 'center', 
         justifyContent: 'space-between',
-
-        borderBottomColor: '#000',
+  
+        borderBottomColor: '#CCF',
         borderBottomWidth: 1,
+          
+        marginVertical: 5,
 
-        paddingVertical: 10
-    },
+        paddingVertical: 16,
+        paddingHorizontal: 5
+      },
+
+      text : {
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: '#666'
+      }
 
 });
 

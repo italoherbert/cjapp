@@ -11,7 +11,7 @@ import globalStyle from '../../shared/style/global-style';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import MostraBalancoUI from '../../shared/components/mostra-balanco-ui';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 
 function MostraBalanco({ route, navigation } : NativeStackScreenProps<StackParamsList, 'MostraBalanco'> ): React.JSX.Element {
@@ -22,7 +22,7 @@ return (
             style={globalStyle.mainScroll}>                   
         
         <View style={{flexDirection: 'row', flex: 3}}>
-            <ButtonUI
+            <ButtonIconUI
                 label='Voltar'
                 icon={faArrowAltCircleLeft}
                 color={globalStyle.buttonPrimary.color} 

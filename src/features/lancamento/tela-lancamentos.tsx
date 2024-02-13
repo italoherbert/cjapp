@@ -18,7 +18,7 @@ import { persistence } from '../../core/persistence/persistence';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
-import ButtonUI from '../../shared/ui/ButtonUI';
+import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faBalanceScale, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
@@ -47,7 +47,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
             style={globalStyle.mainScroll}>   
 
         <View style={{flexDirection: 'row', flex: 3}}>
-            <ButtonUI 
+            <ButtonIconUI 
                 label='Novo'
                 icon={faPlus}
                 color={globalStyle.buttonPrimary.color} 
@@ -56,7 +56,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
                 onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
             />
             
-            <ButtonUI 
+            <ButtonIconUI 
                 label='Filtrar'
                 icon={faFilter}
                 color={globalStyle.buttonPrimary.color} 
@@ -66,7 +66,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
                 onPress={ () => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) }
             />
 
-            <ButtonUI
+            <ButtonIconUI
                 label="Ver balanço" 
                 icon={faBalanceScale}
                 color={globalStyle.buttonPrimary.color} 

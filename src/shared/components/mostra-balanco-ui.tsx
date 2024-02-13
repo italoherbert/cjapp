@@ -63,7 +63,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                     <Text>
                         Crédito: 
                     </Text>
-                    <Text style={[styles.fieldValue, {color: '#00F'}]}>
+                    <Text style={[styles.fieldValue, {color: '#669'}]}>
                         {converter.formatBRL( creditoTotal )}
                     </Text>
                 </View>
@@ -81,7 +81,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                     <Text>
                         Crédito (outros): 
                     </Text>
-                    <Text style={[styles.fieldValue, {color: '#00F'}]}>
+                    <Text style={[styles.fieldValue, {color: '#669'}]}>
                         {converter.formatBRL( outrosCreditosTotal )}
                     </Text>
                 </View>
@@ -99,7 +99,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                     <Text>
                         Em espécie:
                     </Text>
-                    <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#00F'}]}>
+                    <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#669'}]}>
                         {converter.formatBRL( totalEmEspecie )}
                     </Text>
                 </View>
@@ -107,7 +107,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                     <Text>
                         Na conta: 
                     </Text>
-                    <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#00F'}]}>
+                    <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#669'}]}>
                         {converter.formatBRL( totalEmContaCorrente )}
                     </Text>
                 </View>              
@@ -117,7 +117,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                     <Text style={{fontWeight: 'bold'}}>
                         Lucro: 
                     </Text>
-                    <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#00F'}]}>
+                    <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#669'}]}>
                         {converter.formatBRL( lucroTotal )}
                     </Text>
                 </View>  
@@ -140,7 +140,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
     total : {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      backgroundColor: '#CCF',
+      backgroundColor: '#DDD',
       borderRadius: 10,
       padding: 5
     },
