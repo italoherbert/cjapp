@@ -38,13 +38,13 @@ export const lista = async ( db : SQLite.SQLiteDatabase, antigo : boolean ) => {
     return rowsToDevedores( result );
 };
 
-export const filtra = async ( db : SQLite.SQLiteDatabase, nomeLike : string, antigo : boolean ) => {
+export const filtra = async ( db : SQLite.SQLiteDatabase, nomeIni : string, antigo : boolean ) => {
     let result = await db.getAllAsync( 
         `select 
             id, nome, data_debito, valor, antigo 
          from devedor 
          where lower(nome) like lower(?) and antigo=?`, [
-            "%"+nomeLike+"%",
+            nomeIni+"%",
             antigo
         ] 
     );        

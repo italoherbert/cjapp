@@ -30,14 +30,14 @@ export default class DevedorService {
         }
     };
 
-    filtraDevedores = async ( nomeLike : string, antigo : boolean ) => {                  
+    filtraDevedores = async ( nomeIni : string, antigo : boolean ) => {                  
         try {
             let devedores : Devedor[] = [];
             
-            if ( nomeLike.trim() == '*' ) {
+            if ( nomeIni.trim() == '*' ) {
                 devedores = await devedorRepository.lista( this.db!, antigo );
             } else {
-                devedores = await devedorRepository.filtra( this.db!, nomeLike, antigo );        
+                devedores = await devedorRepository.filtra( this.db!, nomeIni, antigo );        
             }
 
             return devedores;

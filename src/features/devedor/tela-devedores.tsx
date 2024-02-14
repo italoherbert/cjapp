@@ -23,8 +23,9 @@ import { persistence } from '../../core/persistence/persistence';
 import {Devedor} from '../../core/persistence/model/devedor';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faPlug, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import TextInputUI from '../../shared/ui/TextInputUI';
+import SnackbarUI from '../../shared/ui/SnackbarUI';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
@@ -37,16 +38,24 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
       setNomeLike( text );
 
       let nmLike = text.trim().length === 0 ? '*' : text;
-      
-      let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
-      setDevedores( data );       
+
+      try {
+        let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
+        setDevedores( data );       
+      } catch ( error : any ) {
+        SnackbarUI.showDanger( ''+error.message );
+      }
     };
 
     const carregaDevedores = async () => {
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
       
-      let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
-      setDevedores( data ); 
+      try {
+        let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
+        setDevedores( data ); 
+      } catch ( error : any ) {
+        SnackbarUI.showDanger( ''+error.message );
+      }
     };
 
     const novoSelectOnPress = async ( isChecked : boolean ) => {

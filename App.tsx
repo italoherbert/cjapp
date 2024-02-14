@@ -28,7 +28,8 @@ function App(): React.JSX.Element {
   );
 
   useEffect( () => {                
-    const init = async () => {}
+    
+    const init = async () => {};
 
     init().finally( () => {
       BootSplash.hide( { fade: true } );
