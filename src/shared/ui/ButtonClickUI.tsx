@@ -52,8 +52,6 @@ const styles = StyleSheet.create( {
         backgroundColor: '#66D',
     },
     pressedView: {
-        borderWidth: 1,        
-        borderColor: '#33A',
         backgroundColor: '#AAD',
     },
 

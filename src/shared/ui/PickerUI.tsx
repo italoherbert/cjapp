@@ -40,7 +40,7 @@ function Item ( { label, value, key } : DataPickerItemProps ) : React.JSX.Elemen
 
 const styles = StyleSheet.create( {
     pickerItem : {
-        color: '#666'
+        color: '#AAA'
     }
 } );
 

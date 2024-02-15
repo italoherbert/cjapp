@@ -14,15 +14,9 @@ export default class Persistence {
     lancamentoService : LancamentoService = new LancamentoService();
     ajustesService : AjustesService = new AjustesService();
 
-    inicializa = () => {
-        this.db = SQLite.openDatabaseSync( DB_NAME );
-
-        this.devedorService.setDB( this.db );
-        this.lancamentoService.setDB( this.db );
-        this.ajustesService.setDB( this.db );
-
-        this.db.withTransactionSync( () => {
-            this.db!.execSync( `
+    inicializa = async ( db : SQLite.SQLiteDatabase ) => {       
+        db.withTransactionAsync( async () => {
+            this.db!.execAsync( `
                 create table if not exists devedor ( 
                     id integer primary key,
                     nome varchar( 256 ) not null,
@@ -30,7 +24,7 @@ export default class Persistence {
                     valor double precision not null,
                     antigo boolean default false                   
                 )` ); 
-            this.db!.execSync( `
+            this.db!.execAsync( `
                 create table if not exists lancamento ( 
                     id integer primary key,
                     descricao varchar( 256 ) not null,
@@ -43,12 +37,11 @@ export default class Persistence {
         } );        
     } 
 
-    finaliza = async () => {
+    finaliza = async ( db : SQLite.SQLiteDatabase ) => {
         if ( this.db === null )
             throw new Error( "Tentativa de fechar conexão não aberta." );
 
-        await this.db.closeAsync();
+        await db.closeAsync();
     };
 }
 export const persistence = new Persistence();
-persistence.inicializa();

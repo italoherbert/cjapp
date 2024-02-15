@@ -2,11 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { 
     View,
-    Button,
     Text, 
     StyleSheet,
-    Pressable,
-    Alert
+    Pressable
 } from "react-native";
 
 export type SelectBoxUIProps = {

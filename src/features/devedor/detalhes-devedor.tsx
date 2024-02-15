@@ -30,6 +30,7 @@ import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
+import ViewUI from '../../shared/ui/ViewUI';
   
 const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesDevedor'> ): React.JSX.Element => {
     
@@ -70,7 +71,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
   
     return (
       <ScrollViewUI>
-        <View>
+        <ViewUI>
             <TitleUI title='Detalhes do Devedor' marginBottom={10} />
 
             <SimpleFieldUI>
@@ -106,9 +107,9 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
               </Text>
             }
             
-            <View style={{flexDirection: 'row'}}>
+            <ViewUI isRow={true}>
               { removido === false && 
-                <View style={{flex: 2, flexDirection: 'row'}}>                  
+                <ViewUI flex={2} isRow={true}>                  
                   <ButtonIconUI 
                       label='Remover'
                       icon={faX}
@@ -123,7 +124,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                       marginType='both'
                       onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
                   />
-                </View>
+                </ViewUI>
               }     
 
               <ButtonIconUI 
@@ -133,8 +134,8 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                   onPress={() => navigation.navigate( 'TelaDevedores' )}
               />
             
-            </View>          
-        </View>
+            </ViewUI>          
+        </ViewUI>
 
         <Dialog.Container visible={removerDialogVisivel}>
             <Dialog.Title>Remoção de devedor</Dialog.Title>

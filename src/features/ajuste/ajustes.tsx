@@ -19,6 +19,7 @@ import { persistence } from '../../core/persistence/persistence';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList, 'Ajustes'> ): React.JSX.Element => {
 
@@ -36,14 +37,9 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
     };
 
     return (
-        <ScrollViewUI>
-            
-            <View style={globalStyle.titlePanel}>
-                <Text style={globalStyle.title}>
-                    Ajustes
-                </Text>
-            </View>
-    
+        <ScrollViewUI>            
+            <TitleUI title='Ajustes' />
+                
             <ButtonClickUI
                 label="Resetar lançamentos"                         
                 onPress={() => setResetarDialogVisivel( !resetarDialogVisivel )} 

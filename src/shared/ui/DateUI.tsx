@@ -58,16 +58,17 @@ const styles = StyleSheet.create({
         borderBottomColor: '#CCF',
         borderBottomWidth: 1,
           
-        marginVertical: 10,
+        marginVertical: 5,
+        marginHorizontal: 0,
 
         paddingVertical: 16,
-        paddingHorizontal: 5
+        paddingHorizontal: 15
       },
 
       text : {
         fontSize: 14,
         fontWeight: 'normal',
-        color: '#666'
+        color: '#333'
       }
 
 });

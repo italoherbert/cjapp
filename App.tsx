@@ -18,6 +18,8 @@ import DevedorScreens from './src/shared/screens/screens-devedor';
 import LancamentoScreens from './src/shared/screens/screens-lancamento';
 
 import Ajustes from './src/features/ajuste/ajustes';
+import { SQLiteProvider } from 'expo-sqlite/next';
+import { persistence } from './src/core/persistence/persistence';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,33 +44,35 @@ function App(): React.JSX.Element {
           barStyle={statusBarStyle}
           backgroundColor='#08F'
         />  
-        <NavigationContainer>            
-          <Tab.Navigator initialRouteName="Devedores" screenOptions={{headerShown: false}} >
-            <Tab.Screen name="Devedores" 
-                component={DevedorScreens} 
-                options={{ 
-                  tabBarLabel: 'Devedores',                   
-                  tabBarIcon: ({focused, color, size} ) => {
-                    return <FontAwesomeIcon icon={faUserTag} color={color} size={size} />
-                  },
-                }}/>
-            <Tab.Screen name="Lancamentos" 
-                component={LancamentoScreens} 
-                options={{ 
-                  tabBarLabel: 'Lançamentos',                   
-                  tabBarIcon: ({focused, color, size} ) => {
-                    return <FontAwesomeIcon icon={faCircleDollarToSlot} color={color} size={size} />
-                  },
-                }}/>
-            <Tab.Screen name="Ajustes"
-                component={Ajustes} options={{ 
-                  tabBarLabel: 'Ajustes',                   
-                  tabBarIcon: ({focused, color, size} ) => {
-                    return <FontAwesomeIcon icon={faGear} color={color} size={size} />
-                  },
-                }}/>
-          </Tab.Navigator>          
-        </NavigationContainer>
+        <SQLiteProvider databaseName='cjapp.db' onInit={persistence.inicializa}>
+          <NavigationContainer>            
+            <Tab.Navigator initialRouteName="Devedores" screenOptions={{headerShown: false}} >
+              <Tab.Screen name="Devedores" 
+                  component={DevedorScreens} 
+                  options={{ 
+                    tabBarLabel: 'Devedores',                   
+                    tabBarIcon: ({focused, color, size} ) => {
+                      return <FontAwesomeIcon icon={faUserTag} color={color} size={size} />
+                    },
+                  }}/>
+              <Tab.Screen name="Lancamentos" 
+                  component={LancamentoScreens} 
+                  options={{ 
+                    tabBarLabel: 'Lançamentos',                   
+                    tabBarIcon: ({focused, color, size} ) => {
+                      return <FontAwesomeIcon icon={faCircleDollarToSlot} color={color} size={size} />
+                    },
+                  }}/>
+              <Tab.Screen name="Ajustes"
+                  component={Ajustes} options={{ 
+                    tabBarLabel: 'Ajustes',                   
+                    tabBarIcon: ({focused, color, size} ) => {
+                      return <FontAwesomeIcon icon={faGear} color={color} size={size} />
+                    },
+                  }}/>
+            </Tab.Navigator>          
+          </NavigationContainer>
+        </SQLiteProvider>
       </React.Fragment>
   );
 }

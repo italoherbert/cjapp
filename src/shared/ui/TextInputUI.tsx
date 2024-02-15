@@ -26,14 +26,17 @@ function TextInputUI( { placeholder, defaultValue, setValue } : TextInputProps )
 const styles = StyleSheet.create({
     textInput : {
         marginVertical: 5,
+        marginHorizontal: 0,
+
+        paddingHorizontal: 15,
 
         borderBottomWidth: 1,
         borderColor: '#CCF',
-        color: '#666'
+        color: '#333'
     },
 
     placeholder : {
-        color: '#669'
+        color: '#666'
     }
 });
 

@@ -13,7 +13,7 @@ import globalStyle from '../style/global-style';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
-import BoxUI from '../ui/BoxUI';
+import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
 import BoxFieldUI from '../ui/BoxFieldUI';
 import TextUI from '../ui/TextUI';
@@ -56,7 +56,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
     }, [props.lancamentos] );
   
     return (
-        <BoxUI>
+        <ViewUI>
             <TitleUI title='Balanço' textAlign='center' />
 
             <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
@@ -125,7 +125,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 </TextUI>
               </BoxFieldUI>  
             </BoxFieldUI>
-        </BoxUI>          
+        </ViewUI>          
     );
     
   }

@@ -9,7 +9,7 @@ import * as converter from '../../core/converter/converter';
 import SimpleTextUI from '../ui/TextUI';
 import BoxFieldUI from '../ui/BoxFieldUI';
 import TextUI from '../ui/TextUI';
-import BoxUI from '../ui/BoxUI';
+import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
@@ -67,8 +67,8 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     }, [props.lancamentos] );
   
     return ( 
-      <BoxUI marginTop={5}>
-        <BoxUI marginTop={10}>
+      <ViewUI marginTop={5}>
+        <ViewUI marginTop={10}>
             <SimpleTextUI>
                 De {converter.formatDate( dataLancMaisAntigo )} até {converter.formatDate( new Date() )}
             </SimpleTextUI>
@@ -123,11 +123,11 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 </TextUI>
               </BoxFieldUI>  
             </BoxFieldUI>
-        </BoxUI>
+        </ViewUI>
 
         <TitleUI title='Lista de lançamentos' marginTop={10} />      
 
-        <BoxUI marginBottom={20}>        
+        <ViewUI marginBottom={20}>        
           {props.lancamentos.length > MAX_SHOW_REGS && 
             <TextUI variant='primary' padding={5}>
                Número de lançamentos maior que {MAX_SHOW_REGS}. Por isso, 
@@ -136,10 +136,10 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
           }
           {props.lancamentos.length <= MAX_SHOW_REGS && gruposLancs.map( ( grupo : any, index : number ) => { 
               return (
-                <BoxUI key={index}>
+                <ViewUI key={index}>
                   <Pressable 
                     onPress={() => setExpandirGrupo(index) }>
-                      <BoxUI 
+                      <ViewUI 
                           padding={12} 
                           margin={1} 
                           background='light' 
@@ -151,16 +151,16 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                         <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'}>
                             {converter.formatBRL( grupo.valor )}
                         </TextUI>
-                      </BoxUI>                      
+                      </ViewUI>                      
                   </Pressable>  
-                  <BoxUI> 
+                  <ViewUI> 
                     { gruposLancsExpandir[ index ] == true &&
                       grupo.lancamentos.map( (lancamento : Lancamento, index2 : number) => {
                         return (
                           <Pressable key={index2}
                               onPress={ () => props.navigateToDetalhesLancamentos( lancamento.id ) }
                           >
-                            <BoxUI 
+                            <ViewUI 
                                 paddingHorizontal={12} 
                                 paddingVertical={5}
                                 margin={1} 
@@ -172,17 +172,17 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                               <TextUI variant={lancamento.tipo === 'debito' ? 'danger' : 'primary'}>
                                   {converter.formatBRL( lancamento.valor )}
                               </TextUI>
-                            </BoxUI>   
+                            </ViewUI>   
                           </Pressable>
                         )
                       } )                               
                     }    
-                  </BoxUI> 
-                </BoxUI>                
+                  </ViewUI> 
+                </ViewUI>                
               )
             } )}          
-        </BoxUI>        
-      </BoxUI>
+        </ViewUI>        
+      </ViewUI>
     );
     
   }

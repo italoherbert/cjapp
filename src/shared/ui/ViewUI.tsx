@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import * as UIUtil from './util/ui-util';
 
-export type BoxProps = React.PropsWithChildren<{
+export type ViewProps = React.PropsWithChildren<{
     flex?: number,
     justifyContent?: any,
     alignItems?: any,
@@ -20,7 +20,7 @@ export type BoxProps = React.PropsWithChildren<{
     background?: string
 }>
 
-function BoxUI ( { children, 
+function ViewUI ( { children, 
         flex, isRow, 
         marginVertical,
         marginHorizontal,
@@ -32,7 +32,7 @@ function BoxUI ( { children,
         padding,
         justifyContent,
         alignItems,
-        background } : BoxProps ) : React.JSX.Element {
+        background } : ViewProps ) : React.JSX.Element {
 
     const [ backgroundColor, setBackgroundColor ] = useState<string | undefined>(undefined);
 
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     
 });
 
-export default BoxUI;
+export default ViewUI;

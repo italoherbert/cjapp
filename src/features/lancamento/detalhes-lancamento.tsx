@@ -28,6 +28,7 @@ import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
+import ViewUI from '../../shared/ui/ViewUI';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
@@ -116,9 +117,9 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
           </TextUI>
         }
 
-        <View style={{flexDirection: 'row'}}>                                     
+        <ViewUI isRow={true}>                                     
             { removido === false && 
-              <View style={{flex: 2, flexDirection: 'row'}}>                
+              <ViewUI flex={2} isRow={true}>                
                   <ButtonIconUI 
                       label='Remover'
                       icon={faX}
@@ -133,7 +134,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
                       marginType='both'
                       onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
                   />
-              </View>
+              </ViewUI>
             }
             
             <ButtonIconUI 
@@ -142,7 +143,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
                 flex={1}
                 onPress={() => navigation.navigate( 'TelaLancamentos' )}
             />
-        </View>
+        </ViewUI>
 
         <Dialog.Container visible={removerDialogVisivel}>
           <Dialog.Title>Remoção de lançamento</Dialog.Title>

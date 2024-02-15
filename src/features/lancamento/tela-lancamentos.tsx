@@ -21,6 +21,7 @@ import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faBalanceScale, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import ViewUI from '../../shared/ui/ViewUI';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
@@ -45,7 +46,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
     return (
       <ScrollViewUI>   
 
-        <View style={{flexDirection: 'row', flex: 3}}>
+        <ViewUI flex={3} isRow={true}>
             <ButtonIconUI 
                 label='Novo'
                 icon={faPlus}
@@ -66,7 +67,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
                 icon={faBalanceScale}
                 flex={1}
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
-        </View>        
+        </ViewUI>        
         
         <FiltraLancamentosUI 
             lancamentos={ lancamentos } 
