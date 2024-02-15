@@ -26,13 +26,13 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
   
           SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
         } catch ( error : any ) {
-          SnackbarUI.showInfo( ''+error.message );
+          SnackbarUI.showDanger( error.message );
         }
     };
 
     return (
         <ScrollViewUI>            
-            <TitleUI title='Ajustes' />
+            <TitleUI title='Ajustes' marginBottom={10}/>
                 
             <ButtonClickUI
                 label="Resetar lançamentos"                         

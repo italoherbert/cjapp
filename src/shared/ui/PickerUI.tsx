@@ -32,17 +32,10 @@ function PickerUI ( { children, selectedValue, setValue } : DatePickerProps ) : 
 function Item ( { label, value, key } : DataPickerItemProps ) : React.JSX.Element {
     return (
         <Picker.Item key={key}
-            color={styles.pickerItem.color}
             label={label} 
             value={value} />
     );
 }
-
-const styles = StyleSheet.create( {
-    pickerItem : {
-        color: '#AAA'
-    }
-} );
 
 PickerUI.Item = Item;
 export default PickerUI;
