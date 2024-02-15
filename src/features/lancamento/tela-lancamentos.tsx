@@ -20,6 +20,7 @@ import { Lancamento } from '../../core/persistence/model/lancamento';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faBalanceScale, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
@@ -42,9 +43,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
     }, [isFocused] );
                 
     return (
-      <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>   
+      <ScrollViewUI>   
 
         <View style={{flexDirection: 'row', flex: 3}}>
             <ButtonIconUI 
@@ -74,7 +73,7 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
         />           
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

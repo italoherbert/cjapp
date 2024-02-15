@@ -1,9 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default StyleSheet.create({      
-    mainScroll: {
-      padding: 10
-    },
+export default StyleSheet.create({          
     titlePanel: {
       marginBottom: 5
     },

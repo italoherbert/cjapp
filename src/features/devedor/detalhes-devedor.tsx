@@ -13,6 +13,8 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Dialog from 'react-native-dialog';
 
+import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
+
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import globalStyle from '../../shared/style/global-style';
@@ -21,9 +23,13 @@ import { persistence } from '../../core/persistence/persistence';
 import * as converter from '../../core/converter/converter';
 
 import {Devedor} from '../../core/persistence/model/devedor';
+
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
+import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
+import TextUI from '../../shared/ui/TextUI';
   
 const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesDevedor'> ): React.JSX.Element => {
     
@@ -63,47 +69,36 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
     };
   
     return (
-      <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={globalStyle.mainScroll}>
+      <ScrollViewUI>
         <View>
-            <View style={globalStyle.titlePanel}>
-                <Text style={globalStyle.title}>
-                    Detalhes do devedor
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Nome: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.primary]}>
-                    {devedor.nome}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Data débito: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.primary]}>
-                    {converter.formatDate( devedor.dataDebito )}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Valor: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.danger]}>
-                    {converter.formatBRL( devedor.valor )}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Tempo: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.primary]}>
-                    {devedor.antigo == true ? 'Antigo' : 'Novo' }
-                </Text>
-            </View>
+            <TitleUI title='Detalhes do Devedor' marginBottom={10} />
+
+            <SimpleFieldUI>
+              <TextUI>
+                Data débito
+              </TextUI>
+              <TextUI variant='normal'>
+                {converter.formatDate( devedor.dataDebito )}
+              </TextUI>
+            </SimpleFieldUI>
+
+            <SimpleFieldUI>
+              <TextUI>
+                Valor: 
+              </TextUI>
+              <TextUI variant='danger'>
+                {converter.formatBRL( devedor.valor )}
+              </TextUI>
+            </SimpleFieldUI>
+            
+            <SimpleFieldUI>
+              <TextUI>
+                Tempo
+              </TextUI>
+              <TextUI variant='primary'>
+                {devedor.antigo == true ? 'Antigo' : 'Novo' }
+              </TextUI>
+            </SimpleFieldUI>
 
             { removido === true && 
               <Text style={globalStyle.danger}>
@@ -138,7 +133,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                   onPress={() => navigation.navigate( 'TelaDevedores' )}
               />
             
-          </View>          
+            </View>          
         </View>
 
         <Dialog.Container visible={removerDialogVisivel}>
@@ -150,7 +145,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
             <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
         </Dialog.Container>
 
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

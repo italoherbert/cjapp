@@ -13,13 +13,12 @@ import { StackParamsList } from '../../shared/screens/StackParamsList';
 import MostraBalancoUI from '../../shared/components/mostra-balanco-ui';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 
 function MostraBalanco({ route, navigation } : NativeStackScreenProps<StackParamsList, 'MostraBalanco'> ): React.JSX.Element {
 
 return (
-      <ScrollView            
-            contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>                   
+      <ScrollViewUI>                   
         
         <ButtonIconUI
             label='Voltar'
@@ -31,7 +30,7 @@ return (
         <MostraBalancoUI 
             lancamentos={ route.params!.lancamentos } 
         />           
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

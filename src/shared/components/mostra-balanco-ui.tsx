@@ -13,6 +13,10 @@ import globalStyle from '../style/global-style';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
+import BoxUI from '../ui/BoxUI';
+import TitleUI from '../ui/TitleUI';
+import BoxFieldUI from '../ui/BoxFieldUI';
+import TextUI from '../ui/TextUI';
 
 export type MostraBalancoProps = {
     lancamentos : Lancamento[]
@@ -52,77 +56,76 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
     }, [props.lancamentos] );
   
     return (
-        <View>             
-            <View style={[globalStyle.titlePanel]}>
-                <Text style={[globalStyle.title, { textAlign: 'center'}]}>
-                    Balanço
-                </Text>
-            </View>                        
-            <View style={[styles.row, { marginTop: 5}]}>
-                <View style={{flex: 1}}>
-                    <Text>
-                        Crédito: 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: '#666'}]}>
-                        {converter.formatBRL( creditoTotal )}
-                    </Text>
-                </View>
-                <View style={{flex: 1}}>
-                    <Text>
-                        Débito: 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: '#F00'}]}>
-                        {converter.formatBRL( debitoTotal )}
-                    </Text>
-                </View>              
-            </View>
-            <View style={[styles.row, { marginTop: 5}]}>
-                <View style={{flex: 1}}>           
-                    <Text>
-                        Crédito (outros): 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: '#666'}]}>
-                        {converter.formatBRL( outrosCreditosTotal )}
-                    </Text>
-                </View>
-                <View style={{flex: 1}}>
-                    <Text>
-                        Débito (outros): 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: '#F00'}]}>
-                        {converter.formatBRL( outrosDebitosTotal )}
-                    </Text>
-                </View>              
-            </View>
-            <View style={[styles.row, {marginTop: 5}]}>              
-                <View style={{flex: 1}}>
-                    <Text>
-                        Em espécie:
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: totalEmEspecie < 0 ? '#F00' : '#666'}]}>
-                        {converter.formatBRL( totalEmEspecie )}
-                    </Text>
-                </View>
-                <View style={{flex: 1}}>
-                    <Text>
-                        Na conta: 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: totalEmContaCorrente < 0 ? '#F00' : '#666'}]}>
-                        {converter.formatBRL( totalEmContaCorrente )}
-                    </Text>
-                </View>              
-            </View>
-            <View style={[styles.total, { marginTop: 5}]}>                             
-                <View style={{justifyContent: 'space-around'}}>
-                    <Text style={{fontWeight: 'bold'}}>
-                        Lucro: 
-                    </Text>
-                    <Text style={[styles.fieldValue, {color: lucroTotal < 0 ? '#F00' : '#666'}]}>
-                        {converter.formatBRL( lucroTotal )}
-                    </Text>
-                </View>  
-            </View>            
-        </View>               
+        <BoxUI>
+            <TitleUI title='Balanço' textAlign='center' />
+
+            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Crédito</TextUI>
+                <TextUI variant='primary' size='big-x'>
+                  {converter.formatBRL( creditoTotal )}
+                </TextUI>
+              </BoxFieldUI>
+
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Débito</TextUI>
+                <TextUI variant='danger' size='big-x'>
+                  {converter.formatBRL( debitoTotal )}
+                </TextUI>
+              </BoxFieldUI>             
+            </BoxFieldUI>
+
+            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Crédito (outros)</TextUI>
+                <TextUI variant='primary' size='big-x'>
+                    {converter.formatBRL( outrosCreditosTotal )}
+                </TextUI>
+              </BoxFieldUI>
+
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Débito (outros)</TextUI>
+                <TextUI variant='danger' size='big-x'>
+                    {converter.formatBRL( outrosDebitosTotal )}
+                </TextUI>
+              </BoxFieldUI>             
+            </BoxFieldUI>
+
+            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Em espécie</TextUI>
+                <TextUI
+                      variant={ totalEmEspecie < 0 ? 'danger' : 'normal' } 
+                      size='big-x'>
+                  {converter.formatBRL( totalEmEspecie )}
+                </TextUI>
+              </BoxFieldUI>
+
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Na conta</TextUI>
+                <TextUI 
+                      variant={ totalEmContaCorrente < 0 ? 'danger' : 'normal' } 
+                      size='big-x'>
+                  {converter.formatBRL( totalEmContaCorrente )}
+                </TextUI>
+              </BoxFieldUI>             
+            </BoxFieldUI>
+
+            <BoxFieldUI flex={1} isRow={false} 
+                  marginVertical={5} 
+                  alignItems='center'
+                  background='light'
+                  padding={10}>
+              <BoxFieldUI flex={1} isRow={false}>
+                <TextUI>Lucro</TextUI>
+                <TextUI 
+                      variant={ lucroTotal < 0 ? 'danger' : 'normal' } 
+                      size='big-x'>
+                  {converter.formatBRL( lucroTotal )}
+                </TextUI>
+              </BoxFieldUI>  
+            </BoxFieldUI>
+        </BoxUI>          
     );
     
   }

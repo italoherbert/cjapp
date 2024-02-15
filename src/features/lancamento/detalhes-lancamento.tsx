@@ -24,6 +24,10 @@ import {Lancamento} from '../../core/persistence/model/lancamento';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faArrowCircleLeft, faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
+import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
+import TextUI from '../../shared/ui/TextUI';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
@@ -63,96 +67,81 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
     };
   
     return (
-      <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={globalStyle.mainScroll}>
-        <View>
-            <View style={globalStyle.titlePanel}>
-                <Text style={globalStyle.title}>
-                    Detalhes do lancamento
-                </Text>
-            </View>
-            <View style={[globalStyle.field]}>
-                <Text style={globalStyle.fieldName}>
-                    Descrição: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.primary]}>
-                    {lancamento.descricao}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Data de registro: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.primary]}>
-                    {converter.formatDate( lancamento.dataLanc )}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Valor: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, { color: lancamento.tipo === 'debito' ? '#F00' : '#00F'}]}>
-                    {converter.formatBRL( lancamento.valor )}
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Tipo: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, { color: lancamento.tipo === 'debito' ? '#F00' : '#00F'}]}>
-                    {lancamento.tipo == 'debito' ? 'Débito' : 'Crédito' }
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Dinheiro: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.success]}>
-                    {lancamento.emContaCorrente == true ? 'Em conta' : 'Em espécie' }
-                </Text>
-            </View>
-            <View style={globalStyle.field}>
-                <Text style={globalStyle.fieldName}>
-                    Do Jogo: 
-                </Text>
-                <Text style={[globalStyle.fieldValue, globalStyle.success]}>
-                    {lancamento.doJogo == true ? 'Sim' : 'Não' }
-                </Text>
-            </View>
-            { removido === true && 
-              <Text style={globalStyle.danger}>
-                    Removido!
-              </Text>
+      <ScrollViewUI>
+        <TitleUI title='Detalhes do Lançamento' />
+
+        <SimpleFieldUI>
+          <TextUI>Descrição</TextUI>
+          <TextUI>{lancamento.descricao}</TextUI>
+        </SimpleFieldUI>
+
+        <SimpleFieldUI>
+          <TextUI>Data de registro</TextUI>
+          <TextUI>
+            {converter.formatDate( lancamento.dataLanc )}
+          </TextUI>
+        </SimpleFieldUI>
+
+        <SimpleFieldUI>
+          <TextUI>Valor</TextUI>
+          <TextUI variant={ lancamento.valor < 0 ? 'danger' : 'primary' }>
+            {converter.formatBRL( lancamento.valor )}
+          </TextUI>
+        </SimpleFieldUI>
+
+        <SimpleFieldUI>
+          <TextUI>Tipo</TextUI>
+          <TextUI variant={ lancamento.tipo === 'debito' ? 'danger' : 'primary' }>
+            {lancamento.tipo == 'debito' ? 'Débito' : 'Crédito' }
+          </TextUI>
+        </SimpleFieldUI>
+
+        <SimpleFieldUI>
+          <TextUI>Dinheiro</TextUI>
+          <TextUI variant='success'>
+            {lancamento.emContaCorrente == true ? 'Em conta' : 'Em espécie' }
+          </TextUI>
+        </SimpleFieldUI>
+
+        <SimpleFieldUI>
+          <TextUI>Do jogo</TextUI>
+          <TextUI variant='success'>
+            {lancamento.doJogo == true ? 'Sim' : 'Não' }
+          </TextUI>
+        </SimpleFieldUI>
+            
+        { removido === true && 
+          <TextUI variant='danger'>
+                Removido!
+          </TextUI>
+        }
+
+        <View style={{flexDirection: 'row'}}>                                     
+            { removido === false && 
+              <View style={{flex: 2, flexDirection: 'row'}}>                
+                  <ButtonIconUI 
+                      label='Remover'
+                      icon={faX}
+                      flex={1}
+                      onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
+                  />
+
+                  <ButtonIconUI 
+                      label='Editar'
+                      icon={faEdit}
+                      flex={1}
+                      marginType='both'
+                      onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
+                  />
+              </View>
             }
-
-            <View style={{flexDirection: 'row'}}>                                     
-                { removido === false && 
-                  <View style={{flex: 2, flexDirection: 'row'}}>                
-                      <ButtonIconUI 
-                          label='Remover'
-                          icon={faX}
-                          flex={1}
-                          onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                      />
-
-                      <ButtonIconUI 
-                          label='Editar'
-                          icon={faEdit}
-                          flex={1}
-                          marginType='both'
-                          onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
-                      />
-                  </View>
-                }
-                
-                <ButtonIconUI 
-                    label='Lançamentos'
-                    icon={faList}
-                    flex={1}
-                    onPress={() => navigation.navigate( 'TelaLancamentos' )}
-                />
-            </View>
+            
+            <ButtonIconUI 
+                label='Lançamentos'
+                icon={faList}
+                flex={1}
+                onPress={() => navigation.navigate( 'TelaLancamentos' )}
+            />
         </View>
 
         <Dialog.Container visible={removerDialogVisivel}>
@@ -163,7 +152,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
             <Dialog.Button label="Remover" onPress={removerOnPress} />
             <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
         </Dialog.Container>
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

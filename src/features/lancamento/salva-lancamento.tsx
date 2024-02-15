@@ -12,11 +12,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { useIsFocused } from '@react-navigation/native';
 
-import {Picker} from '@react-native-picker/picker';
-
 import { StackParamsList } from '../../shared/screens/StackParamsList';
-
-import globalStyle from '../../shared/style/global-style';
 
 import { persistence } from '../../core/persistence/persistence';
 import {Lancamento} from '../../core/persistence/model/lancamento';
@@ -26,8 +22,9 @@ import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faList } from '@fortawesome/free-solid-svg-icons';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
-import DatePickerUI from '../../shared/ui/SelectOptionUI';
-import SelectOptionUI from '../../shared/ui/SelectOptionUI';
+import PickerUI from '../../shared/ui/PickerUI';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
@@ -90,11 +87,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     };
   
     return (
-      <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={globalStyle.mainScroll}>
-        <View>
-
+      <ScrollViewUI>
           <ButtonIconUI 
               label='Lançamentos'
               icon={faList}
@@ -102,11 +95,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
               onPress={() => navigation.navigate( 'TelaLancamentos' )}
           />
 
-          <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
-              <Text style={globalStyle.title}>
-                Salvar lançamento
-              </Text>
-          </View>
+          <TitleUI title='Salvar lançamento' marginTop={10} />
 
           <TextInputUI
               setValue={setDescricao}
@@ -122,39 +111,32 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
 
           <DateUI date={dataLanc} setDate={setDataLanc} rotulo="data de lançamento" />
 
-          <SelectOptionUI 
+          <PickerUI 
               selectedValue={tipo}
-              setValue={setTipo}
-              itens={[
-                { label: 'Debito', value: 'debito'},
-                { label: 'Crédito', value: 'credito' }
-              ]}
-          />
+              setValue={setTipo}>
+            <PickerUI.Item label='Débito' value='debito' />
+            <PickerUI.Item label='Crédito' value='credito' />
+          </PickerUI>
 
-          <SelectOptionUI 
+          <PickerUI 
               selectedValue={dinheiroTipo}
-              setValue={setDinheiroTipo}
-              itens={[
-                { label: 'Em especie', value: 'especie'},
-                { label: 'Em conta corrente', value: 'conta' }
-              ]}
-          />
+              setValue={setDinheiroTipo}>
+            <PickerUI.Item label='Em espécie' value='especie' />
+            <PickerUI.Item label='Em conta corrente' value='conta' />              
+          </PickerUI>
 
-          <SelectOptionUI 
+          <PickerUI 
               selectedValue={deOndeTipo}
-              setValue={setDeOndeTipo}
-              itens={[
-                { label: 'Do Jogo', value: 'do-jogo'},
-                { label: 'Outro', value: 'outro' }
-              ]}
-          />
+              setValue={setDeOndeTipo}>
+            <PickerUI.Item label='Do Jogo' value='do-jogo' />
+            <PickerUI.Item label='Outro' value='outro' />              
+          </PickerUI>
 
           <ButtonClickUI
               label='Salvar'
               onPress={salvarOnPress}
           />                       
-        </View>
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

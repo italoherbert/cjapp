@@ -18,6 +18,7 @@ import globalStyle from '../../shared/style/global-style';
 import { persistence } from '../../core/persistence/persistence';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 
 const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList, 'Ajustes'> ): React.JSX.Element => {
 
@@ -35,21 +36,18 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
     };
 
     return (
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={globalStyle.mainScroll}>
-            <View>
-                <View style={globalStyle.titlePanel}>
-                    <Text style={globalStyle.title}>
-                        Ajustes
-                    </Text>
-                </View>
-        
-                <ButtonClickUI
-                    label="Resetar lançamentos"                         
-                    onPress={() => setResetarDialogVisivel( !resetarDialogVisivel )} 
-                />                                             
+        <ScrollViewUI>
+            
+            <View style={globalStyle.titlePanel}>
+                <Text style={globalStyle.title}>
+                    Ajustes
+                </Text>
             </View>
+    
+            <ButtonClickUI
+                label="Resetar lançamentos"                         
+                onPress={() => setResetarDialogVisivel( !resetarDialogVisivel )} 
+            />                                             
             
             <Dialog.Container visible={resetarDialogVisivel}>
                 <Dialog.Title>Exclusão de lançamentos</Dialog.Title>
@@ -59,7 +57,7 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
                 <Dialog.Button label="Excluir" onPress={resetarOnPress} />
                 <Dialog.Button label="Cancelar" onPress={() => setResetarDialogVisivel( false )} />                  
             </Dialog.Container>
-        </ScrollView>
+        </ScrollViewUI>
     )
 };
 

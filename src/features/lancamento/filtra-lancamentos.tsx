@@ -20,9 +20,9 @@ import DateUI from '../../shared/ui/DateUI';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faBackward, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {
     
@@ -43,9 +43,7 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
     };
             
     return (
-      <ScrollView            
-            contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>                   
+      <ScrollViewUI>                   
         
         <ButtonIconUI 
             label='Voltar'
@@ -54,12 +52,8 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             onPress={() => navigation.goBack() }
         />                        
 
-        <View style={{marginVertical: 5 }}>
-            <DateUI date={dataIni} setDate={setDataIni} rotulo="inicial" />
-        </View>
-        <View style={{marginVertical: 5 }}>
-            <DateUI date={dataFim} setDate={setDataFim} rotulo="final" />
-        </View>       
+        <DateUI date={dataIni} setDate={setDataIni} rotulo="inicial" />
+        <DateUI date={dataFim} setDate={setDataFim} rotulo="final" />
 
         <ButtonClickUI label='Filtrar' onPress={filtra} />
         
@@ -68,7 +62,7 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
             navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
             navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
         />           
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

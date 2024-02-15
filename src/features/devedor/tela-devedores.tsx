@@ -26,6 +26,8 @@ import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
@@ -82,9 +84,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
     }, [isFocused] );
   
     return (
-      <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={globalStyle.mainScroll}>        
+      <ScrollViewUI>        
 
         <ButtonIconUI 
             label='Novo devedor'
@@ -93,11 +93,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) }
         />
 
-        <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
-            <Text style={globalStyle.title}>
-                Lista de devedores
-            </Text>
-        </View> 
+        <TitleUI title='Lista de devedores' marginTop={10} />
 
         <SelectBoxUI op1Rotulo="Novo"
             op1OnSelect={novoSelectOnPress} 
@@ -105,12 +101,11 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             op2OnSelect={antigoSelectOnPress} 
             defaultOpSelectedIndex={1} />          
 
-        <View>
-          <TextInputUI
-              defaultValue={nomeLike} 
-              setValue={nomeLikeOnChangeText}
-              placeholder='Informe o nome' />
-        </View>
+        <TextInputUI
+            defaultValue={nomeLike} 
+            setValue={nomeLikeOnChangeText}
+            placeholder='Informe o nome' />
+        
         <View style={styles.listaPanel}>
             {devedores.map( (devedor: Devedor, index) => { 
             return (
@@ -127,7 +122,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             )
             } )}          
         </View>        
-      </ScrollView>
+      </ScrollViewUI>
     );
     
   }

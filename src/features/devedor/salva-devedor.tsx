@@ -24,7 +24,9 @@ import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import { faList } from '@fortawesome/free-solid-svg-icons';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
-import SelectOptionUI from '../../shared/ui/SelectOptionUI';
+import PickerUI from '../../shared/ui/PickerUI';
+import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaDevedor'> ): React.JSX.Element => {
     
@@ -76,10 +78,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
     };
   
     return (
-      <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={globalStyle.mainScroll}>
-        <View>
+      <ScrollViewUI>
           <ButtonIconUI
               label='Devedores'
               icon={faList}
@@ -87,11 +86,8 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
               onPress={() => navigation.navigate( 'TelaDevedores' )}
           />
 
-          <View style={[globalStyle.titlePanel, {marginTop: 10}]}>
-              <Text style={globalStyle.title}>
-                Salvar devedor
-              </Text>
-          </View>
+          <TitleUI title='Salvar devedor' marginTop={10} />
+
           <TextInputUI
               setValue={setNome}
               defaultValue={nome}              
@@ -103,22 +99,18 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
               placeholder="Informe o valor"           
           /> 
 
-          <SelectOptionUI
+          <PickerUI
               selectedValue={tempo}
-              setValue={setTempo}
-              itens={[
-                { label: 'Novo', value: 'novo'},
-                { label: 'Antigo', value: 'antigo' }
-              ]}
-          />
-
+              setValue={setTempo}>
+                <PickerUI.Item label='Novo' value='novo' />
+                <PickerUI.Item label='Antigo' value='antigo' />
+          </PickerUI>
+             
           <ButtonClickUI
               label='Salvar'
               onPress={salvarOnPress}
-          />            
-                    
-        </View>
-      </ScrollView>
+          />                                
+      </ScrollViewUI>
     );
     
   }
