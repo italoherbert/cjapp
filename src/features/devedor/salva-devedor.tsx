@@ -1,32 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Alert
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
+
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { useIsFocused } from '@react-navigation/native';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../shared/style/global-style';
+import { faList } from '@fortawesome/free-solid-svg-icons';
 
-import {Devedor} from '../../core/persistence/model/devedor';
-import { persistence } from '../../core/persistence/persistence';
-import { Picker } from '@react-native-picker/picker';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faList } from '@fortawesome/free-solid-svg-icons';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import PickerUI from '../../shared/ui/PickerUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
+
+import * as devedorService from '../../core/persistence/service/devedor-service';
+import {Devedor} from '../../core/persistence/model/devedor';
+
 
 const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaDevedor'> ): React.JSX.Element => {
     
@@ -34,10 +27,11 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
     const [valor, setValor] = useState<string>('');
     const [tempo, setTempo] = useState<string>('novo'); 
     const isFocused = useIsFocused();
+    const db = useSQLiteContext();
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
-        let devedor : Devedor = await persistence.devedorService.getDevedorPorId( route.params.id );
+        let devedor : Devedor = await devedorService.getDevedorPorId( db, route.params.id );
         setNome( devedor.nome );
         setValor( devedor.valor.toString().replaceAll( ',', '.' ) );        
         setTempo( devedor.antigo == true ? 'antigo' : 'novo' );
@@ -59,7 +53,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
       try {
         let devedor : Devedor;
         if ( route.params.id > 0 ) {
-          devedor = await persistence.devedorService.getDevedorPorId( route.params.id );
+          devedor = await devedorService.getDevedorPorId( db, route.params.id );
         } else {
           devedor = new Devedor();
         }
@@ -69,7 +63,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
         devedor.valor = parseFloat( val );
         devedor.antigo = ( tempo === 'novo' ? false : true );
 
-        await persistence.devedorService.salvaDevedor( devedor );
+        await devedorService.salvaDevedor( db, devedor );
 
         navigation.navigate( 'DetalhesDevedor', { id : devedor.id } );
       } catch ( error : any ) {
@@ -114,10 +108,6 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
     );
     
   }
-  
-  const styles = StyleSheet.create({      
-          
-  });
-  
+    
   export default SalvaDevedor;
   

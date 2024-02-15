@@ -1,30 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Alert
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
+
+import { faList } from '@fortawesome/free-solid-svg-icons';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { useIsFocused } from '@react-navigation/native';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import { persistence } from '../../core/persistence/persistence';
-import {Lancamento} from '../../core/persistence/model/lancamento';
 import DateUI from '../../shared/ui/DateUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faList } from '@fortawesome/free-solid-svg-icons';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import PickerUI from '../../shared/ui/PickerUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
+
+import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+import {Lancamento} from '../../core/persistence/model/lancamento';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
@@ -35,10 +29,11 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     const [dinheiroTipo, setDinheiroTipo] = useState<string>('especie'); // especie ou conta
     const [deOndeTipo, setDeOndeTipo] = useState<string>('do-jogo');
     const isFocused = useIsFocused();
+    const db = useSQLiteContext();
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
-        let lancamento : Lancamento = await persistence.lancamentoService.getLancamentoPorId( route.params.id );
+        let lancamento : Lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
         setDescricao( lancamento.descricao );
         setValor( lancamento.valor.toString().replaceAll( ',', '.' ) );
         setDataLanc( new Date( lancamento.dataLanc ) );
@@ -64,7 +59,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
       try {
         let lancamento : Lancamento;
         if ( route.params.id > 0 ) {
-          lancamento = await persistence.lancamentoService.getLancamentoPorId( route.params.id );
+          lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
           lancamento.dataLanc = dataLanc;
         } else {
           lancamento = new Lancamento();
@@ -78,11 +73,11 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         lancamento.emContaCorrente = dinheiroTipo === 'conta';
         lancamento.doJogo = deOndeTipo === 'do-jogo';
 
-        await persistence.lancamentoService.salvaLancamento( lancamento );
+        await lancamentoService.salvaLancamento( db, lancamento );
 
         navigation.navigate( 'DetalhesLancamento', { id : lancamento.id } );
       } catch ( error : any ) {
-        Alert.alert( ''+error.message );
+        SnackbarUI.showDanger( ''+error.message );
       }
     };
   
@@ -140,10 +135,6 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     );
     
   }
-  
-  const styles = StyleSheet.create({      
-          
-  });
-  
+    
   export default SalvaLancamento;
   

@@ -1,44 +1,38 @@
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import {
-    Alert,
-  Button,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
+
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import globalStyle from '../../shared/style/global-style';
-
 import { StackParamsList } from '../../shared/screens/StackParamsList';
-
-import { persistence } from '../../core/persistence/persistence';
-import { Lancamento } from '../../core/persistence/model/lancamento';
 
 import DateUI from '../../shared/ui/DateUI';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
+
+import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+import { Lancamento } from '../../core/persistence/model/lancamento';
 
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {
     
     const [dataIni, setDataIni] = useState<Date>(new Date());
     const [dataFim, setDataFim] = useState<Date>(new Date());
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
-   
+    const db = useSQLiteContext();
+
     const filtra = async () => {  
         try {      
-            let lancs = await persistence.lancamentoService.filtraPorIntervaloIgnoreTime( dataIni, dataFim );      
+            let lancs = await lancamentoService.filtraPorIntervaloIgnoreTime( db, dataIni, dataFim );      
             setLancamentos( lancs );
 
             if ( lancs.length === 0 )
                 SnackbarUI.showInfo( 'Nenhum lancamento encontrado.' );
         } catch ( error : any ) {
-            Alert.alert( error.message );
+            SnackbarUI.showDanger( error.message );
         }
     };
             
@@ -66,10 +60,6 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
     );
     
   }
-  
-  const styles = StyleSheet.create({         
-        
-  });
-  
+    
   export default FiltraLancamentos;
   

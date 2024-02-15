@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -12,22 +10,25 @@ import {
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useIsFocused } from '@react-navigation/native';
+import { useSQLiteContext } from 'expo-sqlite/next';
 
-import * as formatter from '../../core/converter/converter';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import globalStyle from '../../shared/style/global-style';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import { persistence } from '../../core/persistence/persistence';
 import {Devedor} from '../../core/persistence/model/devedor';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
+import ViewUI from '../../shared/ui/ViewUI';
+import TextUI from '../../shared/ui/TextUI';
+
+import * as formatter from '../../core/converter/converter';
+import * as devedorService from '../../core/persistence/service/devedor-service';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
@@ -35,6 +36,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
     const [nomeLike, setNomeLike] = useState<string>('');
     const [antigo, setAntigo] = useState<boolean>(false);
     const isFocused = useIsFocused();
+    const db = useSQLiteContext();
 
     const nomeLikeOnChangeText = async ( text : string ) => {      
       setNomeLike( text );
@@ -42,7 +44,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
       let nmLike = text.trim().length === 0 ? '*' : text;
 
       try {
-        let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
+        let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data );       
       } catch ( error : any ) {
         SnackbarUI.showDanger( ''+error.message );
@@ -53,7 +55,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
       
       try {
-        let data = await persistence.devedorService.filtraDevedores( nmLike, antigo );
+        let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data ); 
       } catch ( error : any ) {
         SnackbarUI.showDanger( ''+error.message );
@@ -65,8 +67,12 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
 
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
       
-      let data = await persistence.devedorService.filtraDevedores( nmLike, false );
+      try {
+      let data = await devedorService.filtraDevedores( db, nmLike, false );
       setDevedores( data );
+      } catch ( error : any ) {
+        SnackbarUI.showDanger( ''+error );
+      }
     };
 
     const antigoSelectOnPress = async ( isChecked : boolean ) => {
@@ -74,7 +80,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
 
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
       
-      let data = await persistence.devedorService.filtraDevedores( nmLike, true );
+      let data = await devedorService.filtraDevedores( db, nmLike, true );
       setDevedores( data );
     };
 
@@ -112,12 +118,15 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
                 <Pressable key={index}
                     onPress={ () => navigation.navigate( 'DetalhesDevedor', { id: devedor.id } ) }
                 >
-                  <View style={styles.listaView}>
-                    <Text style={styles.listaItem} >{devedor.nome}</Text>
-                    <Text style={[styles.listaItem, styles.valor]}>
-                      {formatter.formatBRL( devedor.valor )}
-                    </Text>
-                  </View>
+                  <ViewUI isRow={true} 
+                      justifyContent='space-between' 
+                      border='light'
+                      padding={12}>
+                        <TextUI variant='dark-x'>{devedor.nome}</TextUI>
+                        <TextUI variant='danger'>
+                            {formatter.formatBRL( devedor.valor )}
+                        </TextUI>
+                  </ViewUI>                  
                 </Pressable>
             )
             } )}          

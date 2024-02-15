@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Alert
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 import { useIsFocused } from '@react-navigation/native';
@@ -17,11 +10,9 @@ import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../shared/style/global-style';
-
-import { persistence } from '../../core/persistence/persistence';
 import * as converter from '../../core/converter/converter';
 
+import * as devedorService from '../../core/persistence/service/devedor-service';
 import {Devedor} from '../../core/persistence/model/devedor';
 
 import SnackbarUI from '../../shared/ui/SnackbarUI';
@@ -38,10 +29,11 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
     const [removido, setRemovido] = useState<boolean>(false);
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
     const isFocused = useIsFocused();
+    const db = useSQLiteContext();
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
-        let devedor = await persistence.devedorService.getDevedorPorId( route.params.id );
+        let devedor = await devedorService.getDevedorPorId( db, route.params.id );
         setDevedor( devedor! );
       }
     }, [route.params.id] );
@@ -59,12 +51,12 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
         SnackbarUI.showDanger( 'Nenhum devedor selecionado para remoção.' );
       } else {
         try {
-          persistence.devedorService.deletaDevedorPorId( id );
+          await devedorService.deletaDevedorPorId( db, id );
           setRemovido( true );
 
           SnackbarUI.showInfo( 'Devedor removido com sucesso.' );
         } catch ( error : any ) {
-          Alert.alert( ''+error.message );
+          SnackbarUI.showDanger( ''+error.message );
         }
       }
     };
@@ -102,9 +94,9 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
             </SimpleFieldUI>
 
             { removido === true && 
-              <Text style={globalStyle.danger}>
-                    Removido!
-              </Text>
+              <TextUI variant='danger'>
+                  Removido!
+              </TextUI>              
             }
             
             <ViewUI isRow={true}>
@@ -150,10 +142,6 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
     );
     
   }
-  
-  const styles = StyleSheet.create({      
-          
-  });
-  
+    
   export default DetalhesDevedor;
   

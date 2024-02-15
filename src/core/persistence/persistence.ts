@@ -7,16 +7,10 @@ import AjustesService from "./service/ajustes-service";
 let DB_NAME = "cjapp.db";
 
 export default class Persistence {
-
-    db : SQLite.SQLiteDatabase | null = null;
-
-    devedorService : DevedorService = new DevedorService();
-    lancamentoService : LancamentoService = new LancamentoService();
-    ajustesService : AjustesService = new AjustesService();
-
+    
     inicializa = async ( db : SQLite.SQLiteDatabase ) => {       
-        db.withTransactionAsync( async () => {
-            this.db!.execAsync( `
+        await db.withTransactionAsync( async () => {
+            await db.execAsync( `
                 create table if not exists devedor ( 
                     id integer primary key,
                     nome varchar( 256 ) not null,
@@ -24,7 +18,7 @@ export default class Persistence {
                     valor double precision not null,
                     antigo boolean default false                   
                 )` ); 
-            this.db!.execAsync( `
+            await db.execAsync( `
                 create table if not exists lancamento ( 
                     id integer primary key,
                     descricao varchar( 256 ) not null,
@@ -38,7 +32,7 @@ export default class Persistence {
     } 
 
     finaliza = async ( db : SQLite.SQLiteDatabase ) => {
-        if ( this.db === null )
+        if ( db === null )
             throw new Error( "Tentativa de fechar conexão não aberta." );
 
         await db.closeAsync();

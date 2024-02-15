@@ -17,7 +17,8 @@ export type ViewProps = React.PropsWithChildren<{
     padding?: number,
     margin?: number,
     isRow?: boolean,
-    background?: string
+    background?: string,
+    border?: string
 }>
 
 function ViewUI ( { children, 
@@ -32,13 +33,18 @@ function ViewUI ( { children,
         padding,
         justifyContent,
         alignItems,
-        background } : ViewProps ) : React.JSX.Element {
+        background,
+        border } : ViewProps ) : React.JSX.Element {
 
     const [ backgroundColor, setBackgroundColor ] = useState<string | undefined>(undefined);
+    const [ borderWidth, setBorderWidth ] = useState<number | undefined>(undefined);
+    const [ borderColor, setBorderColor ] = useState<string | undefined>(undefined);
 
     useEffect( () => {
         setBackgroundColor( UIUtil.getColor( background! ) );        
-    }, [background] );
+        setBorderWidth( border ? 1 : undefined );
+        setBorderColor( border ? UIUtil.getColor( border ) : undefined );
+    }, [background, border] );
 
     return (
         <View style={{ 
@@ -54,7 +60,9 @@ function ViewUI ( { children,
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
                 padding: padding,
-                backgroundColor: backgroundColor }}>
+                backgroundColor: backgroundColor,
+                borderWidth: borderWidth,
+                borderColor: borderColor }}>
             {children}
         </View>
     )

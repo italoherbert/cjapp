@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Alert
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
+
+import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
 
 import Dialog from 'react-native-dialog';
 
@@ -15,20 +10,18 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../shared/style/global-style';
-
-import { persistence } from '../../core/persistence/persistence';
-import * as converter from '../../core/converter/converter';
-
-import {Lancamento} from '../../core/persistence/model/lancamento';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
-import { faArrowCircleLeft, faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
 import ViewUI from '../../shared/ui/ViewUI';
+
+import * as converter from '../../core/converter/converter';
+import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+
+import {Lancamento} from '../../core/persistence/model/lancamento';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
@@ -36,10 +29,11 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
     const [removido, setRemovido] = useState<boolean>(false);
     const isFocused = useIsFocused();
+    const db = useSQLiteContext();
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
-        let lancamento = await persistence.lancamentoService.getLancamentoPorId( route.params.id );
+        let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
         setLancamento( lancamento );
       }
     }, [route.params.id] );
@@ -57,12 +51,12 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
         SnackbarUI.showDanger( 'Nenhum lancamento selecionado para remoção.' );
       } else {
         try {
-          await persistence.lancamentoService.deletaLancamentoPorId( id );
+          await lancamentoService.deletaLancamentoPorId( db, id );
           setRemovido( true );
 
           SnackbarUI.showInfo( 'Lancamento removido com sucesso.' );
         } catch ( error : any ) {
-          Alert.alert( ''+error.message );
+          SnackbarUI.showDanger( ''+error.message );
         }
       }
     };
@@ -157,10 +151,6 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
     );
     
   }
-  
-  const styles = StyleSheet.create({      
-          
-  });
   
   export default DetalhesLancamento;
   

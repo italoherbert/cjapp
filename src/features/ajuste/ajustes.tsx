@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  ScrollView,
-  Text,
-  View,
-  Alert
-} from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite/next';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'; 
 
@@ -13,22 +7,22 @@ import Dialog from 'react-native-dialog';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import globalStyle from '../../shared/style/global-style';
-
-import { persistence } from '../../core/persistence/persistence';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 
+import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+
 const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList, 'Ajustes'> ): React.JSX.Element => {
 
     const [resetarDialogVisivel, setResetarDialogVisivel] = useState<boolean>(false);
+    const db = useSQLiteContext();
 
     const resetarOnPress = async () => {
         setResetarDialogVisivel( false );
         try {
-          await persistence.lancamentoService.deletaTodosOsLancamentos();  
+          await lancamentoService.deletaTodosOsLancamentos( db );  
   
           SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
         } catch ( error : any ) {
