@@ -112,7 +112,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             setValue={nomeLikeOnChangeText}
             placeholder='Informe o nome' />
         
-        <View style={styles.listaPanel}>
+        <ViewUI background='light'>
             {devedores.map( (devedor: Devedor, index) => { 
             return (
                 <Pressable key={index}
@@ -120,7 +120,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
                 >
                   <ViewUI isRow={true} 
                       justifyContent='space-between' 
-                      border='light'
+                      border='light-x'
                       padding={12}>
                         <TextUI variant='dark-x'>{devedor.nome}</TextUI>
                         <TextUI variant='danger'>
@@ -130,35 +130,11 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
                 </Pressable>
             )
             } )}          
-        </View>        
+        </ViewUI>        
       </ScrollViewUI>
     );
     
   }
-  
-  const styles = StyleSheet.create({         
-    listaPanel : {
-      backgroundColor: '#E4E4E4'
-    },
-    listaView : {           
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-
-      borderWidth: 1,
-      borderColor: '#EEE',
-
-      padding: 12,
-
-    },
-    listaItem: {
-      fontSize: 14,
-      fontWeight: 'normal',
-      color: '#000'
-    },
-    valor: {
-      color: '#F00'
-    }
-  });
   
   export default TelaDevedores;
   

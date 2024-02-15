@@ -141,8 +141,8 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                     onPress={() => setExpandirGrupo(index) }>
                       <ViewUI 
                           padding={12} 
-                          margin={1} 
-                          background='light' 
+                          background='light'
+                          border='light-x' 
                           isRow={true}
                           justifyContent="space-between">
                         <TextUI variant='dark-x'>
@@ -163,7 +163,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                             <ViewUI 
                                 paddingHorizontal={12} 
                                 paddingVertical={5}
-                                margin={1} 
+                                margin={5} 
                                 isRow={true}
                                 justifyContent="space-between">
                               <TextUI variant={lancamento.tipo === 'debito' ? 'danger' : 'primary'}>
