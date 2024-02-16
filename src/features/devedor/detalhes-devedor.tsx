@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Dialog from 'react-native-dialog';
 
-import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faList, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
@@ -64,6 +64,13 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
     return (
       <ScrollViewUI>
         <ViewUI>
+            <ButtonIconUI 
+                  label='Devedores'
+                  icon={faList}
+                  flex={1}
+                  onPress={() => navigation.navigate( 'TelaDevedores' )}
+            />
+
             <TitleUI title='Detalhes do Devedor' marginBottom={10} />
 
             <SimpleFieldUI>
@@ -94,36 +101,35 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
             </SimpleFieldUI>
 
             { removido === true && 
-              <TextUI variant='danger'>
+              <TextUI variant='danger' marginVertical={10}>
                   Removido!
               </TextUI>              
             }
             
-            <ViewUI isRow={true}>
-              { removido === false && 
-                <ViewUI flex={2} isRow={true}>                  
-                  <ButtonIconUI 
-                      label='Remover'
-                      icon={faX}
-                      flex={1}
-                      onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                  />
-                  
-                  <ButtonIconUI 
-                      label='Editar'
-                      icon={faEdit}
-                      flex={1}
-                      marginType='both'
-                      onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
-                  />
-                </ViewUI>
-              }     
+            <ViewUI isRow={true}>                            
+              <ButtonIconUI 
+                  label='Novo'
+                  icon={faPlus}
+                  flex={1}
+                  onPress={() => navigation.navigate( 'SalvaDevedor', { id: -1 } )}
+              /> 
 
               <ButtonIconUI 
-                  label='Devedores'
-                  icon={faList}
+                  label='Editar'
+                  icon={faEdit}
                   flex={1}
-                  onPress={() => navigation.navigate( 'TelaDevedores' )}
+                  marginType='both'
+                  disable={removido}
+                  onPress={() => navigation.navigate( 'SalvaDevedor', { id: route.params.id } )}
+              /> 
+
+              <ButtonIconUI 
+                  label='Remover'
+                  icon={faX}
+                  flex={1}
+                  variant='danger'
+                  disable={removido}
+                  onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
               />
             
             </ViewUI>          

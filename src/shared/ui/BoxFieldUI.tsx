@@ -1,9 +1,8 @@
-import { faAlignJustify } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-import * as UIUtil from './util/ui-util';
+import * as Types from './types/types';
 
 export type BoxFieldProps = React.PropsWithChildren<{
     flex?: number,
@@ -11,7 +10,7 @@ export type BoxFieldProps = React.PropsWithChildren<{
     alignItems?: any,
     marginVertical?: number
     isRow?: boolean,
-    background?: string,
+    background?: Types.Color,
     padding?: number    
 }>
 
@@ -21,7 +20,7 @@ function BoxFieldUI ( { children, flex, isRow,
     const [ backgroundColor, setBackgroundColor ] = useState<string | undefined>(undefined);
 
     useEffect( () => {
-        setBackgroundColor( UIUtil.getColor( background! ) );
+        setBackgroundColor( Types.getColor( background! ) );
     }, [background] );
 
     return (
@@ -37,9 +36,5 @@ function BoxFieldUI ( { children, flex, isRow,
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    
-});
 
 export default BoxFieldUI;

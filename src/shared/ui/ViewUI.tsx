@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { StyleSheet, View } from "react-native";
 
-import * as UIUtil from './util/ui-util';
+import * as UIUtil from './types/types';
 
 export type ViewProps = React.PropsWithChildren<{
     flex?: number,
@@ -17,8 +17,8 @@ export type ViewProps = React.PropsWithChildren<{
     padding?: number,
     margin?: number,
     isRow?: boolean,
-    background?: string,
-    border?: string
+    background?: UIUtil.Color,
+    border?: UIUtil.Color
 }>
 
 function ViewUI ( { children, 

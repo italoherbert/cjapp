@@ -1,4 +1,8 @@
 
+export type Color = "normal" | "primary" | "danger" | "dark" | "success" | "light" | "light-x" | "dark" | "dark-x" | "black";
+export type Size = "normal" | "big" | "big-x";
+export type MarginType = "left" | "right" | "both";
+
 export const getColor = ( variant : string ) => {
     switch ( variant ) {
         case 'normal': return '#666';

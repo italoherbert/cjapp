@@ -101,9 +101,9 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
 
         <TitleUI title='Lista de devedores' marginTop={10} />
 
-        <SelectBoxUI op1Rotulo="Novo"
+        <SelectBoxUI op1Rotulo="Novos"
             op1OnSelect={novoSelectOnPress} 
-            op2Rotulo='Antigo' 
+            op2Rotulo='Antigos' 
             op2OnSelect={antigoSelectOnPress} 
             defaultOpSelectedIndex={1} />          
 

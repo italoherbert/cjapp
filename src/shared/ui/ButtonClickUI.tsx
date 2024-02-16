@@ -8,28 +8,24 @@ import {
 
 export type ActionButtonProps = {
     label : string,
-    style? : any,
-    textStyle? : any,
     onPress : Function
 };
 
-function ButtonClickUI ( { label, style, textStyle, onPress } : ActionButtonProps) : React.JSX.Element {
+function ButtonClickUI ( { label, onPress } : ActionButtonProps) : React.JSX.Element {
 
     const [pressed, setPressed] = useState<boolean>(false);
 
     return (
         <Pressable style={[
                     styles.view, 
-                    (pressed === true ? styles.pressedView : styles.normalView ), 
-                    style
+                    (pressed === true ? styles.pressedView : styles.normalView )
                 ]}
                 onPress={() => {onPress()}}
                 onPressIn={() => setPressed( true )}
                 onPressOut={() => setPressed( false )}>
             <Text style={[
                     styles.text, 
-                    (pressed === true ? styles.pressedText : styles.normalText ),
-                    textStyle
+                    (pressed === true ? styles.pressedText : styles.normalText )                    
                 ]}>
                     {label}
             </Text>

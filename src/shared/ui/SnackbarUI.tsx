@@ -1,6 +1,5 @@
 
 import Snackbar from 'react-native-snackbar';
-import globalStyle from '../style/global-style';
 
 export class SnackbarUI {
     static showDanger = ( text : string ) => {

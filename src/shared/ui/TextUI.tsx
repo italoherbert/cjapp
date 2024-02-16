@@ -6,24 +6,25 @@ import {
     Text,
 } from 'react-native';
 
-import * as UIUtil from './util/ui-util';
+import * as Types from './types/types';
 
 export type SimpleFieldProps = React.PropsWithChildren<{
     marginHorizontal? : number,
+    marginVertical? : number,
     padding?: number,
-    variant?: string,
+    variant?: Types.Color,
     size?: string
 }>;
 
 function TextUI ( 
-            { children, marginHorizontal, padding, variant, size } : SimpleFieldProps ): React.JSX.Element {
+            { children, marginHorizontal, marginVertical, padding, variant, size } : SimpleFieldProps ): React.JSX.Element {
 
     const [ textColor, setTextColor ] = useState<string | undefined>(undefined);
     const [ fontSize, setFontSize ] = useState<number | undefined>(undefined);
 
     useEffect( () => {
-        setTextColor( UIUtil.getColor( variant! ) );
-        setFontSize( UIUtil.getFontSize( size! ) );        
+        setTextColor( Types.getColor( variant! ) );
+        setFontSize( Types.getFontSize( size! ) );        
     }, [variant, size] );
 
     return (
@@ -31,6 +32,7 @@ function TextUI (
                 color: textColor, 
                 fontSize: fontSize,
                 marginHorizontal: marginHorizontal,
+                marginVertical: marginVertical,
                 padding: padding }]}>
             {children?.toString()} 
         </Text>            

@@ -1,5 +1,4 @@
 import { Picker } from "@react-native-picker/picker";
-import { StyleSheet } from "react-native";
 
 export type PickerItem = {
     label : string,

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite/next';
 
-import { faEdit, faList, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faList, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import Dialog from 'react-native-dialog';
 
@@ -63,7 +63,14 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
   
     return (
       <ScrollViewUI>
-        <TitleUI title='Detalhes do Lançamento' />
+        <ButtonIconUI 
+            label='Lançamentos'
+            icon={faList}
+            flex={1}
+            onPress={() => navigation.navigate( 'TelaLancamentos' )}
+        />
+
+        <TitleUI title='Detalhes do Lançamento' marginTop={5} />
 
         <SimpleFieldUI>
           <TextUI>Descrição</TextUI>
@@ -106,37 +113,36 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
         </SimpleFieldUI>
             
         { removido === true && 
-          <TextUI variant='danger'>
+          <TextUI variant='danger' marginVertical={10}>
                 Removido!
           </TextUI>
         }
 
         <ViewUI isRow={true}>                                     
-            { removido === false && 
-              <ViewUI flex={2} isRow={true}>                
-                  <ButtonIconUI 
-                      label='Remover'
-                      icon={faX}
-                      flex={1}
-                      onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                  />
-
-                  <ButtonIconUI 
-                      label='Editar'
-                      icon={faEdit}
-                      flex={1}
-                      marginType='both'
-                      onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
-                  />
-              </ViewUI>
-            }
-            
             <ButtonIconUI 
-                label='Lançamentos'
-                icon={faList}
+                label='Novo'
+                icon={faPlus}
                 flex={1}
-                onPress={() => navigation.navigate( 'TelaLancamentos' )}
+                onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
             />
+
+            <ButtonIconUI 
+                label='Editar'
+                icon={faEdit}
+                flex={1}
+                marginType='both'
+                disable={removido}
+                onPress={() => navigation.navigate( 'SalvaLancamento', { id: route.params.id } )}
+            />
+
+            <ButtonIconUI 
+                label='Remover'
+                icon={faX}
+                flex={1}
+                variant='danger' 
+                disable={removido}                     
+                onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
+            />                                   
         </ViewUI>
 
         <Dialog.Container visible={removerDialogVisivel}>

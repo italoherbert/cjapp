@@ -1,6 +1,6 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { 
     View,
@@ -8,34 +8,89 @@ import {
     Pressable,
     StyleSheet
 } from 'react-native';
-import globalStyle from '../style/global-style';
+
+import * as Types from './types/types';
 
 export type ButtonProps = {
     icon: any,
     label : string,
-    textStyle? : any,
-    flex? : number,
     onPress : Function,
-    marginType? : string
+    flex? : number,
+    variant?: Types.Color,
+    marginType? : Types.MarginType,
+    disable? : boolean;
 }
 
-function ButtonIconUI ( { icon, label, textStyle, flex, onPress, marginType } : ButtonProps ): React.JSX.Element {
+const MARGIN_HORIZONTAL = 5;
+const DEFAULT_COLOR = '#08F';
+const DISABLED_COLOR = '#999';
+
+const BG_COLOR = "#EEF";
+const DISABLED_BG_COLOR = "#CCC";
+
+const DEFAULT_TEXTCOLOR = '#666';
+
+function ButtonIconUI ( { 
+        label,
+        icon, 
+        variant, 
+        disable, 
+        flex, 
+        marginType,
+        onPress } : ButtonProps ): React.JSX.Element {
+
+    const [iconColor, setIconColor] = useState<string|undefined>(undefined); 
+    const [marginLeft, setMarginLeft] = useState<number|undefined>(undefined);
+    const [marginRight, setMarginRight] = useState<number|undefined>(undefined);
+    const [borderColor, setBorderColor] = useState<string|undefined>(undefined);
+    const [textColor, setTextColor] = useState<string|undefined>(undefined);
+    const [backgroundColor, setBackgroundColor] = useState<string|undefined>(undefined);
+
+    const btnOnPress = async () => {
+        if ( !disable )
+            onPress();
+    };
+
+    useEffect( () => {
+        let color;
+        if ( variant ) {
+            color = Types.getColor( variant! )
+        } else {
+            color = DEFAULT_COLOR;
+        }       
+
+        setBackgroundColor( disable === true ? DISABLED_BG_COLOR : BG_COLOR );
+
+        setIconColor( disable === true ? DISABLED_COLOR : color );
+        setBorderColor( disable === true ? DISABLED_COLOR : color );
+
+        setTextColor( disable === true ? DISABLED_COLOR : DEFAULT_TEXTCOLOR );
+
+        if ( marginType === 'left' || marginType === 'both' )
+            setMarginLeft( MARGIN_HORIZONTAL );        
+        if ( marginType === 'right' || marginType === 'both' )
+            setMarginRight( MARGIN_HORIZONTAL );                
+    }, [variant, marginType, disable] );    
 
     return (
-        <Pressable onPress={() => onPress()} style={[
+        <Pressable onPress={() => btnOnPress()} style={[
                     styles.pressable, 
-                    {marginLeft: marginType === 'left' || marginType === 'both' ? 5 : 0 },
-                    {marginRight: marginType === 'right' || marginType === 'both' ? 5 : 0 },
-                    {flex: flex}
+                    { 
+                        flex: flex, 
+                        marginLeft:marginLeft, 
+                        marginRight: marginRight, 
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor
+                    },
                 ]}>
             <View style={[styles.view]}>
                 <View style={{alignItems: 'center'}}>
                     
                     <FontAwesomeIcon icon={icon} 
                         size={styles.icon.fontSize} 
-                        color={styles.icon.color} />
+                        color={iconColor} />
 
-                    <Text style={[styles.text, textStyle]}>
+                    <Text style={[styles.text, {color: textColor}]}>
                         {label}
                     </Text>
                     
@@ -49,8 +104,6 @@ const styles = StyleSheet.create({
     pressable: {
         borderWidth: 1,
         borderRadius: 6,
-        borderColor: '#CCF',
-        backgroundColor: '#EEF'
     },
     view: {       
         flexDirection: 'column',        
@@ -58,14 +111,13 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        color: '#08F',
         fontSize: 26
     },
 
     text: {
         fontSize: 14,
         fontWeight: 'normal'
-    }
+    },
 });
 
 export default ButtonIconUI;
