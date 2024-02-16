@@ -99,7 +99,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             onPress={() => navigation.navigate( 'SalvaDevedor', { id : -1 } ) }
         />
 
-        <TitleUI title='Lista de devedores' marginTop={10} />
+        <TitleUI title='Lista de devedores' />
 
         <SelectBoxUI op1Rotulo="Novos"
             op1OnSelect={novoSelectOnPress} 

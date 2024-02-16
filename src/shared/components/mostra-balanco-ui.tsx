@@ -9,8 +9,6 @@ import {
 
 import * as converter from '../../core/converter/converter';
 
-import globalStyle from '../style/global-style';
-
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 import ViewUI from '../ui/ViewUI';
@@ -57,7 +55,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
   
     return (
         <ViewUI>
-            <TitleUI title='Balanço' textAlign='center' />
+            <TitleUI title='Balanço' />
 
             <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
               <BoxFieldUI flex={1} isRow={false}>

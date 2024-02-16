@@ -70,7 +70,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
             onPress={() => navigation.navigate( 'TelaLancamentos' )}
         />
 
-        <TitleUI title='Detalhes do Lançamento' marginTop={5} />
+        <TitleUI title='Detalhes do Lançamento' />
 
         <SimpleFieldUI>
           <TextUI>Descrição</TextUI>
@@ -118,7 +118,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
           </TextUI>
         }
 
-        <ViewUI isRow={true}>                                     
+        <ViewUI isRow={true} marginVertical={10}>                                     
             <ButtonIconUI 
                 label='Novo'
                 icon={faPlus}

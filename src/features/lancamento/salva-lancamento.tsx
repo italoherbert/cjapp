@@ -90,7 +90,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
               onPress={() => navigation.navigate( 'TelaLancamentos' )}
           />
 
-          <TitleUI title='Salvar lançamento' marginTop={10} />
+          <TitleUI title='Salvar lançamento' />
 
           <TextInputUI
               setValue={setDescricao}

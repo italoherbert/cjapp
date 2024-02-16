@@ -11,15 +11,14 @@ export type TitleProps = {
     title : string,
     marginTop? : number,
     marginBottom?: number,
-    textAlign? : any
 };
 
-function TitleUI ( { title, textAlign, marginTop, marginBottom } : TitleProps ): React.JSX.Element {
+function TitleUI ( { title, marginTop, marginBottom } : TitleProps ): React.JSX.Element {
     return (
         <View style={[styles.view, {                
                 marginTop: marginTop, 
                 marginBottom: marginBottom }]}>
-            <Text style={[styles.text, { textAlign: textAlign }]}>
+            <Text style={styles.text}>
                 {title}
             </Text>
         </View>
@@ -28,10 +27,11 @@ function TitleUI ( { title, textAlign, marginTop, marginBottom } : TitleProps ):
 
 const styles = StyleSheet.create({
     view: {
-        marginBottom: 5
+        marginVertical: 15
     },
     text: {
-        fontSize: 24
+        fontSize: 24,
+        textAlign: 'center'
     },
 });
 

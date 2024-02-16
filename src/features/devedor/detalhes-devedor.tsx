@@ -71,7 +71,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                   onPress={() => navigation.navigate( 'TelaDevedores' )}
             />
 
-            <TitleUI title='Detalhes do Devedor' marginBottom={10} />
+            <TitleUI title='Detalhes do Devedor' />
 
             <SimpleFieldUI>
               <TextUI>
@@ -106,7 +106,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
               </TextUI>              
             }
             
-            <ViewUI isRow={true}>                            
+            <ViewUI isRow={true} marginVertical={10}>                            
               <ButtonIconUI 
                   label='Novo'
                   icon={faPlus}
