@@ -86,7 +86,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
 
         <SimpleFieldUI>
           <TextUI>Valor</TextUI>
-          <TextUI variant={ lancamento.valor < 0 ? 'danger' : 'primary' }>
+          <TextUI variant={ lancamento.tipo === 'debito' ? 'danger' : 'primary' }>
             {converter.formatBRL( lancamento.valor )}
           </TextUI>
         </SimpleFieldUI>
