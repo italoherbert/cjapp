@@ -50,6 +50,13 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         } catch ( error : any ) {
           handleError( error );
         }
+      } else {
+        setDescricao( '' );
+        setValor( '' );
+        setDataLanc( new Date() );
+        setTipo( 'debito' );
+        setDinheiroTipo( 'especie' );
+        setDeOndeTipo( 'do-jogo' );
       }
     };
 
@@ -90,7 +97,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         await lancamentoService.salvaLancamento( db, lancamento );
 
         navigation.navigate( 'DetalhesLancamento', { id : lancamento.id } );
-      } catch ( error : any ) {
+      } catch ( error ) {
         handleError( error );
       }
     };

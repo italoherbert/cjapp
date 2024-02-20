@@ -25,7 +25,7 @@ export const getLancamentoPorId = async ( db : SQLite.SQLiteDatabase, id : numbe
 };
 
 export const getLancamentosPorGrupoId = async ( db : SQLite.SQLiteDatabase, grupoId : number ) => {
-    return await lancamentoRepository.listaPorMesId( db, grupoId );                  
+    return await lancamentoRepository.listaPorGrupoId( db, grupoId );                  
 };
 
 export const deletaLancamentoPorId = async ( db : SQLite.SQLiteDatabase, id : number ) => {

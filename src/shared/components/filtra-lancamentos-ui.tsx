@@ -5,8 +5,6 @@ import {
 
 import * as converter from '../../core/converter/converter';
 
-import SimpleTextUI from '../ui/TextUI';
-import BoxFieldUI from '../ui/BoxFieldUI';
 import TextUI from '../ui/TextUI';
 import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
@@ -90,10 +88,10 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     return ( 
       <ViewUI marginTop={5}>
         <ViewUI marginTop={10}>
-            <SimpleTextUI>
+            <TextUI>
                 { 'De ' + converter.formatDate( dataIni ) + 
                   ' até ' + getDataFimStr( dataFim ) }
-            </SimpleTextUI>
+            </TextUI>
 
             <MostraBalancoResumidoUI 
                 lancamentos={props.lancamentos}

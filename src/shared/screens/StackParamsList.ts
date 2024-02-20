@@ -9,10 +9,14 @@ export type StackParamsList = {
     TelaLancamentos : any,
     MostraBalanco : any,
 
+    ListaLancamentosPorGrupo : { gid : number },
+
     TelaLancamentosGrupos : any,
     NovoLancamentosGrupo : any,
     DetalhesLancamentosGrupo : { id : number },
     FechaLancamentosGrupo : any,
 
-    Ajustes: any
+    Ajustes: any,
+
+    LancamentoScreens: any
 }; 

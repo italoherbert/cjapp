@@ -4,8 +4,6 @@ export default class Persistence {
     
     inicializa = async ( db : SQLite.SQLiteDatabase ) => {       
         await db.withTransactionAsync( async () => {
-            await db.execAsync( 'drop table lancamento' );
-
             await db.execAsync( `
                 create table if not exists devedor ( 
                     id integer primary key,

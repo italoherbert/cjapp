@@ -21,8 +21,8 @@ import * as lancamentosGruposService from '../../core/persistence/service/lancam
 import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
 
 import { handleError } from '../../shared/error/error-handler';
-import { MessageError } from '../../core/error/MessageError';
-import SnackbarUI from '../../shared/ui/SnackbarUI';
+import SelectBoxUI from '../../shared/ui/SelectBoxUI';
+import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 
 const MAX_SHOW_REGS = 12;
 
@@ -30,18 +30,42 @@ function TelaLancamentosGrupos (
         { route, navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentosGrupos'> ) : React.JSX.Element {
 
     const [grupos, setGrupos] = useState<LancamentosGrupo[]>([]);
-    const [grupoAberto, setGrupoAberto] = useState<boolean>(true);
+    const [grupoAberto, setGrupoAberto] = useState<boolean>(false);
+    const [ativosVisible, setAtivosVisible] = useState<boolean>(true);
 
     const db = useSQLiteContext();
     const isFocused = useIsFocused();
 
     const carregaTela = async () => {
         try {
-            let aberto = await lancamentosGruposService.getGrupoAberto( db );
-            setGrupoAberto( aberto !== null ); 
+            let grp = await lancamentosGruposService.getGrupoAberto( db );
+            if ( grp !== null )
+                setGrupoAberto( grp.aberto == true ); 
+            else setGrupoAberto( false );
 
-            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS );
+            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, true );
             setGrupos( grps );
+            setAtivosVisible( true );
+        } catch ( error : any ) {
+            handleError( error );
+        }
+    };
+
+    const ativosSelectOnPress = async () => {
+        try {
+            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, true );
+            setGrupos( grps );
+            setAtivosVisible( true );
+        } catch ( error : any ) {
+            handleError( error );
+        }
+    };
+
+    const desativadosSelectOnPress = async () => {
+        try {
+            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, false );
+            setGrupos( grps );
+            setAtivosVisible( false );
         } catch ( error : any ) {
             handleError( error );
         }
@@ -49,9 +73,9 @@ function TelaLancamentosGrupos (
 
     const getDataFimStr = ( dataFim? : Date ) => {
         if ( dataFim === undefined || dataFim === null )
-            return " o momento";
+            return "o momento";
         if ( new Date( dataFim ).getTime() === 0 )
-            return " o momento";
+            return "o momento";
 
         return converter.formatDate( dataFim );
     };    
@@ -82,8 +106,17 @@ function TelaLancamentosGrupos (
                 }
             </ViewUI>
 
-            <TitleUI title='Lista de lançamentos' />      
-                    
+            <TitleUI title='Lista de grupos' />      
+
+            <ViewUI marginBottom={10}>
+                <SelectBoxUI op1Rotulo="Ativos"
+                    op1OnSelect={ativosSelectOnPress} 
+                    op2Rotulo='Desativados' 
+                    op2OnSelect={desativadosSelectOnPress} 
+                    defaultOpSelectedIndex={ativosVisible === true ? 1 : 2} 
+                /> 
+            </ViewUI>
+
             {grupos.map( ( grupo : LancamentosGrupo, index : number ) => 
                 <ViewUI key={index}>
                     <Pressable 
@@ -94,11 +127,13 @@ function TelaLancamentosGrupos (
                                 border='light-x' 
                                 isRow={true}
                                 justifyContent="space-between">
-
                             <TextUI variant='dark-x'>
                                 {converter.formatDate( grupo.dataIni ) + 
                                 ' até ' + 
                                 getDataFimStr( grupo.dataFim )}
+                            </TextUI>
+                            <TextUI variant={ grupo.aberto == true ? 'success' : 'dark' }>
+                                {grupo.aberto == true ? 'Aberto' : 'Fechado' }
                             </TextUI>
                         </ViewUI>                      
                     </Pressable>

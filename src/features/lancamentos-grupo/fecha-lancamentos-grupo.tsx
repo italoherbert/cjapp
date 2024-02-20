@@ -27,11 +27,13 @@ import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo
 import ButtonIconUI from "../../shared/ui/ButtonIconUI";
 import { Lancamento } from "../../core/persistence/model/lancamento";
 import MostraBalancoResumidoUI from "../../shared/components/mostra-balanco-resumido-ui";
+import TextUI from "../../shared/ui/TextUI";
 
 function FechaLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'FechaLancamentosGrupo'> ) : React.JSX.Element {
 
     const [fecharDialogVisivel, setFecharDialogVisivel] = useState<boolean>(false);
+    const [grupoFechado, setGrupoFechado] = useState<boolean>(false);
     
     const [grupo, setGrupo] = useState<LancamentosGrupo>( new LancamentosGrupo() );
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
@@ -65,10 +67,21 @@ function FechaLancamentosGrupo (
         try {                              
             await lancamentosGrupoService.fechaGrupo( db, grupo.id, totalEmEspecie, totalEmContaCorrente );            
 
-            let grp = await lancamentosGrupoService.getGrupoPorId( db, grupo.id );
+            let grp = await lancamentosGrupoService.getGrupoPorId( db, grupo.id ); 
             setGrupo( grp );
 
-            SnackbarUI.showInfo( 'Grupo fechado com sucesso.' );
+            let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grp.id );                        
+
+            let totais = await lancamentoLogica.carregaTotais( lancs );
+
+            setTotalEmEspecie( totais.totalEmEspecie );
+            setTotalEmContaCorrente( totais.totalEmContaCorrente );
+
+            setLancamentos( lancs );
+            setGrupo( grp );
+            
+            setGrupoFechado( true );
+            setFecharDialogVisivel( false );
         } catch ( error ) {
             handleError( error );
         }
@@ -77,7 +90,7 @@ function FechaLancamentosGrupo (
     useEffect( () => {
         if ( isFocused )
             carregaGrupo();
-    }, [isFocused] );
+    }, [isFocused ] );
 
     return (
         <ScrollViewUI>
@@ -94,6 +107,12 @@ function FechaLancamentosGrupo (
 
             <MostraBalancoResumidoUI lancamentos={lancamentos} />
 
+            { grupoFechado === true && 
+                <TextUI marginVertical={10} variant="primary">
+                    Grupo fechado.
+                </TextUI>
+            }
+
             <ViewUI marginTop={10}>
                 <ButtonClickUI
                     label="Fechar grupo aberto" 
@@ -105,7 +124,7 @@ function FechaLancamentosGrupo (
                 <Dialog.Description>
                     Tem certeza que deseja zerar as contas e fechar o grupo?
                 </Dialog.Description>
-                <Dialog.Button label="Criar novo" onPress={fecharGrupoOnPress} />
+                <Dialog.Button label="Fechar grupo" onPress={fecharGrupoOnPress} />
                 <Dialog.Button label="Cancelar" onPress={() => setFecharDialogVisivel( false )} />                  
             </Dialog.Container>
 

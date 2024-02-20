@@ -5,6 +5,7 @@ import TelaLancamentos from '../../features/lancamento/tela-lancamentos';
 import SalvaLancamento from '../../features/lancamento/salva-lancamento';
 import DetalhesLancamento from '../../features/lancamento/detalhes-lancamento';
 import MostraBalanco from '../../features/lancamento/mostra-balanco';
+import ListaLancamentosPorGrupo from '../../features/lancamento/lista-lancamentos-por-grupo';
 
 const Stack = createNativeStackNavigator<StackParamsList>();
 
@@ -15,6 +16,7 @@ function LancamentoScreens(): React.JSX.Element {
         <Stack.Screen name="SalvaLancamento" component={SalvaLancamento} />
         <Stack.Screen name="DetalhesLancamento" component={DetalhesLancamento} />
         <Stack.Screen name="TelaLancamentos" component={TelaLancamentos} />
+        <Stack.Screen name="ListaLancamentosPorGrupo" component={ListaLancamentosPorGrupo} />
         <Stack.Screen name="MostraBalanco" component={MostraBalanco} />
     </Stack.Navigator>
   );

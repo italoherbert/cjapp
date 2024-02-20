@@ -11,7 +11,7 @@ export const insere = async ( db : SQLite.SQLiteDatabase, lancamento : Lancament
             lancamento.descricao,
             lancamento.valor,
             lancamento.tipo,
-            lancamento.dataLanc.toISOString(),
+            new Date( lancamento.dataLanc ).toISOString(),
             lancamento.emContaCorrente,
             lancamento.doJogo,
         ] 
@@ -27,7 +27,7 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, lancamento : Lancame
             lancamento.descricao,
             lancamento.valor,
             lancamento.tipo,
-            lancamento.dataLanc.toISOString(),
+            new Date( lancamento.dataLanc ).toISOString(),
             lancamento.emContaCorrente,
             lancamento.doJogo,
             lancamento.id
@@ -46,13 +46,13 @@ export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number 
     return rowsToLancamentos( result );
 };
 
-export const listaPorMesId = async ( db : SQLite.SQLiteDatabase, lancamentosMesId : number ) => {    
+export const listaPorGrupoId = async ( db : SQLite.SQLiteDatabase, lancamentosGrupoId : number ) => {    
     let result = await db.getAllAsync( 
         `select 
             id, lancamentos_grupo_id, 
             descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo
          from lancamento 
-         where lancamentos_grupo_id=?`, [ lancamentosMesId ] );         
+         where lancamentos_grupo_id=?`, [ lancamentosGrupoId ] );         
     
     return rowsToLancamentos( result );
 };

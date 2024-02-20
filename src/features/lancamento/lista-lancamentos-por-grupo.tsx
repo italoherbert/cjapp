@@ -22,7 +22,7 @@ import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo
 
 import { handleError } from '../../shared/error/error-handler';
 
-function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
+function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps<StackParamsList, 'ListaLancamentosPorGrupo'> ): React.JSX.Element {
     
     const [lancamentosGrupoAberto, setLancamentosGrupoAberto] = useState<LancamentosGrupo>(new LancamentosGrupo());
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
@@ -32,7 +32,9 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
 
     const carregaLancamentos = async () => {
       try {        
-        let grupo = await lancamentosGrupoService.getGrupoAberto( db );        
+        let gid = route.params.gid;
+        let grupo = await lancamentosGrupoService.getGrupoPorId( db, gid );        
+
         if ( grupo !== null ) {          
           let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grupo.id );
 
@@ -57,7 +59,7 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
 
         <ViewUI flex={2} isRow={true}>
             <ButtonIconUI 
-                label='Novo lançamento'
+                label='Novo'
                 icon={faPlus}
                 flex={1}
                 marginType='right'
@@ -74,7 +76,7 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
 
         { carregados === false &&
           <TextUI variant='primary' marginVertical={10}>
-            Nenhum grupo de lançamentos aberto.
+            Lançamentos não carregados pelo ID do grupo.
           </TextUI>
         }
 
@@ -91,5 +93,5 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
     
   }
     
-  export default TelaLancamentos;
+  export default ListaLancamentosPorGrupo;
   

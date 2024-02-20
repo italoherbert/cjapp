@@ -7,7 +7,7 @@ export class SnackbarUI {
              text : text, 
              duration: Snackbar.LENGTH_LONG,
              textColor: '#FFF',
-             backgroundColor: '#F55'
+             backgroundColor: '#F55',
         } );
     };
     static showInfo = ( text : string ) => {
@@ -15,8 +15,18 @@ export class SnackbarUI {
             text : text, 
             duration: Snackbar.LENGTH_LONG,
             textColor: '#FFF',
-            backgroundColor: '#5AF'
+            backgroundColor: '#5AF',            
         } );
+    };
+
+    static showDanger2 = ( text : string ) => {
+        Snackbar.show( {
+            text : text, 
+            duration: Snackbar.LENGTH_LONG,
+            textColor: '#FFF',
+            backgroundColor: '#F55',
+            numberOfLines: 20
+       } );
     };
 }
 export default SnackbarUI;

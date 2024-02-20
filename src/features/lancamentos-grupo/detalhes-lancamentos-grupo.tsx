@@ -64,14 +64,13 @@ function DetalhesLancamentosGrupo (
     };
 
     const desativarOnPress = async () => {
+        setDesativarDialogVisivel( false );
         try {
             if ( route.params.id <= 0 )
                 throw new MessageError( 'ID de grupo de lançamento inválido.' );
 
             await lancamentosGrupoService.desativaGrupo( db, route.params.id );
             setDesativado( true );
-
-            SnackbarUI.showInfo( 'Grupo desativado com sucesso.' );
         } catch ( error ) {
             handleError( error );
         }
@@ -150,7 +149,6 @@ function DetalhesLancamentosGrupo (
                         label='Ativar'
                         icon={faCheck}
                         flex={1}
-                        marginType="right"
                         onPress={ativarOnPress}
                     />                                   
                 }
@@ -164,6 +162,14 @@ function DetalhesLancamentosGrupo (
                         onPress={ () => navigation.navigate( 'FechaLancamentosGrupo' ) }
                     />
                 }
+
+                <ButtonIconUI 
+                    label="Lançamentos"
+                    icon={faList}
+                    flex={1}
+                    marginType="left"
+                    onPress={ () => navigation.navigate( 'LancamentoScreens', { screen : 'ListaLancamentosPorGrupo', params: { gid : grupo.id } } ) }
+                />
             </ViewUI>
 
             <Dialog.Container visible={desativarDialogVisivel}>

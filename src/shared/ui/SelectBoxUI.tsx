@@ -40,7 +40,7 @@ function SelectBoxUI( { op1OnSelect, op2OnSelect, op1Rotulo, op2Rotulo, defaultO
             setOp1Selected( true );
             setOp2Selected( false );
         }
-    }, [] );
+    }, [defaultOpSelectedIndex] );
 
     return (
         <View style={styles.view}>

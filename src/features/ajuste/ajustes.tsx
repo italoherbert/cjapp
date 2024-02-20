@@ -12,8 +12,12 @@ import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 
+import * as ajustesService from '../../core/persistence/service/ajustes-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
-import { MessageError } from '../../core/error/MessageError';
+
+import { handleError } from '../../shared/error/error-handler';
+import ViewUI from '../../shared/ui/ViewUI';
+import { Alert } from 'react-native';
 
 const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList, 'Ajustes'> ): React.JSX.Element => {
 
@@ -23,26 +27,35 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
     const resetarOnPress = async () => {
         setResetarDialogVisivel( false );
         try {
-          await lancamentosGrupoService.deletaTodosOsGrupos( db );  
+            await lancamentosGrupoService.deletaTodosOsGrupos( db );  
   
-          SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
-        } catch ( error : any ) {
-          if ( error instanceof MessageError )            
-            SnackbarUI.showDanger( error.message );
+            SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
+        } catch ( error ) {
+          handleError( error );
         }
     };
 
-    
+    const ajustarDBOnPress = async () => {
+        try {
+            await ajustesService.ajustarDB( db );
 
+            SnackbarUI.showInfo( 'Ajuste realizado com sucesso.' );
+        } catch ( error ) {
+            handleError( error );
+        }
+    };
+    
     return (
         <ScrollViewUI>            
-            <TitleUI title='Ajustes' marginBottom={10}/>
-                
-            <ButtonClickUI
-                label="Resetar lançamentos"                         
-                onPress={() => setResetarDialogVisivel( !resetarDialogVisivel )} 
-            />                                             
-            
+            <TitleUI title='Ajustes' />
+                            
+            <ViewUI marginVertical={10}>
+                <ButtonClickUI
+                    label="Ajustar banco de dados"                         
+                    onPress={ ajustarDBOnPress } 
+                /> 
+            </ViewUI>
+                                                        
             <Dialog.Container visible={resetarDialogVisivel}>
                 <Dialog.Title>Exclusão de lançamentos</Dialog.Title>
                 <Dialog.Description>

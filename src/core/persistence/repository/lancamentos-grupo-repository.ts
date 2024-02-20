@@ -4,10 +4,10 @@ import { LancamentosGrupo } from '../model/lancamentos-grupo';
 export const insere = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosGrupo ) => {    
     let result = await db.runAsync( 
         `insert into lancamentos_grupo ( 
-            data_ini, data_fim, aberto
+            data_ini, data_fim, aberto, ativo
          ) values (?, ?, ?, ?)`, [   
-            grupo.dataIni.toISOString(),
-            grupo.dataFim!.toISOString(),
+            new Date( grupo.dataIni ).toISOString(),
+            new Date( grupo.dataFim! ).toISOString(),
             grupo.aberto,
             grupo.ativo
         ] 
@@ -20,9 +20,10 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosG
         `update lancamentos_grupo set 
             data_ini=?, data_fim=?, aberto=?, ativo=?  
          where id=?`, [            
-            grupo.dataIni.toISOString(),
-            grupo.dataFim!.toISOString(),
+            new Date( grupo.dataIni ).toISOString(),
+            new Date( grupo.dataFim! ).toISOString(),
             grupo.aberto,
+            grupo.ativo,
             grupo.id
         ]
     );    
@@ -54,36 +55,30 @@ export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {
     return rowsToLancamentosGrupos( result );
 };
 
-export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number ) => {    
+export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number, ativo : boolean ) => {    
     let result = await db.getAllAsync( 
         `select 
             id, data_ini, data_fim, aberto, ativo
          from lancamentos_grupo 
-         limit ?`, [ quant ] );         
+         where ativo=? 
+         order by data_ini desc 
+         limit ?`, [ ativo, quant ] );         
     
     return rowsToLancamentosGrupos( result );
 };
 
-export const getAberto = async ( db : SQLite.SQLiteDatabase ) => {
-    let result = await db.getFirstAsync( 
+export const getUltimo = async ( db : SQLite.SQLiteDatabase ) => {
+    let result = await db.getFirstAsync(
         `select 
-            id, data_ini, data_fim, aberto, ativo
-         from lancamentos_grupo
-         where aberto=true`, [] );
+            id, data_ini, data_fim, aberto, ativo 
+         from lancamentos_grupo 
+         order by data_ini desc`
+    );
 
     if ( result === null )
         return null;
 
     return rowToLancamentosGrupo( result );
-}
-
-export const existeAberto = async ( db : SQLite.SQLiteDatabase ) => {
-    let result = await db.getFirstAsync( 
-        `select id
-         from lancamentos_grupo
-         where aberto=true`, [] );
-    
-    return ( result !== null );
 };
 
 export const findById = async ( db : SQLite.SQLiteDatabase, id : number ) => {
