@@ -75,13 +75,12 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         let lancamento : Lancamento;
         if ( route.params.id > 0 ) {
           lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
-          lancamento.dataLanc = dataLanc;
         } else {
           lancamento = new Lancamento();
           lancamento.id = 0;
-          lancamento.dataLanc = new Date();
         }
 
+        lancamento.dataLanc = dataLanc;
         lancamento.descricao = descricao;
         lancamento.valor = parseFloat( val );
         lancamento.tipo = tipo;

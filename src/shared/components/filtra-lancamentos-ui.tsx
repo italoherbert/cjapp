@@ -86,18 +86,16 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     }, [props.lancamentos] );
   
     return ( 
-      <ViewUI marginTop={5}>
-        <ViewUI marginTop={10}>
-            <TextUI>
-                { 'De ' + converter.formatDate( dataIni ) + 
-                  ' até ' + getDataFimStr( dataFim ) }
-            </TextUI>
+      <ViewUI>
+        <TextUI>
+            { 'De ' + converter.formatDate( dataIni ) + 
+              ' até ' + getDataFimStr( dataFim ) }
+        </TextUI>
 
-            <MostraBalancoResumidoUI 
-                lancamentos={props.lancamentos}
-            />
-        </ViewUI>
-
+        <MostraBalancoResumidoUI 
+            lancamentos={props.lancamentos}
+        />
+        
         <TitleUI title='Lista de lançamentos' marginTop={10} />      
 
         <ViewUI marginBottom={20}>        

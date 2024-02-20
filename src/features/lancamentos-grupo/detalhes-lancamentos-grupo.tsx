@@ -22,7 +22,7 @@ import SimpleFieldUI from "../../shared/ui/SimpleFieldUI";
 import TextUI from "../../shared/ui/TextUI";
 import TitleUI from "../../shared/ui/TitleUI";
 import ButtonIconUI from "../../shared/ui/ButtonIconUI";
-import { faCheck, faList, faX } from "@fortawesome/free-solid-svg-icons";
+import { faCashRegister, faCheck, faList, faX } from "@fortawesome/free-solid-svg-icons";
 import SnackbarUI from "../../shared/ui/SnackbarUI";
 
 function DetalhesLancamentosGrupo ( 
@@ -165,7 +165,7 @@ function DetalhesLancamentosGrupo (
 
                 <ButtonIconUI 
                     label="Lançamentos"
-                    icon={faList}
+                    icon={faCashRegister}
                     flex={1}
                     marginType="left"
                     onPress={ () => navigation.navigate( 'LancamentoScreens', { screen : 'ListaLancamentosPorGrupo', params: { gid : grupo.id } } ) }

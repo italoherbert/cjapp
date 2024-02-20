@@ -13,6 +13,7 @@ import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from '../../shared/ui/ViewUI';
 import TextUI from '../../shared/ui/TextUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
@@ -59,7 +60,7 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
 
         <ViewUI flex={2} isRow={true}>
             <ButtonIconUI 
-                label='Novo'
+                label='Novo lançamento'
                 icon={faPlus}
                 flex={1}
                 marginType='right'
@@ -73,6 +74,8 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
                 marginType='left'
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </ViewUI>        
+
+        <TitleUI title='Lancs. do grupo' />
 
         { carregados === false &&
           <TextUI variant='primary' marginVertical={10}>

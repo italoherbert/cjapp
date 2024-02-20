@@ -13,6 +13,7 @@ import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from '../../shared/ui/ViewUI';
 import TextUI from '../../shared/ui/TextUI';
+import TitleUI from '../../shared/ui/TitleUI';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
@@ -71,6 +72,8 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
                 marginType='left'
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </ViewUI>        
+
+        <TitleUI title='Lancs. do grupo ativo' />
 
         { carregados === false &&
           <TextUI variant='primary' marginVertical={10}>
