@@ -1,12 +1,4 @@
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
-
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-import globalStyle from '../../shared/style/global-style';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
@@ -34,10 +26,6 @@ return (
     );
     
   }
-  
-  const styles = StyleSheet.create({         
-        
-  });
-  
+    
   export default MostraBalanco;
   

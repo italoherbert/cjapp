@@ -17,6 +17,8 @@ import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import { Lancamento } from '../../core/persistence/model/lancamento';
 
+import { handleError } from '../../shared/error/error-handler';
+
 function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'FiltraLancamentos'> ): React.JSX.Element {
     
     const [dataIni, setDataIni] = useState<Date>(new Date());
@@ -26,13 +28,13 @@ function FiltraLancamentos({ navigation } : NativeStackScreenProps<StackParamsLi
 
     const filtra = async () => {  
         try {      
-            let lancs = await lancamentoService.filtraPorIntervaloIgnoreTime( db, dataIni, dataFim );      
+            let lancs : Lancamento[] = [];//await lancamentoService.filtraPorIntervaloIgnoreTime( db, dataIni, dataFim );      
             setLancamentos( lancs );
 
             if ( lancs.length === 0 )
                 SnackbarUI.showInfo( 'Nenhum lancamento encontrado.' );
         } catch ( error : any ) {
-            SnackbarUI.showDanger( error.message );
+            handleError( error );
         }
     };
             

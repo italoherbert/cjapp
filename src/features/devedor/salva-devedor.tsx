@@ -20,6 +20,9 @@ import TitleUI from '../../shared/ui/TitleUI';
 import * as devedorService from '../../core/persistence/service/devedor-service';
 import {Devedor} from '../../core/persistence/model/devedor';
 
+import { MessageError } from '../../core/error/MessageError';
+import { handleError } from '../../shared/error/error-handler';
+
 
 const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaDevedor'> ): React.JSX.Element => {
     
@@ -31,10 +34,14 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
+        try {
         let devedor : Devedor = await devedorService.getDevedorPorId( db, route.params.id );
         setNome( devedor.nome );
         setValor( devedor.valor.toString().replaceAll( ',', '.' ) );        
         setTempo( devedor.antigo == true ? 'antigo' : 'novo' );
+        } catch ( error : any ) {
+          handleError( error );
+        }
       }
     }, [route.params.id] );
 
@@ -45,10 +52,8 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
 
     const salvarOnPress = async () => {  
       let val = valor.replaceAll( ',', '.' );
-      if ( isNaN( parseFloat( val ) ) === true ) {
-        SnackbarUI.showDanger( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );
-        return;
-      }
+      if ( isNaN( parseFloat( val ) ) === true )
+        throw new MessageError( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );      
 
       try {
         let devedor : Devedor;
@@ -67,7 +72,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
 
         navigation.navigate( 'DetalhesDevedor', { id : devedor.id } );
       } catch ( error : any ) {
-        SnackbarUI.showDanger( ''+error.message );
+        handleError( error );
       }
     };
   

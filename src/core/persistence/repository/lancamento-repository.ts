@@ -4,14 +4,16 @@ import { Lancamento } from '../model/lancamento';
 export const insere = async ( db : SQLite.SQLiteDatabase, lancamento : Lancamento ) => {    
     let result = await db.runAsync( 
         `insert into lancamento ( 
-            descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo
-        ) values (?, ?, ?, ?, ?, ?)`, [   
+            lancamentos_grupo_id, 
+            descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo 
+        ) values (?, ?, ?, ?, ?, ?, ?)`, [   
+            lancamento.lancamentosGrupoId,
             lancamento.descricao,
             lancamento.valor,
             lancamento.tipo,
             lancamento.dataLanc.toISOString(),
             lancamento.emContaCorrente,
-            lancamento.doJogo
+            lancamento.doJogo,
         ] 
     ); 
     lancamento.id = result.lastInsertRowId;
@@ -33,39 +35,25 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, lancamento : Lancame
     );    
 };
 
-export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {    
+export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo 
-         from lancamento`, [] );         
+            id, lancamentos_grupo_id, 
+            descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo
+         from lancamento 
+         limit ?`, [ quant ] );         
     
     return rowsToLancamentos( result );
 };
 
-export const filtraPorMes = async ( db : SQLite.SQLiteDatabase, dataMes : string ) => {
+export const listaPorMesId = async ( db : SQLite.SQLiteDatabase, lancamentosMesId : number ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo  
+            id, lancamentos_grupo_id, 
+            descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo
          from lancamento 
-         where strftime(\'%Y-%m\', date( data_lanc ) ) = ?`, [ 
-            dataMes
-        ] 
-    );     
+         where lancamentos_grupo_id=?`, [ lancamentosMesId ] );         
     
-    return rowsToLancamentos( result );
-};
- 
-export const filtraPorIntervalo = async ( db : SQLite.SQLiteDatabase, dataLancIni : Date, dataLancFim : Date ) => {    
-    let result = await db.getAllAsync( 
-        `select 
-            id, descricao, valor, tipo, data_lanc, em_conta_corrente, do_jogo  
-         from lancamento 
-         where data_lanc between ? and ?`, [ 
-            dataLancIni.toISOString(), 
-            dataLancFim.toISOString() 
-        ] 
-    );         
-
     return rowsToLancamentos( result );
 };
 
@@ -114,5 +102,6 @@ const rowToLancamento = ( row : any ) => {
     lanc.dataLanc = row['data_lanc'];
     lanc.emContaCorrente = row['em_conta_corrente'];
     lanc.doJogo = row['do_jogo'];
+    lanc.lancamentosGrupoId = row['lancamentos_grupo_id'];
     return lanc;
 };

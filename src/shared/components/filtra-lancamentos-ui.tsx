@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Pressable,
-  StyleSheet
+  Pressable
 } from 'react-native';
 
 import * as converter from '../../core/converter/converter';
@@ -13,9 +12,12 @@ import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
+import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
+
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 export type FiltraLancamentosProps = {
+    lancamentosGrupoAberto? : LancamentosGrupo,
     lancamentos : Lancamento[],
     navigateToSaveLancamentos : Function,
     navigateToDetalhesLancamentos : Function,
@@ -25,7 +27,8 @@ const MAX_SHOW_REGS : number = 200;
 
 function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Element {
 
-    const [dataLancMaisAntigo, setDataLancMaisAntigo] = useState<Date>(new Date());
+    const [dataIni, setDataIni] = useState<Date>(new Date());
+    const [dataFim, setDataFim] = useState<Date>(new Date());
     const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
     const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
     const [lucroTotal, setLucroTotal] = useState<number>(0);
@@ -48,8 +51,13 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
             gpLancsExpandir.push( false );        
 
         let lancTotais = await lancamentoLogica.carregaTotais( lancs );
-        let gruposLancs = await lancamentoLogica.carregaGruposLancs( lancs )
-        let dtLancMaisAntigo = await lancamentoLogica.dataLancMaisAntigo( lancs );
+        let gruposLancs = await lancamentoLogica.carregaGruposLancs( lancs );
+
+        let dataIni = props.lancamentosGrupoAberto!.dataIni;
+
+        let dataFim = new Date();
+        if ( props.lancamentosGrupoAberto!.dataFim !== undefined )
+          dataFim = props.lancamentosGrupoAberto!.dataFim;
 
         setTotalEmContaCorrente( lancTotais.totalEmContaCorrente );
         setTotalEmEspecie( lancTotais.totalEmEspecie );
@@ -57,9 +65,11 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         setDebitoTotal( lancTotais.debitoTotal );
         setLucroTotal( lancTotais.lucroTotal );
 
-        setDataLancMaisAntigo( dtLancMaisAntigo );
         setGruposLancs( gruposLancs );                
         setGruposLancsExpandir( gpLancsExpandir );
+
+        setDataIni( dataIni );
+        setDataFim( dataFim );
     };
 
     useEffect( () => {
@@ -70,7 +80,8 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
       <ViewUI marginTop={5}>
         <ViewUI marginTop={10}>
             <SimpleTextUI>
-                De {converter.formatDate( dataLancMaisAntigo )} até {converter.formatDate( new Date() )}
+                { 'De ' + converter.formatDate( dataIni ) + 
+                  ' até ' + converter.formatDate( dataFim ) }
             </SimpleTextUI>
 
             <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
@@ -186,10 +197,6 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     );
     
   }
-  
-  const styles = StyleSheet.create({             
     
-  });
-  
   export default FiltraLancamentosUI;
   

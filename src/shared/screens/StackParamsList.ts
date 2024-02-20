@@ -8,7 +8,12 @@ export type StackParamsList = {
     DetalhesLancamento : { id : number },
     TelaLancamentos : any,
     FiltraLancamentos : any,
-    MostraBalanco : any
-    
+    MostraBalanco : any,
+
+    TelaLancamentosGrupos : any,
+    NovoLancamentosGrupo : any,
+    DetalhesLancamentosGrupo : { id : number },
+    FechaLancamentosGrupo : any,
+
     Ajustes: any
 }; 

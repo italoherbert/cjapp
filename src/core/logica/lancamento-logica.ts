@@ -9,7 +9,7 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     let totDebito = 0;
     let totCredito = 0;
     let totOutrosDebitos = 0;
-    let totOutrosCreditos = 0;
+    let totOutrosCreditos = 0;    
 
     for( let lanc of lancs ) {
       if ( lanc.tipo === 'debito' ) {        
@@ -38,7 +38,11 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
         }
       }
     };
-    
+        
+    let creditoTotalGeral = totCredito + totOutrosCreditos;
+    let debitoTotalGeral = totDebito + totOutrosDebitos;
+    let totalGeral = creditoTotalGeral - debitoTotalGeral;
+
     let lucroTotal = totCredito - totDebito;
 
     let lancTotais = new LancTotais();
@@ -48,6 +52,11 @@ export const carregaTotais = async ( lancs : Lancamento[] ) => {
     lancTotais.creditoTotal = totCredito;
     lancTotais.outrosDebitosTotal = totOutrosDebitos;
     lancTotais.outrosCreditosTotal = totOutrosCreditos;
+
+    lancTotais.debitoTotalGeral = debitoTotalGeral;
+    lancTotais.creditoTotalGeral = creditoTotalGeral;
+    lancTotais.totalGeral = totalGeral;
+    
     lancTotais.lucroTotal = lucroTotal;
 
     return lancTotais;

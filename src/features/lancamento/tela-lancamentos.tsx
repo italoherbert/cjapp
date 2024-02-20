@@ -12,23 +12,38 @@ import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from '../../shared/ui/ViewUI';
+import TextUI from '../../shared/ui/TextUI';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
+
 import { Lancamento } from '../../core/persistence/model/lancamento';
-import SnackbarUI from '../../shared/ui/SnackbarUI';
+import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
+
+import { handleError } from '../../shared/error/error-handler';
 
 function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
+    const [lancamentosGrupoAberto, setLancamentosGrupoAberto] = useState<LancamentosGrupo>(new LancamentosGrupo());
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
+    const [carregados, setCarregados] = useState<boolean>(false);
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
     const carregaLancamentos = async () => {
       try {
-        let lancs = await lancamentoService.filtraPorMes( db, new Date() );
-        setLancamentos( lancs );
+        let grupo = await lancamentosGrupoService.getGrupoAberto( db );
+        if ( grupo !== null ) {          
+          let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grupo.id );
+
+          setLancamentos( lancs );
+          setLancamentosGrupoAberto( grupo );
+          setCarregados( true );
+        } else {
+          setCarregados( false );
+        }
       } catch ( error : any ) {
-        SnackbarUI.showDanger( error.message );
+        handleError( error );
       }
     };
 
@@ -62,12 +77,21 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
                 flex={1}
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </ViewUI>        
-        
-        <FiltraLancamentosUI 
-            lancamentos={ lancamentos } 
-            navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
-            navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
-        />           
+
+        { carregados === false &&
+          <TextUI variant='primary' marginVertical={10}>
+            Nenhum grupo de lançamentos aberto.
+          </TextUI>
+        }
+
+        { carregados === true &&      
+            <FiltraLancamentosUI 
+                lancamentos={ lancamentos }
+                lancamentosGrupoAberto={ lancamentosGrupoAberto } 
+                navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
+                navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
+            />           
+        }
       </ScrollViewUI>
     );
     

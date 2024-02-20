@@ -18,7 +18,11 @@ import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
+
 import {Lancamento} from '../../core/persistence/model/lancamento';
+import { handleError } from '../../shared/error/error-handler';
+import { MessageError } from '../../core/error/MessageError';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
@@ -31,18 +35,23 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
-    const loadTela = useCallback( async () => {
+    const loadTela = async () => {
       if ( route.params.id > 0 ) {
-        let lancamento : Lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
-        setDescricao( lancamento.descricao );
-        setValor( lancamento.valor.toString().replaceAll( ',', '.' ) );
-        setDataLanc( new Date( lancamento.dataLanc ) );
-        setTipo( lancamento.tipo );
+        try {
+          let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
 
-        setDinheiroTipo( lancamento.emContaCorrente == true ? 'conta' : 'especie' );
-        setDeOndeTipo( lancamento.doJogo == true ? 'do-jogo' : 'outro' );
+          setDescricao( lancamento.descricao );
+          setValor( lancamento.valor.toString().replaceAll( ',', '.' ) );
+          setDataLanc( new Date( lancamento.dataLanc ) );
+          setTipo( lancamento.tipo );
+
+          setDinheiroTipo( lancamento.emContaCorrente == true ? 'conta' : 'especie' );
+          setDeOndeTipo( lancamento.doJogo == true ? 'do-jogo' : 'outro' );
+        } catch ( error : any ) {
+          handleError( error );
+        }
       }
-    }, [route.params.id] );
+    };
 
     useEffect( () => {
       if ( isFocused )
@@ -51,12 +60,11 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
 
     const salvarOnPress = async () => {  
       let val = valor.replaceAll( ',', '.' );
-      if ( isNaN( parseFloat( val ) ) === true ) {
-        SnackbarUI.showDanger( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );
-        return;
-      }
 
       try {
+        if ( isNaN( parseFloat( val ) ) === true )
+          throw new MessageError( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );              
+
         let lancamento : Lancamento;
         if ( route.params.id > 0 ) {
           lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
@@ -73,11 +81,17 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
         lancamento.emContaCorrente = dinheiroTipo === 'conta';
         lancamento.doJogo = deOndeTipo === 'do-jogo';
 
+        let grupo = await lancamentosGrupoService.getGrupoAberto( db );
+        if ( grupo === null )
+          throw new MessageError( 'Nenhum grupo de lançamentos aberto.' );           
+
+        lancamento.lancamentosGrupoId = grupo.id;
+
         await lancamentoService.salvaLancamento( db, lancamento );
 
         navigation.navigate( 'DetalhesLancamento', { id : lancamento.id } );
       } catch ( error : any ) {
-        SnackbarUI.showDanger( ''+error.message );
+        handleError( error );
       }
     };
   

@@ -12,7 +12,8 @@ import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 
-import * as lancamentoService from '../../core/persistence/service/lancamento-service';
+import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
+import { MessageError } from '../../core/error/MessageError';
 
 const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList, 'Ajustes'> ): React.JSX.Element => {
 
@@ -22,13 +23,16 @@ const Ajustes = ( { navigation, route } : NativeStackScreenProps<StackParamsList
     const resetarOnPress = async () => {
         setResetarDialogVisivel( false );
         try {
-          await lancamentoService.deletaTodosOsLancamentos( db );  
+          await lancamentosGrupoService.deletaTodosOsGrupos( db );  
   
           SnackbarUI.showInfo( 'Lista de lançamentos resetada com sucesso.' );
         } catch ( error : any ) {
-          SnackbarUI.showDanger( error.message );
+          if ( error instanceof MessageError )            
+            SnackbarUI.showDanger( error.message );
         }
     };
+
+    
 
     return (
         <ScrollViewUI>            

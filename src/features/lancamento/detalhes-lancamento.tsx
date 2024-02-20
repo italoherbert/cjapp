@@ -22,6 +22,8 @@ import * as converter from '../../core/converter/converter';
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
+import { handleError } from '../../shared/error/error-handler';
+import { MessageError } from '../../core/error/MessageError';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
@@ -31,12 +33,16 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
-    const loadTela = useCallback( async () => {
+    const loadTela = async () => {
       if ( route.params.id > 0 ) {
-        let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
-        setLancamento( lancamento );
+        try {
+          let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
+          setLancamento( lancamento );
+        } catch ( error : any ) {
+          handleError( error );
+        }
       }
-    }, [route.params.id] );
+    };
 
     useEffect( () => {
       if ( isFocused )
@@ -46,18 +52,17 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
     const removerOnPress = async () => {      
       setRemoverDialogVisivel( false );
 
-      let id = route.params.id;
-      if ( id <= 0 ) {
-        SnackbarUI.showDanger( 'Nenhum lancamento selecionado para remoção.' );
-      } else {
-        try {
-          await lancamentoService.deletaLancamentoPorId( db, id );
-          setRemovido( true );
+      try {
+        let id = route.params.id;
+        if ( id <= 0 )
+          throw new MessageError( 'Nenhum lancamento selecionado para remoção.' );
+        
+        await lancamentoService.deletaLancamentoPorId( db, id );
+        setRemovido( true );
 
-          SnackbarUI.showInfo( 'Lancamento removido com sucesso.' );
-        } catch ( error : any ) {
-          SnackbarUI.showDanger( ''+error.message );
-        }
+        SnackbarUI.showInfo( 'Lancamento removido com sucesso.' );
+      } catch ( error : any ) {
+        handleError( error );      
       }
     };
   

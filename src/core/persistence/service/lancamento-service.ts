@@ -2,19 +2,7 @@ import * as SQLite from 'expo-sqlite/next';
 
 import * as lancamentoRepository from '../repository/lancamento-repository';
 import { Lancamento } from '../model/lancamento';
-
-import * as converter from '../../converter/converter';
-
-export const deletaTodosOsLancamentos = async ( db : SQLite.SQLiteDatabase ) => {
-    try {            
-        await db.withTransactionAsync( async () => { 
-            await lancamentoRepository.deleteAll( db );
-        } );
-    } catch ( error ) {
-        console.error( "Service Error= "+error );
-        throw error;
-    }
-};
+import { MessageError } from '../../error/MessageError';
 
 export const salvaLancamento = async ( db : SQLite.SQLiteDatabase, lancamento : Lancamento ) => {
     try {        
@@ -32,35 +20,23 @@ export const salvaLancamento = async ( db : SQLite.SQLiteDatabase, lancamento : 
     }
 };
 
-export const filtraPorMes = async ( db : SQLite.SQLiteDatabase, dataLanc: Date ) => {
-    try {            
-        let dataMes = converter.formatDataMes( dataLanc );
-        return await lancamentoRepository.filtraPorMes( db, dataMes );                             
-    } catch ( error ) {
-        console.error( "Service Error= "+error ); 
-        throw error;       
-    }
-};
-
-export const filtraPorIntervaloIgnoreTime = async ( db : SQLite.SQLiteDatabase, dataIni : Date, dataFim : Date ) => {
-    try {               
-        let dtIni = converter.toDateZeroTime( dataIni );
-        let dtFim = converter.toDateMaxTime( dataFim );  
-        return  await lancamentoRepository.filtraPorIntervalo( db, dtIni, dtFim );                  
-    } catch ( error ) {
-        console.error( "Service Error= "+error ); 
-        throw error;       
-    }
-};
-
 export const getLancamentoPorId = async ( db : SQLite.SQLiteDatabase, id : number ) => {
     try {
         let lancamento = await lancamentoRepository.findById( db, id );
         
         if ( lancamento == null )
-            throw new Error( 'Lancamento não encontrado pelo ID.' );
+            throw new MessageError( 'Lancamento não encontrado pelo ID.' );        
 
         return lancamento;
+    } catch ( error ) {
+        console.error( "Service Error= "+error ); 
+        throw error; 
+    }
+};
+
+export const getLancamentosPorGrupoId = async ( db : SQLite.SQLiteDatabase, grupoId : number ) => {
+    try {
+        return await lancamentoRepository.listaPorMesId( db, grupoId );              
     } catch ( error ) {
         console.error( "Service Error= "+error ); 
         throw error; 

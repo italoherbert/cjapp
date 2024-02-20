@@ -1,15 +1,11 @@
 import * as SQLite from "expo-sqlite/next";
 
-import DevedorService from "./service/devedor-service";
-import LancamentoService from "./service/lancamento-service";
-import AjustesService from "./service/ajustes-service";
-
-let DB_NAME = "cjapp.db";
-
 export default class Persistence {
     
     inicializa = async ( db : SQLite.SQLiteDatabase ) => {       
         await db.withTransactionAsync( async () => {
+            await db.execAsync( 'drop table lancamento' );
+
             await db.execAsync( `
                 create table if not exists devedor ( 
                     id integer primary key,
@@ -18,6 +14,15 @@ export default class Persistence {
                     valor double precision not null,
                     antigo boolean default false                   
                 )` ); 
+                
+            await db.execAsync( `
+                create table if not exists lancamentos_grupo ( 
+                    id integer primary key,
+                    data_ini datetime not null,
+                    data_fim datetime,
+                    aberto boolean default true
+                )` ); 
+
             await db.execAsync( `
                 create table if not exists lancamento ( 
                     id integer primary key,
@@ -26,8 +31,10 @@ export default class Persistence {
                     data_lanc date not null,
                     valor double precision not null,
                     em_conta_corrente boolean not null,
-                    do_jogo boolean default true
-                )` );  
+                    do_jogo boolean default true,
+                    lancamentos_grupo_id integer not null,
+                    foreign key( lancamentos_grupo_id ) references lancamentos_grupo( id ) on delete cascade 
+                )` );               
         } );        
     } 
 

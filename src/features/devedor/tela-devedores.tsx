@@ -30,6 +30,8 @@ import TextUI from '../../shared/ui/TextUI';
 import * as formatter from '../../core/converter/converter';
 import * as devedorService from '../../core/persistence/service/devedor-service';
 
+import { handleError } from '../../shared/error/error-handler';
+
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
 
     const [devedores, setDevedores] = useState<Devedor[]>([]);
@@ -47,7 +49,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data );       
       } catch ( error : any ) {
-        SnackbarUI.showDanger( ''+error.message );
+        handleError( error );
       }
     };
 
@@ -58,7 +60,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data ); 
       } catch ( error : any ) {
-        SnackbarUI.showDanger( ''+error.message );
+        handleError( error );
       }
     };
 
@@ -68,10 +70,10 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
       
       try {
-      let data = await devedorService.filtraDevedores( db, nmLike, false );
-      setDevedores( data );
+        let data = await devedorService.filtraDevedores( db, nmLike, false );
+        setDevedores( data );
       } catch ( error : any ) {
-        SnackbarUI.showDanger( ''+error );
+        handleError( error );
       }
     };
 
@@ -79,9 +81,13 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
       setAntigo( true );
 
       let nmLike = nomeLike.trim().length === 0 ? '*' : nomeLike;
-      
-      let data = await devedorService.filtraDevedores( db, nmLike, true );
-      setDevedores( data );
+
+      try {
+        let data = await devedorService.filtraDevedores( db, nmLike, true );
+        setDevedores( data );
+      } catch ( error : any ) {
+        handleError( error );
+      }
     };
 
     useEffect( () => {

@@ -10,7 +10,7 @@ import {
 export type TitleProps = {
     title : string,
     marginTop? : number,
-    marginBottom?: number,
+    marginBottom?: number
 };
 
 function TitleUI ( { title, marginTop, marginBottom } : TitleProps ): React.JSX.Element {

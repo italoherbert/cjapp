@@ -14,6 +14,9 @@ import * as converter from '../../core/converter/converter';
 
 import * as devedorService from '../../core/persistence/service/devedor-service';
 import {Devedor} from '../../core/persistence/model/devedor';
+import { MessageError } from '../../core/error/MessageError';
+
+import { handleError } from '../../shared/error/error-handler';
 
 import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
@@ -33,8 +36,12 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
 
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
-        let devedor = await devedorService.getDevedorPorId( db, route.params.id );
-        setDevedor( devedor! );
+        try {
+          let devedor = await devedorService.getDevedorPorId( db, route.params.id );
+          setDevedor( devedor! );
+        } catch ( error : any ) {
+          handleError( error );
+        }
       }
     }, [route.params.id] );
 
@@ -46,19 +53,18 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
     const removerOnPress = async () => {
       setRemoverDialogVisivel( false );
 
-      let id = route.params.id;
-      if ( id <= 0 ) {
-        SnackbarUI.showDanger( 'Nenhum devedor selecionado para remoção.' );
-      } else {
-        try {
+      try {
+        let id = route.params.id;
+        if ( id <= 0 )
+          throw new MessageError( 'Nenhum devedor selecionado para remoção.' );
+        
           await devedorService.deletaDevedorPorId( db, id );
           setRemovido( true );
 
           SnackbarUI.showInfo( 'Devedor removido com sucesso.' );
-        } catch ( error : any ) {
-          SnackbarUI.showDanger( ''+error.message );
-        }
-      }
+      } catch ( error : any ) {
+        handleError( error );
+      }      
     };
   
     return (

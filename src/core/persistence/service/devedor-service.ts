@@ -2,10 +2,11 @@ import * as SQLite from 'expo-sqlite/next';
 
 import * as devedorRepository from '../repository/devedor-repository';
 import { Devedor } from '../model/devedor';
+import { MessageError } from '../../error/MessageError';
 
 export const salvaDevedor = async ( db : SQLite.SQLiteDatabase, devedor : Devedor ) => {
     if ( devedor.nome.trim().length == 0 )
-        throw new Error( "O nome é um campo de preenchimento obrigatório." );
+        throw new MessageError( "O nome é um campo de preenchimento obrigatório." );
     
     try {
         await db.withTransactionAsync( async () => {
@@ -44,7 +45,7 @@ export const getDevedorPorId = async ( db : SQLite.SQLiteDatabase, id : number )
         let devedor = await devedorRepository.findById( db, id );                
         
         if ( devedor == null )
-            throw new Error( 'Devedor não encontrado pelo ID.' );
+            throw new MessageError( 'Devedor não encontrado pelo ID.' );
 
         return devedor;
     } catch ( error ) {
