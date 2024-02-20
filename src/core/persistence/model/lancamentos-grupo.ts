@@ -5,4 +5,5 @@ export class LancamentosGrupo {
     dataIni : Date = new Date();
     dataFim? : Date;
     aberto : boolean = true;
+    ativo : boolean = true;
 }

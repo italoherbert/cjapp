@@ -18,7 +18,7 @@ function ButtonClickUI ( { label, onPress } : ActionButtonProps) : React.JSX.Ele
     return (
         <Pressable style={[
                     styles.view, 
-                    (pressed === true ? styles.pressedView : styles.normalView )
+                    (pressed === true ? styles.pressedView : styles.normalView ),
                 ]}
                 onPress={() => {onPress()}}
                 onPressIn={() => setPressed( true )}

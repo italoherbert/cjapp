@@ -11,8 +11,10 @@ import TextUI from '../ui/TextUI';
 import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
 
+import MostraBalancoResumidoUI from './mostra-balanco-resumido-ui';
+
 import {Lancamento} from '../../core/persistence/model/lancamento';
-import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
+import {LancamentosGrupo} from '../../core/persistence/model/lancamentos-grupo';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
@@ -72,6 +74,15 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         setDataFim( dataFim );
     };
 
+    const getDataFimStr = ( dataFim : Date ) => {
+      if ( dataFim === undefined || dataFim === null )
+        return "o momento";
+      if ( new Date( dataFim ).getTime() === 0 )
+        return "o momento";
+
+      return converter.formatDate( dataFim );
+    };
+
     useEffect( () => {
       carregaTela();      
     }, [props.lancamentos] );
@@ -81,59 +92,12 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         <ViewUI marginTop={10}>
             <SimpleTextUI>
                 { 'De ' + converter.formatDate( dataIni ) + 
-                  ' até ' + converter.formatDate( dataFim ) }
+                  ' até ' + getDataFimStr( dataFim ) }
             </SimpleTextUI>
 
-            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Crédito</TextUI>
-                <TextUI variant='primary' size='big-x'>
-                  {converter.formatBRL( creditoTotal )}
-                </TextUI>
-              </BoxFieldUI>
-
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Débito</TextUI>
-                <TextUI variant='danger' size='big-x'>
-                  {converter.formatBRL( debitoTotal )}
-                </TextUI>
-              </BoxFieldUI>             
-            </BoxFieldUI>
-
-            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Em espécie</TextUI>
-                <TextUI
-                      variant={ totalEmEspecie < 0 ? 'danger' : 'normal' } 
-                      size='big-x'>
-                  {converter.formatBRL( totalEmEspecie )}
-                </TextUI>
-              </BoxFieldUI>
-
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Na conta</TextUI>
-                <TextUI 
-                      variant={ totalEmContaCorrente < 0 ? 'danger' : 'normal' } 
-                      size='big-x'>
-                  {converter.formatBRL( totalEmContaCorrente )}
-                </TextUI>
-              </BoxFieldUI>             
-            </BoxFieldUI>
-
-            <BoxFieldUI flex={1} isRow={false} 
-                  marginVertical={5} 
-                  alignItems='center'
-                  background='light' 
-                  padding={10}>
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Lucro</TextUI>
-                <TextUI 
-                      variant={ lucroTotal < 0 ? 'danger' : 'normal' } 
-                      size='big-x'>
-                  {converter.formatBRL( lucroTotal )}
-                </TextUI>
-              </BoxFieldUI>  
-            </BoxFieldUI>
+            <MostraBalancoResumidoUI 
+                lancamentos={props.lancamentos}
+            />
         </ViewUI>
 
         <TitleUI title='Lista de lançamentos' marginTop={10} />      

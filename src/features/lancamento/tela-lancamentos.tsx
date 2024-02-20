@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite/next';
 
-import { faBalanceScale, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBalanceScale, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -55,26 +55,20 @@ function TelaLancamentos({ navigation } : NativeStackScreenProps<StackParamsList
     return (
       <ScrollViewUI>   
 
-        <ViewUI flex={3} isRow={true}>
+        <ViewUI flex={2} isRow={true}>
             <ButtonIconUI 
                 label='Novo'
                 icon={faPlus}
                 flex={1}
+                marginType='right'
                 onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
             />
             
-            <ButtonIconUI 
-                label='Filtrar'
-                icon={faFilter}
-                flex={1}
-                marginType='both'
-                onPress={ () => navigation.navigate( 'FiltraLancamentos', { id : -1 } ) }
-            />
-
             <ButtonIconUI
                 label="Ver balanço" 
                 icon={faBalanceScale}
                 flex={1}
+                marginType='left'
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </ViewUI>        
 

@@ -7,7 +7,6 @@ export type StackParamsList = {
     SalvaLancamento : { id : number },
     DetalhesLancamento : { id : number },
     TelaLancamentos : any,
-    FiltraLancamentos : any,
     MostraBalanco : any,
 
     TelaLancamentosGrupos : any,

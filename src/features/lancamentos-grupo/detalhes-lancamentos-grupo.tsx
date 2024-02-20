@@ -22,15 +22,15 @@ import SimpleFieldUI from "../../shared/ui/SimpleFieldUI";
 import TextUI from "../../shared/ui/TextUI";
 import TitleUI from "../../shared/ui/TitleUI";
 import ButtonIconUI from "../../shared/ui/ButtonIconUI";
-import { faList, faX } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faList, faX } from "@fortawesome/free-solid-svg-icons";
 import SnackbarUI from "../../shared/ui/SnackbarUI";
 
 function DetalhesLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamentosGrupo'> ) : React.JSX.Element {
 
     const [grupo, setGrupo] = useState<LancamentosGrupo>(new LancamentosGrupo());
-    const [removido, setRemovido] = useState<boolean>(false);
-    const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
+    const [desativado, setDesativado] = useState<boolean>(false);
+    const [desativarDialogVisivel, setDesativarDialogVisivel] = useState<boolean>(false);
 
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
@@ -42,20 +42,36 @@ function DetalhesLancamentosGrupo (
 
             let grp = await lancamentosGrupoService.getGrupoPorId( db, route.params.id );
             setGrupo( grp );
+
+            setDesativado( grp.ativo == false );
         } catch ( error ) {
             handleError( error );
         }
     };
 
-    const removerOnPress = async () => {
+    const ativarOnPress = async () => {
         try {
             if ( route.params.id <= 0 )
                 throw new MessageError( 'ID de grupo de lançamento inválido.' );
 
-            await lancamentosGrupoService.deletaGrupoPorId( db, route.params.id );
-            setRemovido( true );
+            await lancamentosGrupoService.ativaGrupo( db, route.params.id );
+            setDesativado( false );
 
-            SnackbarUI.showInfo( 'Grupo deletado com sucesso.' );
+            SnackbarUI.showInfo( 'Grupo ativado com sucesso.' );
+        } catch ( error ) {
+            handleError( error );
+        }
+    };
+
+    const desativarOnPress = async () => {
+        try {
+            if ( route.params.id <= 0 )
+                throw new MessageError( 'ID de grupo de lançamento inválido.' );
+
+            await lancamentosGrupoService.desativaGrupo( db, route.params.id );
+            setDesativado( true );
+
+            SnackbarUI.showInfo( 'Grupo desativado com sucesso.' );
         } catch ( error ) {
             handleError( error );
         }
@@ -105,30 +121,58 @@ function DetalhesLancamentosGrupo (
                 </TextUI>
             </SimpleFieldUI>
 
-            { removido === true && 
+            <SimpleFieldUI>
+                <TextUI>Ativo</TextUI>
+                <TextUI variant={grupo.ativo == true ? 'success' : 'primary'}>
+                    {grupo.ativo == true ? 'Sim' : 'Não'}
+                </TextUI>
+            </SimpleFieldUI>
+
+            { desativado === true && 
             <TextUI variant='danger' marginVertical={10}>
-                    Removido!
+                    Desativado!
             </TextUI>
             }
 
-            <ViewUI isRow={true} marginVertical={10}>                                                 
-                <ButtonIconUI 
-                    label='Remover'
-                    icon={faX}
-                    flex={1}
-                    variant='danger' 
-                    disable={removido}                     
-                    onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-                />                                   
+            <ViewUI isRow={true} marginTop={10}>                                                 
+                { desativado === false &&
+                    <ButtonIconUI 
+                        label='Desativar'
+                        icon={faX}
+                        flex={1}
+                        variant='danger' 
+                        onPress={() => setDesativarDialogVisivel( !desativarDialogVisivel )}
+                    />                                   
+                }
+
+                { desativado === true &&
+                    <ButtonIconUI 
+                        label='Ativar'
+                        icon={faCheck}
+                        flex={1}
+                        marginType="right"
+                        onPress={ativarOnPress}
+                    />                                   
+                }
+
+                { grupo.aberto == true && 
+                    <ButtonIconUI 
+                        label="Fechar"
+                        icon={faX}
+                        flex={1}
+                        marginType="left"
+                        onPress={ () => navigation.navigate( 'FechaLancamentosGrupo' ) }
+                    />
+                }
             </ViewUI>
 
-            <Dialog.Container visible={removerDialogVisivel}>
-            <Dialog.Title>Remoção de grupo</Dialog.Title>
+            <Dialog.Container visible={desativarDialogVisivel}>
+            <Dialog.Title>Desativar grupo</Dialog.Title>
             <Dialog.Description>
-                Tem certeza que deseja remover este grupo?
+                Tem certeza que deseja desativar este grupo?
             </Dialog.Description>
-                <Dialog.Button label="Remover" onPress={removerOnPress} />
-                <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
+                <Dialog.Button label="Desativar" onPress={desativarOnPress} />
+                <Dialog.Button label="Cancelar" onPress={() => setDesativarDialogVisivel( false )} />                  
             </Dialog.Container>
 
         </ScrollViewUI>

@@ -5,10 +5,11 @@ export const insere = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosGru
     let result = await db.runAsync( 
         `insert into lancamentos_grupo ( 
             data_ini, data_fim, aberto
-         ) values (?, ?, ?)`, [   
+         ) values (?, ?, ?, ?)`, [   
             grupo.dataIni.toISOString(),
             grupo.dataFim!.toISOString(),
-            grupo.aberto
+            grupo.aberto,
+            grupo.ativo
         ] 
     ); 
     grupo.id = result.lastInsertRowId;
@@ -17,7 +18,7 @@ export const insere = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosGru
 export const atualiza = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosGrupo ) => {
     await db.runAsync( 
         `update lancamentos_grupo set 
-            data_ini=?, data_fim=?, aberto=?  
+            data_ini=?, data_fim=?, aberto=?, ativo=?  
          where id=?`, [            
             grupo.dataIni.toISOString(),
             grupo.dataFim!.toISOString(),
@@ -27,12 +28,12 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, grupo : LancamentosG
     );    
 };
 
-export const atualizaAberto = async ( db : SQLite.SQLiteDatabase, id : number, aberto : boolean ) => {
+export const atualizaAtivo = async ( db : SQLite.SQLiteDatabase, id : number, ativo : boolean ) => {
     await db.runAsync( 
         `update lancamentos_grupo set 
-            aberto=?  
+            ativo=?  
          where id=?`, [            
-            aberto,
+            ativo,
             id
         ]
     );  
@@ -47,7 +48,7 @@ export const fechaTodos = async ( db : SQLite.SQLiteDatabase ) => {
 export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, data_ini, data_fim, aberto 
+            id, data_ini, data_fim, aberto, ativo
          from lancamentos_grupo`, [] );         
     
     return rowsToLancamentosGrupos( result );
@@ -56,7 +57,7 @@ export const listaTodos = async ( db : SQLite.SQLiteDatabase ) => {
 export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number ) => {    
     let result = await db.getAllAsync( 
         `select 
-            id, data_ini, data_fim, aberto 
+            id, data_ini, data_fim, aberto, ativo
          from lancamentos_grupo 
          limit ?`, [ quant ] );         
     
@@ -66,7 +67,7 @@ export const listaPorQuant = async ( db : SQLite.SQLiteDatabase, quant : number 
 export const getAberto = async ( db : SQLite.SQLiteDatabase ) => {
     let result = await db.getFirstAsync( 
         `select 
-            id, data_ini, data_fim, aberto 
+            id, data_ini, data_fim, aberto, ativo
          from lancamentos_grupo
          where aberto=true`, [] );
 
@@ -76,10 +77,19 @@ export const getAberto = async ( db : SQLite.SQLiteDatabase ) => {
     return rowToLancamentosGrupo( result );
 }
 
+export const existeAberto = async ( db : SQLite.SQLiteDatabase ) => {
+    let result = await db.getFirstAsync( 
+        `select id
+         from lancamentos_grupo
+         where aberto=true`, [] );
+    
+    return ( result !== null );
+};
+
 export const findById = async ( db : SQLite.SQLiteDatabase, id : number ) => {
     let result = await db.getFirstAsync( 
         `select 
-            id, data_ini, data_fim, aberto  
+            id, data_ini, data_fim, aberto, ativo
          from lancamentos_grupo 
          where id=?`, [ id ] 
     );         
@@ -118,5 +128,6 @@ const rowToLancamentosGrupo = ( row : any ) => {
     grupo.dataIni = row['data_ini'];
     grupo.dataFim = row['data_fim'];
     grupo.aberto = row['aberto'];    
+    grupo.ativo = row['ativo'];
     return grupo;
 };

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite/next";
 
+import { faList } from "@fortawesome/free-solid-svg-icons";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../shared/screens/StackParamsList";
 
@@ -13,23 +15,18 @@ import ViewUI from "../../shared/ui/ViewUI";
 import TitleUI from "../../shared/ui/TitleUI";
 import ButtonClickUI from "../../shared/ui/ButtonClickUI";
 import SnackbarUI from "../../shared/ui/SnackbarUI";
-import TextUI from "../../shared/ui/TextUI";
-import BoxFieldUI from "../../shared/ui/BoxFieldUI";
 
 import { handleError } from "../../shared/error/error-handler";
 import { MessageError } from "../../core/error/MessageError";
-
-import * as converter from '../../core/converter/converter';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo";
-import { LancTotais } from "../../core/logica/model/lanc-totais";
-import { Lancamento } from "../../core/persistence/model/lancamento";
 import ButtonIconUI from "../../shared/ui/ButtonIconUI";
-import { faList } from "@fortawesome/free-solid-svg-icons";
+import { Lancamento } from "../../core/persistence/model/lancamento";
+import MostraBalancoResumidoUI from "../../shared/components/mostra-balanco-resumido-ui";
 
 function FechaLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'FechaLancamentosGrupo'> ) : React.JSX.Element {
@@ -37,11 +34,9 @@ function FechaLancamentosGrupo (
     const [fecharDialogVisivel, setFecharDialogVisivel] = useState<boolean>(false);
     
     const [grupo, setGrupo] = useState<LancamentosGrupo>( new LancamentosGrupo() );
-    const [creditoTotalGeral, setCreditoTotalGeral] = useState<number>(0);
-    const [debitoTotalGeral, setDebitoTotalGeral] = useState<number>(0);
-    const [totalGeral, setTotalGeral] = useState<number>(0);
-    const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
+    const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
     const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
+    const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
 
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
@@ -52,16 +47,14 @@ function FechaLancamentosGrupo (
             if ( grp === null )
                 throw new MessageError( 'Nenhum grupo de lançamentos aberto.' );
 
-            let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grp.id );            
+            let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grp.id );                        
+
             let totais = await lancamentoLogica.carregaTotais( lancs );
 
             setTotalEmEspecie( totais.totalEmEspecie );
             setTotalEmContaCorrente( totais.totalEmContaCorrente );
-            
-            setCreditoTotalGeral( totais.creditoTotalGeral );
-            setDebitoTotalGeral( totais.debitoTotalGeral );
-            setTotalGeral( totais.totalGeral );
 
+            setLancamentos( lancs );
             setGrupo( grp );
         } catch ( error ) {
             handleError( error );
@@ -99,40 +92,13 @@ function FechaLancamentosGrupo (
 
             <TitleUI title="Fechamento de grupo" />
 
-            <BoxFieldUI flex={2} isRow={true} marginVertical={5}> 
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Crédito Geral</TextUI>
-                <TextUI variant='primary' size='big-x'>
-                  {converter.formatBRL( creditoTotalGeral )}
-                </TextUI>
-              </BoxFieldUI>
+            <MostraBalancoResumidoUI lancamentos={lancamentos} />
 
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Débito Geral</TextUI>
-                <TextUI variant='danger' size='big-x'>
-                  {converter.formatBRL( debitoTotalGeral )}
-                </TextUI>
-              </BoxFieldUI>             
-            </BoxFieldUI>
-
-            <BoxFieldUI flex={1} isRow={false} 
-                  marginVertical={5} 
-                  alignItems='center'
-                  background='light' 
-                  padding={10}>
-              <BoxFieldUI flex={1} isRow={false}>
-                <TextUI>Lucro</TextUI>
-                <TextUI 
-                      variant={ totalGeral < 0 ? 'danger' : 'normal' } 
-                      size='big-x'>
-                  {converter.formatBRL( totalGeral )}
-                </TextUI>
-              </BoxFieldUI>  
-            </BoxFieldUI>
-
-            <ButtonClickUI 
-                label="Fechar grupo aberto" 
-                onPress={() => setFecharDialogVisivel( true )} />
+            <ViewUI marginTop={10}>
+                <ButtonClickUI
+                    label="Fechar grupo aberto" 
+                    onPress={() => setFecharDialogVisivel( true )} />
+            </ViewUI>
 
             <Dialog.Container visible={fecharDialogVisivel}>
                 <Dialog.Title>Fechamento de grupo aberto</Dialog.Title>

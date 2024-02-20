@@ -8,14 +8,18 @@ export type BoxFieldProps = React.PropsWithChildren<{
     flex?: number,
     justifyContent?: any,
     alignItems?: any,
-    marginVertical?: number
+    marginVertical?: number,
+    marginTop?: number,
+    marginBottom?: number,
     isRow?: boolean,
     background?: Types.Color,
     padding?: number    
 }>
 
 function BoxFieldUI ( { children, flex, isRow, 
-        justifyContent, alignItems,  marginVertical, padding, background } : BoxFieldProps ) : React.JSX.Element {
+        justifyContent, alignItems,  
+        marginVertical, marginTop, marginBottom,
+        padding, background } : BoxFieldProps ) : React.JSX.Element {
 
     const [ backgroundColor, setBackgroundColor ] = useState<string | undefined>(undefined);
 
@@ -31,6 +35,8 @@ function BoxFieldUI ( { children, flex, isRow,
                 flex: flex, 
                 padding: padding,
                 marginVertical: marginVertical,
+                marginTop: marginTop,
+                marginBottom: marginBottom,
                 backgroundColor: backgroundColor }}>
             {children}
         </View>

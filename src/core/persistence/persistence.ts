@@ -20,7 +20,8 @@ export default class Persistence {
                     id integer primary key,
                     data_ini datetime not null,
                     data_fim datetime,
-                    aberto boolean default true
+                    aberto boolean default true,
+                    ativo boolean default true
                 )` ); 
 
             await db.execAsync( `
@@ -34,7 +35,7 @@ export default class Persistence {
                     do_jogo boolean default true,
                     lancamentos_grupo_id integer not null,
                     foreign key( lancamentos_grupo_id ) references lancamentos_grupo( id ) on delete cascade 
-                )` );               
+                )` );                  
         } );        
     } 
 
