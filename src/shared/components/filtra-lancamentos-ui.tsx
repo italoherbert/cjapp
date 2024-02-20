@@ -95,7 +95,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         <MostraBalancoResumidoUI 
             lancamentos={props.lancamentos}
         />
-        
+
         <TitleUI title='Lista de lançamentos' marginTop={10} />      
 
         <ViewUI marginBottom={20}>        
@@ -118,7 +118,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                           justifyContent="space-between">
                         <TextUI variant='dark-x'>
                             {converter.formatDate( grupo.dataLanc )}
-                        </TextUI>
+                        </TextUI>                        
                         <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'}>
                             {converter.formatBRL( grupo.valor )}
                         </TextUI>
@@ -138,8 +138,11 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                                 isRow={true}
                                 justifyContent="space-between">
                               <TextUI variant={lancamento.tipo === 'debito' ? 'danger' : 'primary'}>
-                                  {lancamento.tipo === 'debito' ? 'Débito' : 'Crédito'}
-                              </TextUI>
+                                  {
+                                    ( lancamento.tipo === 'debito' ? 'Débito' : 'Crédito' ) + 
+                                    ( lancamento.emContaCorrente == true ? ' em conta' : ' em espécie' )
+                                  }
+                              </TextUI>                              
                               <TextUI variant={lancamento.tipo === 'debito' ? 'danger' : 'primary'}>
                                   {converter.formatBRL( lancamento.valor )}
                               </TextUI>
