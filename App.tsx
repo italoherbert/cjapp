@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {  
   Alert,
   StatusBar,
@@ -30,15 +30,6 @@ function App(): React.JSX.Element {
     'light-content'
   );
 
-  useEffect( () => {                
-    
-    const init = async () => {};
-
-    init().finally( () => {
-      BootSplash.hide( { fade: true } );
-    } );
-  }, [] );
-
   return (    
       <React.Fragment>
         <StatusBar
@@ -46,7 +37,7 @@ function App(): React.JSX.Element {
           backgroundColor='#08F'
         />  
         <SQLiteProvider databaseName='cjapp.db' onInit={persistence.inicializa}>
-          <NavigationContainer>            
+          <NavigationContainer onReady={() => BootSplash.hide()}>            
             <Tab.Navigator initialRouteName="Devedores" screenOptions={{headerShown: false}} >
               <Tab.Screen name="Devedores" 
                   component={DevedorScreens} 
@@ -61,7 +52,7 @@ function App(): React.JSX.Element {
                   options={{ 
                     tabBarLabel: 'Lançamentos',                   
                     tabBarIcon: ({focused, color, size} ) => {
-                      return <FontAwesomeIcon icon={faCircleDollarToSlot} color={color} size={size} />
+                      return <FontAwesomeIcon icon={faCashRegister} color={color} size={size} />
                     },
                   }}/>
               <Tab.Screen name="LancamentosGrupo" 
@@ -69,7 +60,7 @@ function App(): React.JSX.Element {
                   options={{ 
                     tabBarLabel: 'Grupos',                   
                     tabBarIcon: ({focused, color, size} ) => {
-                      return <FontAwesomeIcon icon={faCashRegister} color={color} size={size} />
+                      return <FontAwesomeIcon icon={faCircleDollarToSlot} color={color} size={size} />
                     },
                   }}/>
               <Tab.Screen name="Ajustes"
