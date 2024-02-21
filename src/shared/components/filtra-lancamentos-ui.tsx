@@ -122,12 +122,13 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                             {dateUtil.formatDate( grupo.dataLanc )}
                         </TextUI>  
                         <ViewUI isRow={true} alignItems="center">
-                            <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'} 
-                                    marginHorizontal={10}>
+                            <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'}>
                                 {numberUtil.formatBRL( grupo.valor )}
                             </TextUI>
                             <Pressable onPress={ () => verBalancoAteODia( grupo.dataLanc )}>
-                              <FontAwesomeIcon icon={faEye} color="blue" />
+                              <ViewUI paddingHorizontal={10}>
+                                <FontAwesomeIcon icon={faEye} color="green" />                              
+                              </ViewUI>
                             </Pressable>
                         </ViewUI>                      
                         

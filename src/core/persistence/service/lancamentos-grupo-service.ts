@@ -1,10 +1,8 @@
 import * as SQLite from 'expo-sqlite/next';
 
 import * as lancamentosGrupoRepository from '../repository/lancamentos-grupo-repository';
-import * as lancamentoRepository from '../repository/lancamento-repository';
 
 import { LancamentosGrupo } from '../model/lancamentos-grupo';
-import { Lancamento } from '../model/lancamento';  
 
 import { MessageError } from '../../error/MessageError';
 
@@ -37,15 +35,21 @@ export const novoGrupo = async ( db : SQLite.SQLiteDatabase ) => {
     return grupo;    
 };
 
-export const fechaGrupo = async ( db : SQLite.SQLiteDatabase, 
-            gid : number, 
-            totalEmEspecie : number, totalEmContaCorrente : number ) => {
-    if ( totalEmEspecie < 0 )
-        throw new MessageError( 'Valor do total em espécie negativo.' );
+export const abreUltimoGrupo = async ( db : SQLite.SQLiteDatabase ) => {
+    let grupo = await lancamentosGrupoRepository.getUltimo( db );
+    if ( grupo === null )
+        throw new MessageError( 'Nenhum grupo registrado' );
 
-    if ( totalEmContaCorrente < 0 )
-        throw new MessageError( 'Valor do total em conta corrente negativo.' );
+    if ( grupo.aberto == true )
+        throw new MessageError( 'Grupo já aberto.' );
 
+    grupo.dataFim = new Date( 0 );
+    grupo.aberto = true;
+
+    await lancamentosGrupoRepository.atualiza( db, grupo );
+};
+
+export const fechaGrupo = async ( db : SQLite.SQLiteDatabase, gid : number ) => {    
     let grupo = await lancamentosGrupoRepository.findById( db, gid );
     if ( grupo === null )
         throw new MessageError( 'Grupo não encontrado' );
@@ -53,33 +57,10 @@ export const fechaGrupo = async ( db : SQLite.SQLiteDatabase,
     if ( grupo.aberto == false )
         throw new MessageError( 'Grupo não aberto.' );
 
-    let lancDebEmEspecie = new Lancamento();
-    lancDebEmEspecie.dataLanc = new Date();
-    lancDebEmEspecie.descricao = "Fechamento de grupo";
-    lancDebEmEspecie.valor = totalEmEspecie;
-    lancDebEmEspecie.tipo = 'debito';
-    lancDebEmEspecie.emContaCorrente = false;
-    lancDebEmEspecie.doJogo = false;
-    lancDebEmEspecie.lancamentosGrupoId = grupo.id;
-
-    let lancDebEmContaCorrente = new Lancamento();
-    lancDebEmContaCorrente.dataLanc = new Date();
-    lancDebEmContaCorrente.descricao = "Fechamento de grupo";
-    lancDebEmContaCorrente.valor = totalEmContaCorrente;
-    lancDebEmContaCorrente.tipo = 'debito';
-    lancDebEmContaCorrente.emContaCorrente = true;
-    lancDebEmContaCorrente.doJogo = false;
-    lancDebEmContaCorrente.lancamentosGrupoId = grupo.id;
-
     grupo.dataFim = new Date();
     grupo.aberto = false;
 
-    await db.withTransactionAsync( async () => {
-        await lancamentoRepository.insere( db, lancDebEmEspecie );
-        await lancamentoRepository.insere( db, lancDebEmContaCorrente );
-
-        await lancamentosGrupoRepository.atualiza( db, grupo! );
-    } );    
+    await lancamentosGrupoRepository.atualiza( db, grupo );
 };
 
 export const desativaGrupo = async ( db : SQLite.SQLiteDatabase, id : number ) => {

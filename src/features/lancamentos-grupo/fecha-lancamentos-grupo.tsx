@@ -37,9 +37,7 @@ function FechaLancamentosGrupo (
     
     const [grupo, setGrupo] = useState<LancamentosGrupo>( new LancamentosGrupo() );
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
-    const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
-    const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
-
+    
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
@@ -51,11 +49,6 @@ function FechaLancamentosGrupo (
 
             let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grp.id );                        
 
-            let totais = await lancamentoLogica.carregaTotais( lancs );
-
-            setTotalEmEspecie( totais.totalEmEspecie );
-            setTotalEmContaCorrente( totais.totalEmContaCorrente );
-
             setLancamentos( lancs );
             setGrupo( grp );
         } catch ( error ) {
@@ -65,20 +58,7 @@ function FechaLancamentosGrupo (
 
     const fecharGrupoOnPress = async () => {
         try {                              
-            await lancamentosGrupoService.fechaGrupo( db, grupo.id, totalEmEspecie, totalEmContaCorrente );            
-
-            let grp = await lancamentosGrupoService.getGrupoPorId( db, grupo.id ); 
-            setGrupo( grp );
-
-            let lancs = await lancamentoService.getLancamentosPorGrupoId( db, grp.id );                        
-
-            let totais = await lancamentoLogica.carregaTotais( lancs );
-
-            setTotalEmEspecie( totais.totalEmEspecie );
-            setTotalEmContaCorrente( totais.totalEmContaCorrente );
-
-            setLancamentos( lancs );
-            setGrupo( grp );
+            await lancamentosGrupoService.fechaGrupo( db, grupo.id );                       
             
             setGrupoFechado( true );
             setFecharDialogVisivel( false );
@@ -122,7 +102,7 @@ function FechaLancamentosGrupo (
             <Dialog.Container visible={fecharDialogVisivel}>
                 <Dialog.Title>Fechamento de grupo aberto</Dialog.Title>
                 <Dialog.Description>
-                    Tem certeza que deseja zerar as contas e fechar o grupo?
+                    Tem certeza que deseja fechar o grupo?
                 </Dialog.Description>
                 <Dialog.Button label="Fechar grupo" onPress={fecharGrupoOnPress} />
                 <Dialog.Button label="Cancelar" onPress={() => setFecharDialogVisivel( false )} />                  

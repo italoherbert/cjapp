@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import { faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBoxOpen, faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from "../../shared/ui/ViewUI";
@@ -22,6 +22,7 @@ import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo
 
 import { handleError } from '../../shared/error/error-handler';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
+import SnackbarUI from '../../shared/ui/SnackbarUI';
 
 const MAX_SHOW_REGS = 12;
 
@@ -49,6 +50,20 @@ function TelaLancamentosGrupos (
             handleError( error );
         }
     };
+
+    const abrirUltimoGrupoOnPress = async () => {
+        try {
+            await lancamentosGruposService.abreUltimoGrupo( db );
+
+            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, true );
+            setGrupos( grps );
+            setGrupoAberto( true );
+
+            SnackbarUI.showInfo( "Grupo aberto com sucesso. " );
+        } catch ( error : any ) {
+            handleError( error );
+        }
+    }
 
     const ativosSelectOnPress = async () => {
         try {
@@ -86,14 +101,24 @@ function TelaLancamentosGrupos (
 
     return (
         <ScrollViewUI>
-            <ViewUI isRow={true} flex={2}>                
+            <ViewUI isRow={true} flex={1}>                
                 { grupoAberto === false && 
-                    <ButtonIconUI 
-                        label='Novo grupo'
-                        icon={faPlus}
-                        flex={1}
-                        onPress={ () => navigation.navigate( 'NovoLancamentosGrupo' )}
-                    />
+                    <ViewUI isRow={true} flex={1}>
+                        <ButtonIconUI 
+                            label='Novo grupo'
+                            icon={faPlus}
+                            flex={1}
+                            onPress={ () => navigation.navigate( 'NovoLancamentosGrupo' )}
+                        />
+
+                        <ButtonIconUI 
+                            label='Abre grupo'
+                            icon={faBoxOpen}
+                            flex={1}
+                            marginType='left'
+                            onPress={ abrirUltimoGrupoOnPress }
+                        />
+                    </ViewUI>
                 }
                 { grupoAberto === true && 
                     <ButtonIconUI 
