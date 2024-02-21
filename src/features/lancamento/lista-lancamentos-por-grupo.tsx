@@ -61,7 +61,6 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
             label="Ver balanço" 
             icon={faBalanceScale}
             flex={1}
-            marginType='left'
             onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
 
         <TitleUI title='Lancs. do grupo' />
