@@ -23,9 +23,10 @@ function NovoLancamentosGrupo (
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'NovoLancamentosGrupo'> ) : React.JSX.Element {
 
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);   
+
     const db = useSQLiteContext();
 
-    const novoOnPress = async () => {
+    const novoOnPress = async () => {        
         try {                        
             let grupo = await lancamentosGrupoService.novoGrupo( db );
             navigation.navigate( 'DetalhesLancamentosGrupo', { id : grupo.id } );

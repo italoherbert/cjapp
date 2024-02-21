@@ -1,7 +1,7 @@
 
 import * as SQLite from 'expo-sqlite/next';
 
-import * as converter from '../../converter/converter';
+import * as dateUtil from '../../util/date-util';
 
 export const ajustarDB = async ( db : SQLite.SQLiteDatabase ) => {    
     await db.withTransactionAsync( async () => {        
@@ -12,7 +12,7 @@ export const ajustarDB = async ( db : SQLite.SQLiteDatabase ) => {
                 data_ini, data_fim, aberto, ativo 
             ) values ( ?, ?, ?, ? )
         `, [
-            converter.toDate( '2024-02-06' ).toISOString(),
+            dateUtil.toDate( '2024-02-06' ).toISOString(),
             new Date( 0 ).toISOString(),
             true,
             true

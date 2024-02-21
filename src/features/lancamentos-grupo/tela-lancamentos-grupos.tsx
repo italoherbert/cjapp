@@ -15,14 +15,13 @@ import TitleUI from '../../shared/ui/TitleUI';
 import TextUI from '../../shared/ui/TextUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 
-import * as converter from '../../core/converter/converter';
+import * as dateUtil from '../../core/util/date-util';
 
 import * as lancamentosGruposService from '../../core/persistence/service/lancamentos-grupo-service';
 import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
 
 import { handleError } from '../../shared/error/error-handler';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
-import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 
 const MAX_SHOW_REGS = 12;
 
@@ -77,7 +76,7 @@ function TelaLancamentosGrupos (
         if ( new Date( dataFim ).getTime() === 0 )
             return "o momento";
 
-        return converter.formatDate( dataFim );
+        return dateUtil.formatDate( dataFim );
     };    
 
     useEffect( () => {
@@ -128,7 +127,7 @@ function TelaLancamentosGrupos (
                                 isRow={true}
                                 justifyContent="space-between">
                             <TextUI variant='dark-x'>
-                                {converter.formatDate( grupo.dataIni ) + 
+                                {dateUtil.formatDate( grupo.dataIni ) + 
                                 ' até ' + 
                                 getDataFimStr( grupo.dataFim )}
                             </TextUI>

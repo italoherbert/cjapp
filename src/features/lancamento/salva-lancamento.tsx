@@ -9,13 +9,14 @@ import { useIsFocused } from '@react-navigation/native';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import DateUI from '../../shared/ui/DateUI';
-import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import PickerUI from '../../shared/ui/PickerUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
+
+import * as numberUtil from '../../core/util/number-util';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
@@ -41,7 +42,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
           let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
 
           setDescricao( lancamento.descricao );
-          setValor( lancamento.valor.toString().replaceAll( ',', '.' ) );
+          setValor( numberUtil.numberToStringComPonto( lancamento.valor ) );
           setDataLanc( new Date( lancamento.dataLanc ) );
           setTipo( lancamento.tipo );
 
@@ -66,11 +67,9 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
     }, [ isFocused ] );
 
     const salvarOnPress = async () => {  
-      let val = valor.replaceAll( ',', '.' );
-
       try {
-        if ( isNaN( parseFloat( val ) ) === true )
-          throw new MessageError( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );              
+        if ( numberUtil.isNumber( valor ) === false )
+          throw new MessageError( 'Valor em formato inválido.' );              
 
         let lancamento : Lancamento;
         if ( route.params.id > 0 ) {
@@ -82,7 +81,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
 
         lancamento.dataLanc = dataLanc;
         lancamento.descricao = descricao;
-        lancamento.valor = parseFloat( val );
+        lancamento.valor = numberUtil.stringToNumber( valor ); 
         lancamento.tipo = tipo;
         lancamento.emContaCorrente = dinheiroTipo === 'conta';
         lancamento.doJogo = deOndeTipo === 'do-jogo';

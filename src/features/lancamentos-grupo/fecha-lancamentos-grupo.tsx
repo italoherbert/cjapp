@@ -14,7 +14,10 @@ import ScrollViewUI from "../../shared/ui/ScrollViewUI";
 import ViewUI from "../../shared/ui/ViewUI";
 import TitleUI from "../../shared/ui/TitleUI";
 import ButtonClickUI from "../../shared/ui/ButtonClickUI";
-import SnackbarUI from "../../shared/ui/SnackbarUI";
+import ButtonIconUI from "../../shared/ui/ButtonIconUI";
+import TextUI from "../../shared/ui/TextUI";
+
+import MostraBalancoResumidoUI from "../../shared/components/mostra-balanco-resumido-ui";
 
 import { handleError } from "../../shared/error/error-handler";
 import { MessageError } from "../../core/error/MessageError";
@@ -24,10 +27,7 @@ import * as lancamentosGrupoService from '../../core/persistence/service/lancame
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo";
-import ButtonIconUI from "../../shared/ui/ButtonIconUI";
 import { Lancamento } from "../../core/persistence/model/lancamento";
-import MostraBalancoResumidoUI from "../../shared/components/mostra-balanco-resumido-ui";
-import TextUI from "../../shared/ui/TextUI";
 
 function FechaLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'FechaLancamentosGrupo'> ) : React.JSX.Element {

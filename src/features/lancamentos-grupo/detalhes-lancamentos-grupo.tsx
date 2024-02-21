@@ -13,7 +13,7 @@ import ViewUI from "../../shared/ui/ViewUI";
 import { handleError } from "../../shared/error/error-handler";
 import { MessageError } from "../../core/error/MessageError";
 
-import * as converter from '../../core/converter/converter';
+import * as dateUtil from '../../core/util/date-util';
 
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
 import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo";
@@ -82,7 +82,7 @@ function DetalhesLancamentosGrupo (
         if ( new Date( dataFim ).getTime() === 0 )
             return "Não definida.";
 
-        return converter.formatDate( dataFim );            
+        return dateUtil.formatDate( dataFim );            
     };
 
     useEffect( () => {
@@ -105,7 +105,7 @@ function DetalhesLancamentosGrupo (
 
             <SimpleFieldUI>
                 <TextUI>Data inicial</TextUI>
-                <TextUI>{converter.formatDate( grupo.dataIni )}</TextUI>
+                <TextUI>{dateUtil.formatDate( grupo.dataIni )}</TextUI>
             </SimpleFieldUI>
 
             <SimpleFieldUI>

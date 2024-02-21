@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import {
   Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Alert
 } from 'react-native';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useIsFocused } from '@react-navigation/native';
 import { useSQLiteContext } from 'expo-sqlite/next';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import {Devedor} from '../../core/persistence/model/devedor';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
-import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import ViewUI from '../../shared/ui/ViewUI';
 import TextUI from '../../shared/ui/TextUI';
 
-import * as formatter from '../../core/converter/converter';
+import * as numberUtil from '../../core/util/number-util';
+
 import * as devedorService from '../../core/persistence/service/devedor-service';
+import {Devedor} from '../../core/persistence/model/devedor';
 
 import { handleError } from '../../shared/error/error-handler';
 
@@ -118,9 +112,8 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
             setValue={nomeLikeOnChangeText}
             placeholder='Informe o nome' />
         
-        <ViewUI background='light'>
-            {devedores.map( (devedor: Devedor, index) => { 
-            return (
+        <ViewUI background='light' marginBottom={20}>
+            {devedores.map( (devedor: Devedor, index) => 
                 <Pressable key={index}
                     onPress={ () => navigation.navigate( 'DetalhesDevedor', { id: devedor.id } ) }
                 >
@@ -130,12 +123,11 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
                       padding={12}>
                         <TextUI variant='dark-x'>{devedor.nome}</TextUI>
                         <TextUI variant='danger'>
-                            {formatter.formatBRL( devedor.valor )}
+                            {numberUtil.formatBRL( devedor.valor )}
                         </TextUI>
                   </ViewUI>                  
                 </Pressable>
-            )
-            } )}          
+            ) }           
         </ViewUI>        
       </ScrollViewUI>
     );

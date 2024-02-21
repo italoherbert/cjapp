@@ -1,7 +1,7 @@
 import { Lancamento } from "../persistence/model/lancamento";
 import { LancTotais } from "./model/lanc-totais";
 
-import * as converter from '../converter/converter'
+import * as dateUtil from '../util/date-util'
 
 export const carregaTotais = async ( lancs : Lancamento[] ) => {
     let totEmContaCorrente = 0;
@@ -72,7 +72,7 @@ export const carregaGruposLancs = async ( lancs : Lancamento[] ) => {
         valor = lanc.valor;
       }
 
-      let dataLancStr = converter.formatDate( lanc.dataLanc );
+      let dataLancStr = dateUtil.formatDate( lanc.dataLanc );
 
       let grupo = map.get( dataLancStr );
       if ( grupo === null || grupo === undefined ) {
@@ -93,15 +93,15 @@ export const carregaGruposLancs = async ( lancs : Lancamento[] ) => {
   };
   
   return [...map.values()].sort( (g1, g2) => {
-      let d1 = converter.formatInvertDate( g1.dataLanc );
-      let d2 = converter.formatInvertDate( g2.dataLanc );
+      let d1 = dateUtil.formatInvertDate( g1.dataLanc );
+      let d2 = dateUtil.formatInvertDate( g2.dataLanc );
       if ( d1 < d2 )
         return 1;
       if ( d1 > d2 )
         return -1;
       return 0;
   } );
-}
+};
 
 export const dataLancMaisAntigo = async ( lancs : Lancamento[] ) => {
     let date = new Date();
@@ -109,4 +109,17 @@ export const dataLancMaisAntigo = async ( lancs : Lancamento[] ) => {
         if ( new Date( lanc.dataLanc ).getTime() < date.getTime() )
             date = new Date( lanc.dataLanc );    
     return date;
+};
+
+export const selectLancsAteAData = ( lancs : Lancamento[], data : Date ) => {
+  let dataMaxMS = dateUtil.toDateMaxTime( data ).getTime(); 
+
+  let lancamentos = [];
+  for( let lanc of lancs ) {
+    let lancMS = new Date( lanc.dataLanc ).getTime();
+    if ( lancMS <= dataMaxMS )
+      lancamentos.push( lanc );
+  }
+
+  return lancamentos;
 }

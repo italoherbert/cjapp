@@ -2,6 +2,7 @@ import * as SQLite from 'expo-sqlite/next';
 
 import * as devedorRepository from '../repository/devedor-repository';
 import { Devedor } from '../model/devedor';
+
 import { MessageError } from '../../error/MessageError';
 
 export const salvaDevedor = async ( db : SQLite.SQLiteDatabase, devedor : Devedor ) => {

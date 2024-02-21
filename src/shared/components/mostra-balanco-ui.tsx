@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import * as converter from '../../core/converter/converter';
+import * as numberUtil from '../../core/util/number-util';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
@@ -41,14 +41,14 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Crédito (Jogo)</TextUI>
                 <TextUI variant='primary' size='big-x'>
-                  {converter.formatBRL( totais.creditoTotal )}
+                  {numberUtil.formatBRL( totais.creditoTotal )}
                 </TextUI>
               </BoxFieldUI>
 
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Débito (Jogo)</TextUI>
                 <TextUI variant='danger' size='big-x'>
-                  {converter.formatBRL( totais.debitoTotal )}
+                  {numberUtil.formatBRL( totais.debitoTotal )}
                 </TextUI>
               </BoxFieldUI>             
             </BoxFieldUI>
@@ -57,14 +57,14 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Crédito (outros)</TextUI>
                 <TextUI variant='primary' size='big-x'>
-                    {converter.formatBRL( totais.outrosCreditosTotal )}
+                    {numberUtil.formatBRL( totais.outrosCreditosTotal )}
                 </TextUI>
               </BoxFieldUI>
 
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Débito (outros)</TextUI>
                 <TextUI variant='danger' size='big-x'>
-                    {converter.formatBRL( totais.outrosDebitosTotal )}
+                    {numberUtil.formatBRL( totais.outrosDebitosTotal )}
                 </TextUI>
               </BoxFieldUI>             
             </BoxFieldUI>
@@ -75,14 +75,14 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Crédito (Geral)</TextUI>
                 <TextUI variant='primary' size='big-x'>
-                    {converter.formatBRL( totais.creditoTotalGeral )}
+                    {numberUtil.formatBRL( totais.creditoTotalGeral )}
                 </TextUI>
               </BoxFieldUI>
 
               <BoxFieldUI flex={1} isRow={false}>
                 <TextUI>Débito (Geral)</TextUI>
                 <TextUI variant='danger' size='big-x'>
-                    {converter.formatBRL( totais.debitoTotalGeral )}
+                    {numberUtil.formatBRL( totais.debitoTotalGeral )}
                 </TextUI>
               </BoxFieldUI>             
             </BoxFieldUI>
@@ -97,7 +97,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 <TextUI 
                       variant={ totais.totalGeral < 0 ? 'danger' : 'normal' } 
                       size='big-x'>
-                  {converter.formatBRL( totais.totalGeral )}
+                  {numberUtil.formatBRL( totais.totalGeral )}
                 </TextUI>
               </BoxFieldUI>  
             </BoxFieldUI>
@@ -108,7 +108,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 <TextUI
                       variant={ totais.totalEmEspecie < 0 ? 'danger' : 'normal' } 
                       size='big-x'>
-                  {converter.formatBRL( totais.totalEmEspecie )}
+                  {numberUtil.formatBRL( totais.totalEmEspecie )}
                 </TextUI>
               </BoxFieldUI>
 
@@ -117,7 +117,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 <TextUI 
                       variant={ totais.totalEmContaCorrente < 0 ? 'danger' : 'normal' } 
                       size='big-x'>
-                  {converter.formatBRL( totais.totalEmContaCorrente )}
+                  {numberUtil.formatBRL( totais.totalEmContaCorrente )}
                 </TextUI>
               </BoxFieldUI>             
             </BoxFieldUI>
@@ -132,7 +132,7 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                 <TextUI 
                       variant={ totais.lucroTotal < 0 ? 'danger' : 'normal' } 
                       size='big-x'>
-                  {converter.formatBRL( totais.lucroTotal )}
+                  {numberUtil.formatBRL( totais.lucroTotal )}
                 </TextUI>
               </BoxFieldUI>  
             </BoxFieldUI>

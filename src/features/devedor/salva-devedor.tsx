@@ -9,13 +9,14 @@ import { StackParamsList } from '../../shared/screens/StackParamsList';
 
 import { faList } from '@fortawesome/free-solid-svg-icons';
 
-import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ButtonClickUI from '../../shared/ui/ButtonClickUI';
 import TextInputUI from '../../shared/ui/TextInputUI';
 import PickerUI from '../../shared/ui/PickerUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
+
+import * as numberUtil from '../../core/util/number-util';
 
 import * as devedorService from '../../core/persistence/service/devedor-service';
 import {Devedor} from '../../core/persistence/model/devedor';
@@ -35,10 +36,10 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
     const loadTela = useCallback( async () => {
       if ( route.params.id > 0 ) {
         try {
-        let devedor : Devedor = await devedorService.getDevedorPorId( db, route.params.id );
-        setNome( devedor.nome );
-        setValor( devedor.valor.toString().replaceAll( ',', '.' ) );        
-        setTempo( devedor.antigo == true ? 'antigo' : 'novo' );
+          let devedor : Devedor = await devedorService.getDevedorPorId( db, route.params.id );
+          setNome( devedor.nome );
+          setValor( numberUtil.numberToStringComPonto( devedor.valor ) );        
+          setTempo( devedor.antigo == true ? 'antigo' : 'novo' );
         } catch ( error : any ) {
           handleError( error );
         }
@@ -50,12 +51,11 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
         loadTela();
     }, [ isFocused ] );
 
-    const salvarOnPress = async () => {  
-      let val = valor.replaceAll( ',', '.' );
-      if ( isNaN( parseFloat( val ) ) === true )
-        throw new MessageError( 'Valor em formato inválido. Ex. valido= 45,92 ou 40 ou 43,8' );      
-
+    const salvarOnPress = async () => {        
       try {
+        if ( numberUtil.isNumber( valor ) == false )
+          throw new MessageError( 'Valor em formato inválido.' );      
+
         let devedor : Devedor;
         if ( route.params.id > 0 ) {
           devedor = await devedorService.getDevedorPorId( db, route.params.id );
@@ -65,7 +65,7 @@ const SalvaDevedor = ( { navigation, route  } : NativeStackScreenProps<StackPara
 
         devedor.nome = nome;
         devedor.dataDebito = new Date();
-        devedor.valor = parseFloat( val );
+        devedor.valor = numberUtil.stringToNumber( valor );
         devedor.antigo = ( tempo === 'novo' ? false : true );
 
         await devedorService.salvaDevedor( db, devedor );

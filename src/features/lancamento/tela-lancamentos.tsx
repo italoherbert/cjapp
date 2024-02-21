@@ -73,7 +73,7 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
                 onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
         </ViewUI>        
 
-        <TitleUI title='Lancs. do grupo ativo' />
+        <TitleUI title='Lancs. do grupo aberto' />
 
         { carregados === false &&
           <TextUI variant='primary' marginVertical={10}>
@@ -87,6 +87,7 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
                 lancamentosGrupoAberto={ lancamentosGrupoAberto } 
                 navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
                 navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
+                navitateToMostraBalanco={ ( lancs : Lancamento[] ) => navigation.navigate( 'MostraBalanco', { lancamentos : lancs })}
             />           
         }
       </ScrollViewUI>

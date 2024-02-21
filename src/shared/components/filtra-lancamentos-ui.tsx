@@ -3,7 +3,8 @@ import {
   Pressable
 } from 'react-native';
 
-import * as converter from '../../core/converter/converter';
+import * as dateUtil from '../../core/util/date-util';
+import * as numberUtil from '../../core/util/number-util';
 
 import TextUI from '../ui/TextUI';
 import ViewUI from '../ui/ViewUI';
@@ -15,12 +16,16 @@ import {Lancamento} from '../../core/persistence/model/lancamento';
 import {LancamentosGrupo} from '../../core/persistence/model/lancamentos-grupo';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
+import { handleError } from '../error/error-handler';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 export type FiltraLancamentosProps = {
     lancamentosGrupoAberto? : LancamentosGrupo,
     lancamentos : Lancamento[],
     navigateToSaveLancamentos : Function,
     navigateToDetalhesLancamentos : Function,
+    navitateToMostraBalanco : Function
 };
 
 const MAX_SHOW_REGS : number = 200;
@@ -29,12 +34,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
 
     const [dataIni, setDataIni] = useState<Date>(new Date());
     const [dataFim, setDataFim] = useState<Date>(new Date());
-    const [totalEmEspecie, setTotalEmEspecie] = useState<number>(0);
-    const [totalEmContaCorrente, setTotalEmContaCorrente] = useState<number>(0);
-    const [lucroTotal, setLucroTotal] = useState<number>(0);
-    const [debitoTotal, setDebitoTotal] = useState<number>(0);
-    const [creditoTotal, setCreditoTotal] = useState<number>(0);
-
+    
     const [gruposLancs, setGruposLancs] = useState<any[]>([]);
     const [gruposLancsExpandir, setGruposLancsExpandir] = useState<boolean[]>([]);
 
@@ -50,7 +50,6 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         for( let i = 0; i < lancs.length; i++ )
             gpLancsExpandir.push( false );        
 
-        let lancTotais = await lancamentoLogica.carregaTotais( lancs );
         let gruposLancs = await lancamentoLogica.carregaGruposLancs( lancs );
 
         let dataIni = props.lancamentosGrupoAberto!.dataIni;
@@ -59,12 +58,6 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         if ( props.lancamentosGrupoAberto!.dataFim !== undefined )
           dataFim = props.lancamentosGrupoAberto!.dataFim;
 
-        setTotalEmContaCorrente( lancTotais.totalEmContaCorrente );
-        setTotalEmEspecie( lancTotais.totalEmEspecie );
-        setCreditoTotal( lancTotais.creditoTotal );
-        setDebitoTotal( lancTotais.debitoTotal );
-        setLucroTotal( lancTotais.lucroTotal );
-
         setGruposLancs( gruposLancs );                
         setGruposLancsExpandir( gpLancsExpandir );
 
@@ -72,13 +65,22 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
         setDataFim( dataFim );
     };
 
+    const verBalancoAteODia = async ( dataDia : Date ) => {
+        try {
+          let lancs = lancamentoLogica.selectLancsAteAData( props.lancamentos, dataDia );
+          props.navitateToMostraBalanco( lancs );
+        } catch ( error ) {
+          handleError( error );
+        }
+    }
+
     const getDataFimStr = ( dataFim : Date ) => {
       if ( dataFim === undefined || dataFim === null )
         return "o momento";
       if ( new Date( dataFim ).getTime() === 0 )
         return "o momento";
 
-      return converter.formatDate( dataFim );
+      return dateUtil.formatDate( dataFim );
     };
 
     useEffect( () => {
@@ -88,7 +90,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
     return ( 
       <ViewUI>
         <TextUI>
-            { 'De ' + converter.formatDate( dataIni ) + 
+            { 'De ' + dateUtil.formatDate( dataIni ) + 
               ' até ' + getDataFimStr( dataFim ) }
         </TextUI>
 
@@ -117,11 +119,18 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                           isRow={true}
                           justifyContent="space-between">
                         <TextUI variant='dark-x'>
-                            {converter.formatDate( grupo.dataLanc )}
-                        </TextUI>                        
-                        <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'}>
-                            {converter.formatBRL( grupo.valor )}
-                        </TextUI>
+                            {dateUtil.formatDate( grupo.dataLanc )}
+                        </TextUI>  
+                        <ViewUI isRow={true} alignItems="center">
+                            <TextUI variant={grupo.valor < 0 ? 'danger' : 'primary'} 
+                                    marginHorizontal={10}>
+                                {numberUtil.formatBRL( grupo.valor )}
+                            </TextUI>
+                            <Pressable onPress={ () => verBalancoAteODia( grupo.dataLanc )}>
+                              <FontAwesomeIcon icon={faEye} color="blue" />
+                            </Pressable>
+                        </ViewUI>                      
+                        
                       </ViewUI>                      
                   </Pressable>  
                   <ViewUI> 
@@ -144,7 +153,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                                   }
                               </TextUI>                              
                               <TextUI variant={lancamento.tipo === 'debito' ? 'danger' : 'primary'}>
-                                  {converter.formatBRL( lancamento.valor )}
+                                  {numberUtil.formatBRL( lancamento.valor )}
                               </TextUI>
                             </ViewUI>   
                           </Pressable>

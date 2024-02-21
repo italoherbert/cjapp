@@ -1,10 +1,6 @@
 
 import moment from 'moment';
 
-export const formatBRL = ( num : number ) => {
-    return "R$ "+ num.toFixed( 2 ).toString().replaceAll( '.', ',' );
-};
-
 export const formatDate = ( date : Date ) => {
     return moment( date ).format('DD/MM/YYYY');
 };

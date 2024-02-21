@@ -11,7 +11,6 @@ import { StackParamsList } from '../../shared/screens/StackParamsList';
 import FiltraLancamentosUI from '../../shared/components/filtra-lancamentos-ui';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
-import ViewUI from '../../shared/ui/ViewUI';
 import TextUI from '../../shared/ui/TextUI';
 import TitleUI from '../../shared/ui/TitleUI';
 
@@ -58,22 +57,12 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
     return (
       <ScrollViewUI>   
 
-        <ViewUI flex={2} isRow={true}>
-            <ButtonIconUI 
-                label='Novo lançamento'
-                icon={faPlus}
-                flex={1}
-                marginType='right'
-                onPress={() => navigation.navigate( 'SalvaLancamento', { id : -1 } )}
-            />
-            
-            <ButtonIconUI
-                label="Ver balanço" 
-                icon={faBalanceScale}
-                flex={1}
-                marginType='left'
-                onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
-        </ViewUI>        
+        <ButtonIconUI
+            label="Ver balanço" 
+            icon={faBalanceScale}
+            flex={1}
+            marginType='left'
+            onPress={ () => navigation.navigate( 'MostraBalanco', { lancamentos : lancamentos } ) } />            
 
         <TitleUI title='Lancs. do grupo' />
 
@@ -89,6 +78,7 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
                 lancamentosGrupoAberto={ lancamentosGrupoAberto } 
                 navigateToSaveLancamentos={ () => navigation.navigate( 'SalvaLancamento', { id : -1 }) }
                 navigateToDetalhesLancamentos={ (id : number) => navigation.navigate( 'DetalhesLancamento', { id : id } ) }
+                navitateToMostraBalanco={ ( lancs : Lancamento[] ) => navigation.navigate( 'MostraBalanco', { lancamentos : lancs })}
             />           
         }
       </ScrollViewUI>

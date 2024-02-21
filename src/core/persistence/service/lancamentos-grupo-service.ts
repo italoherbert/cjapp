@@ -4,8 +4,9 @@ import * as lancamentosGrupoRepository from '../repository/lancamentos-grupo-rep
 import * as lancamentoRepository from '../repository/lancamento-repository';
 
 import { LancamentosGrupo } from '../model/lancamentos-grupo';
-import { MessageError } from '../../error/MessageError';
 import { Lancamento } from '../model/lancamento';  
+
+import { MessageError } from '../../error/MessageError';
 
 export const deletaTodosOsGrupos = async ( db : SQLite.SQLiteDatabase ) => {
     await db.withTransactionAsync( async () => { 
@@ -27,26 +28,13 @@ export const novoGrupo = async ( db : SQLite.SQLiteDatabase ) => {
     grupo.dataFim = new Date( 0 );
     grupo.aberto = true;
     grupo.ativo = true;
-
+    
     await db.withTransactionAsync( async () => {
         await lancamentosGrupoRepository.fechaTodos( db );
         await lancamentosGrupoRepository.insere( db, grupo );
     } );
 
     return grupo;    
-};
-
-export const abreGrupo = async ( db : SQLite.SQLiteDatabase, gid : number ) => {
-    let grupo = await lancamentosGrupoRepository.findById( db, gid );
-    if ( grupo === null )
-        throw new MessageError( 'Grupo não encontrado' );
-
-    if ( grupo.aberto === true )
-        throw new MessageError( 'Grupo já aberto.' );
-
-    grupo.aberto = true;
-
-    await lancamentosGrupoRepository.atualiza( db, grupo );
 };
 
 export const fechaGrupo = async ( db : SQLite.SQLiteDatabase, 

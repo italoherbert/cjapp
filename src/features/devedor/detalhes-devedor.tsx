@@ -10,7 +10,8 @@ import { faEdit, faList, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import * as converter from '../../core/converter/converter';
+import * as dateUtil from '../../core/util/date-util';
+import * as numberUtil from '../../core/util/number-util';
 
 import * as devedorService from '../../core/persistence/service/devedor-service';
 import {Devedor} from '../../core/persistence/model/devedor';
@@ -84,7 +85,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                 Data débito
               </TextUI>
               <TextUI variant='normal'>
-                {converter.formatDate( devedor.dataDebito )}
+                {dateUtil.formatDate( devedor.dataDebito )}
               </TextUI>
             </SimpleFieldUI>
 
@@ -93,7 +94,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                 Valor: 
               </TextUI>
               <TextUI variant='danger'>
-                {converter.formatBRL( devedor.valor )}
+                {numberUtil.formatBRL( devedor.valor )}
               </TextUI>
             </SimpleFieldUI>
             

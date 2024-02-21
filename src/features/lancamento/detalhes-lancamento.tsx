@@ -18,7 +18,9 @@ import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
 import ViewUI from '../../shared/ui/ViewUI';
 
-import * as converter from '../../core/converter/converter';
+import * as numberUtil from '../../core/util/number-util';
+import * as dateUtil from '../../core/util/date-util';
+
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 
 import {Lancamento} from '../../core/persistence/model/lancamento';
@@ -85,14 +87,14 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
         <SimpleFieldUI>
           <TextUI>Data de registro</TextUI>
           <TextUI>
-            {converter.formatDate( lancamento.dataLanc )}
+            {dateUtil.formatDate( lancamento.dataLanc )}
           </TextUI>
         </SimpleFieldUI>
 
         <SimpleFieldUI>
           <TextUI>Valor</TextUI>
           <TextUI variant={ lancamento.tipo === 'debito' ? 'danger' : 'primary' }>
-            {converter.formatBRL( lancamento.valor )}
+            {numberUtil.formatBRL( lancamento.valor )}
           </TextUI>
         </SimpleFieldUI>
 
