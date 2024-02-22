@@ -177,6 +177,11 @@ function TelaLancamentosGrupos (
                                 getDataFimStr( grupo.dataFim )}
                             </TextUI>
                             <ViewUI isRow={true} alignItems="center">                                
+                                { grupo.ativo == true &&
+                                    <TextUI variant={grupo.aberto ? 'success' : 'dark' }>
+                                        {grupo.aberto == true ? 'aberto' : 'fechado' }
+                                    </TextUI>
+                                }
                                 { grupo.ativo == false && 
                                     <Pressable onPress={() => setRemoverDialogVisivel( true )}>
                                         <ViewUI paddingHorizontal={10}>
