@@ -3,6 +3,8 @@ import * as SQLite from "expo-sqlite/next";
 export default class Persistence {
     
     inicializa = async ( db : SQLite.SQLiteDatabase ) => {       
+        await db.execAsync('PRAGMA foreign_keys = ON');
+        
         await db.withTransactionAsync( async () => {
             await db.execAsync( `
                 create table if not exists devedor ( 
@@ -11,8 +13,7 @@ export default class Persistence {
                     data_debito date not null,
                     valor double precision not null,
                     antigo boolean default false                   
-                )` ); 
-                
+                )` );                 
             await db.execAsync( `
                 create table if not exists lancamentos_grupo ( 
                     id integer primary key,

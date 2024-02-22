@@ -79,6 +79,14 @@ export const deletaPorId = async ( db : SQLite.SQLiteDatabase, id : number ) => 
     );
 };
 
+export const deletaPorGrupoId = async ( db : SQLite.SQLiteDatabase, grupoId : number ) => {
+    await db.runAsync(
+        'delete from lancamento where lancamentos_grupo_id=?', [
+            grupoId
+        ]
+    );
+};
+
 export const deleteAll = async ( db : SQLite.SQLiteDatabase ) => {
     await db.runAsync( 
         'delete from lancamento', [] 

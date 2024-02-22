@@ -110,8 +110,8 @@ export const getGrupoMaisRecente = async ( db : SQLite.SQLiteDatabase ) => {
     return await lancamentosGrupoRepository.getUltimo( db );          
 };
 
-export const deletaGrupoPorId = async ( db : SQLite.SQLiteDatabase, id : number ) => {
+export const deletaGrupoPorId = async ( db : SQLite.SQLiteDatabase, gid : number ) => {
     await db.withTransactionAsync( async () => {
-        await lancamentosGrupoRepository.deletaPorId( db, id );
+        await lancamentosGrupoRepository.deletaPorId( db, gid );
     } );    
 };
