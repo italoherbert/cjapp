@@ -64,12 +64,13 @@ function DetalhesLancamentosGrupo (
     };
 
     const desativarOnPress = async () => {
-        setDesativarDialogVisivel( false );
         try {
             if ( route.params.id <= 0 )
                 throw new MessageError( 'ID de grupo de lançamento inválido.' );
 
             await lancamentosGrupoService.desativaGrupo( db, route.params.id );
+
+            setDesativarDialogVisivel( false );
             setDesativado( true );
         } catch ( error ) {
             handleError( error );

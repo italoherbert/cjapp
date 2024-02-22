@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
 
+import Dialog from 'react-native-dialog';
+
 import { useSQLiteContext } from 'expo-sqlite/next';
 import { useIsFocused } from '@react-navigation/native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import { faBoxOpen, faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBoxOpen, faClose, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from "../../shared/ui/ViewUI";
@@ -23,11 +25,14 @@ import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo
 import { handleError } from '../../shared/error/error-handler';
 import SelectBoxUI from '../../shared/ui/SelectBoxUI';
 import SnackbarUI from '../../shared/ui/SnackbarUI';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const MAX_SHOW_REGS = 12;
 
 function TelaLancamentosGrupos ( 
         { route, navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentosGrupos'> ) : React.JSX.Element {
+
+    const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
 
     const [grupos, setGrupos] = useState<LancamentosGrupo[]>([]);
     const [grupoAberto, setGrupoAberto] = useState<boolean>(false);
@@ -63,7 +68,22 @@ function TelaLancamentosGrupos (
         } catch ( error : any ) {
             handleError( error );
         }
-    }
+    };
+
+    const removerGrupoOnPress = async ( gid : number ) => {
+        try {
+            await lancamentosGruposService.deletaGrupoPorId( db, gid );
+
+            let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, false );
+            setGrupos( grps );
+
+            setRemoverDialogVisivel( false );
+
+            SnackbarUI.showInfo( 'Grupo removido com sucesso.' );
+        } catch ( error : any ) {
+            handleError( error );
+        }
+    };  
 
     const ativosSelectOnPress = async () => {
         try {
@@ -156,13 +176,31 @@ function TelaLancamentosGrupos (
                                 ' até ' + 
                                 getDataFimStr( grupo.dataFim )}
                             </TextUI>
-                            <TextUI variant={ grupo.aberto == true ? 'success' : 'dark' }>
-                                {grupo.aberto == true ? 'Aberto' : 'Fechado' }
-                            </TextUI>
+                            <ViewUI isRow={true} alignItems="center">
+                                <TextUI variant={ grupo.aberto == true ? 'success' : 'dark' }>
+                                    {grupo.aberto == true ? 'Aberto' : 'Fechado' }
+                                </TextUI>
+                                { grupo.ativo == false && 
+                                    <Pressable onPress={() => setRemoverDialogVisivel( true )}>
+                                        <ViewUI paddingHorizontal={10}>
+                                            <FontAwesomeIcon icon={faX} color="red" />
+                                        </ViewUI>
+                                        <Dialog.Container visible={removerDialogVisivel}>
+                                            <Dialog.Title>Remoção de grupo</Dialog.Title>
+                                            <Dialog.Description>
+                                                Tem certeza que deseja remover este grupo?
+                                            </Dialog.Description>
+                                            <Dialog.Button label="Remover grupo" onPress={() => removerGrupoOnPress( grupo.id )} />
+                                            <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
+                                        </Dialog.Container>
+                                    </Pressable>
+                                }                                                                                                        
+                            </ViewUI>
+                            
                         </ViewUI>                      
                     </Pressable>
                 </ViewUI>                
-            ) }
+            ) }            
         </ScrollViewUI>
     );
 }        
