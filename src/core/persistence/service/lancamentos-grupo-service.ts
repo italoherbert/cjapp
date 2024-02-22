@@ -15,11 +15,9 @@ export const deletaTodosOsGrupos = async ( db : SQLite.SQLiteDatabase ) => {
 export const novoGrupo = async ( db : SQLite.SQLiteDatabase ) => {
     let ultimo = await lancamentosGrupoRepository.getUltimo( db );
     
-    if ( ultimo === null )
-        throw new MessageError( 'Nenhum grupo encontrado.' );        
-
-    if ( ultimo.aberto == true )
-        throw new MessageError( 'Para abrir um novo grupo é necessário fechar o atual.' );
+    if ( ultimo !== null )
+        if ( ultimo.aberto == true )
+            throw new MessageError( 'Para abrir um novo grupo é necessário fechar o atual.' );
 
     let grupo = new LancamentosGrupo();
     grupo.dataIni = new Date();
