@@ -55,6 +55,9 @@ function DetalhesLancamentosGrupo (
                 throw new MessageError( 'ID de grupo de lançamento inválido.' );
 
             await lancamentosGrupoService.ativaGrupo( db, route.params.id );
+            let grp = await lancamentosGrupoService.getGrupoPorId( db, route.params.id );
+
+            setGrupo( grp );
             setDesativado( false );
 
             SnackbarUI.showInfo( 'Grupo ativado com sucesso.' );
@@ -69,9 +72,11 @@ function DetalhesLancamentosGrupo (
                 throw new MessageError( 'ID de grupo de lançamento inválido.' );
 
             await lancamentosGrupoService.desativaGrupo( db, route.params.id );
+            let grp = await lancamentosGrupoService.getGrupoPorId( db, route.params.id );
 
-            setDesativarDialogVisivel( false );
+            setGrupo( grp );
             setDesativado( true );
+            setDesativarDialogVisivel( false );
         } catch ( error ) {
             handleError( error );
         }
