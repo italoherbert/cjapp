@@ -1,5 +1,5 @@
 
-npx icon-set-creator create icon.png
+npx icon-set-creator create splash.png
 
 npx react-native generate-bootsplash splash.png \
   --platforms=android,ios,web \
