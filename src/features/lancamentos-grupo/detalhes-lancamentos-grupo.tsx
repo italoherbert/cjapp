@@ -6,9 +6,15 @@ import { useSQLiteContext } from "expo-sqlite/next";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../shared/screens/StackParamsList";
 
-import Dialog from 'react-native-dialog';
+import { faCashRegister, faCheck, faList, faX } from "@fortawesome/free-solid-svg-icons";
 
 import ViewUI from "../../shared/ui/ViewUI";
+import ScrollViewUI from "../../shared/ui/ScrollViewUI";
+import SimpleFieldUI from "../../shared/ui/SimpleFieldUI";
+import TextUI from "../../shared/ui/TextUI";
+import TitleUI from "../../shared/ui/TitleUI";
+import ButtonIconUI from "../../shared/ui/ButtonIconUI";
+import MessageUI, { MessageType } from "../../shared/ui/MessageUI";
 
 import { handleError } from "../../shared/error/error-handler";
 import { MessageError } from "../../core/error/MessageError";
@@ -17,20 +23,16 @@ import * as dateUtil from '../../core/util/date-util';
 
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
 import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo";
-import ScrollViewUI from "../../shared/ui/ScrollViewUI";
-import SimpleFieldUI from "../../shared/ui/SimpleFieldUI";
-import TextUI from "../../shared/ui/TextUI";
-import TitleUI from "../../shared/ui/TitleUI";
-import ButtonIconUI from "../../shared/ui/ButtonIconUI";
-import { faBookOpen, faCashRegister, faCheck, faList, faX } from "@fortawesome/free-solid-svg-icons";
-import SnackbarUI from "../../shared/ui/SnackbarUI";
 
 function DetalhesLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamentosGrupo'> ) : React.JSX.Element {
 
     const [grupo, setGrupo] = useState<LancamentosGrupo>(new LancamentosGrupo());
     const [desativado, setDesativado] = useState<boolean>(false);
-    const [desativarDialogVisivel, setDesativarDialogVisivel] = useState<boolean>(false);
+    
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
@@ -45,7 +47,7 @@ function DetalhesLancamentosGrupo (
 
             setDesativado( grp.ativo == false );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -60,9 +62,11 @@ function DetalhesLancamentosGrupo (
             setGrupo( grp );
             setDesativado( false );
 
-            SnackbarUI.showInfo( 'Grupo ativado com sucesso.' );
+            setMessageContent( 'Grupo ativado com sucesso.')
+            setMessageType( 'info' );
+            setMessageVisible( true );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -76,9 +80,12 @@ function DetalhesLancamentosGrupo (
 
             setGrupo( grp );
             setDesativado( true );
-            setDesativarDialogVisivel( false );
+            
+            setMessageContent( 'Grupo desativado com sucesso.')
+            setMessageType( 'info' );
+            setMessageVisible( true );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -133,12 +140,6 @@ function DetalhesLancamentosGrupo (
                 </TextUI>
             </SimpleFieldUI>
 
-            { desativado === true && 
-            <TextUI variant='danger' marginVertical={10}>
-                    Desativado!
-            </TextUI>
-            }
-
             <ViewUI isRow={true} marginTop={10}>                                                 
                 { desativado === false &&
                     <ButtonIconUI 
@@ -146,7 +147,7 @@ function DetalhesLancamentosGrupo (
                         icon={faX}
                         flex={1}
                         variant='danger' 
-                        onPress={() => setDesativarDialogVisivel( !desativarDialogVisivel )}
+                        onPress={desativarOnPress}
                     />                                   
                 }
 
@@ -178,14 +179,11 @@ function DetalhesLancamentosGrupo (
                 />
             </ViewUI>
 
-            <Dialog.Container visible={desativarDialogVisivel}>
-            <Dialog.Title>Desativar grupo</Dialog.Title>
-            <Dialog.Description>
-                Tem certeza que deseja desativar este grupo?
-            </Dialog.Description>
-                <Dialog.Button label="Desativar" onPress={desativarOnPress} />
-                <Dialog.Button label="Cancelar" onPress={() => setDesativarDialogVisivel( false )} />                  
-            </Dialog.Container>
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI> 
 
         </ScrollViewUI>
     );

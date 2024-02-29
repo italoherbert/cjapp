@@ -10,13 +10,13 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
-import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
 import ViewUI from '../../shared/ui/ViewUI';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 import * as numberUtil from '../../core/util/number-util';
 import * as dateUtil from '../../core/util/date-util';
@@ -29,9 +29,14 @@ import { MessageError } from '../../core/error/MessageError';
 
 const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesLancamento'> ): React.JSX.Element => {
     
-    const [lancamento, setLancamento] = useState<Lancamento>(new Lancamento()); 
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
     const [removido, setRemovido] = useState<boolean>(false);
+    
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
+
+    const [lancamento, setLancamento] = useState<Lancamento>(new Lancamento()); 
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
@@ -41,7 +46,7 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
           let lancamento = await lancamentoService.getLancamentoPorId( db, route.params.id );
           setLancamento( lancamento );
         } catch ( error : any ) {
-          handleError( error );
+          handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
       }
     };
@@ -62,9 +67,11 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
         await lancamentoService.deletaLancamentoPorId( db, id );
         setRemovido( true );
 
-        SnackbarUI.showInfo( 'Lancamento removido com sucesso.' );
+        setMessageContent( 'Lançamento removido com sucesso.')
+        setMessageType( 'info' );
+        setMessageVisible( true );
       } catch ( error : any ) {
-        handleError( error );      
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
   
@@ -160,6 +167,13 @@ const DetalhesLancamento = ( { navigation, route  } : NativeStackScreenProps<Sta
             <Dialog.Button label="Remover" onPress={removerOnPress} />
             <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
         </Dialog.Container>
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
+
       </ScrollViewUI>
     );
     

@@ -3,6 +3,7 @@ export type StackParamsList = {
     SalvaDevedor : { id : number },
     DetalhesDevedor : { id : number },
     TelaDevedores : any,
+    AddOuSubDebitoDevedor : { id : number },
 
     SalvaLancamento : { id : number },
     DetalhesLancamento : { id : number },

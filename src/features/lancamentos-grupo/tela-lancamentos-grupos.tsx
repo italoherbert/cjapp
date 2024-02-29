@@ -9,6 +9,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBoxOpen, faClose, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
@@ -16,6 +17,8 @@ import ViewUI from "../../shared/ui/ViewUI";
 import TitleUI from '../../shared/ui/TitleUI';
 import TextUI from '../../shared/ui/TextUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
+import SelectBoxUI from '../../shared/ui/SelectBoxUI';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 import * as dateUtil from '../../core/util/date-util';
 
@@ -23,9 +26,6 @@ import * as lancamentosGruposService from '../../core/persistence/service/lancam
 import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
 
 import { handleError } from '../../shared/error/error-handler';
-import SelectBoxUI from '../../shared/ui/SelectBoxUI';
-import SnackbarUI from '../../shared/ui/SnackbarUI';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const MAX_SHOW_REGS = 12;
 
@@ -33,6 +33,10 @@ function TelaLancamentosGrupos (
         { route, navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentosGrupos'> ) : React.JSX.Element {
 
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
+    
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const [grupos, setGrupos] = useState<LancamentosGrupo[]>([]);
     const [grupoAberto, setGrupoAberto] = useState<boolean>(false);
@@ -51,8 +55,8 @@ function TelaLancamentosGrupos (
             let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, true );
             setGrupos( grps );
             setAtivosVisible( true );
-        } catch ( error : any ) {
-            handleError( error );
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -64,11 +68,13 @@ function TelaLancamentosGrupos (
             setGrupos( grps );
             setGrupoAberto( true );
 
-            SnackbarUI.showInfo( "Grupo aberto com sucesso. " );
-        } catch ( error : any ) {
-            handleError( error );
+            setMessageContent( 'Grupo aberto com sucesso.' );
+            setMessageType( 'info' );
+            setMessageVisible( true );
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
-    };
+    }
 
     const removerGrupoOnPress = async ( gid : number ) => {
         try {
@@ -77,11 +83,11 @@ function TelaLancamentosGrupos (
             let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, false );
             setGrupos( grps );
 
-            setRemoverDialogVisivel( false );
-
-            SnackbarUI.showInfo( 'Grupo removido com sucesso.' );
-        } catch ( error : any ) {
-            handleError( error );
+            setMessageContent( 'Grupo removido com sucesso.' );
+            setMessageType( 'info' );
+            setMessageVisible( true );
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };  
 
@@ -90,8 +96,8 @@ function TelaLancamentosGrupos (
             let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, true );
             setGrupos( grps );
             setAtivosVisible( true );
-        } catch ( error : any ) {
-            handleError( error );
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -100,8 +106,8 @@ function TelaLancamentosGrupos (
             let grps = await lancamentosGruposService.getGruposPorQuant( db, MAX_SHOW_REGS, false );
             setGrupos( grps );
             setAtivosVisible( false );
-        } catch ( error : any ) {
-            handleError( error );
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -113,6 +119,10 @@ function TelaLancamentosGrupos (
 
         return dateUtil.formatDate( dataFim );
     };    
+
+    useEffect( () => {
+
+    }, [] );
 
     useEffect( () => {
         if ( isFocused )
@@ -197,12 +207,18 @@ function TelaLancamentosGrupos (
                                         </Dialog.Container>
                                     </Pressable>
                                 }                                                                                                        
-                            </ViewUI>
-                            
+                            </ViewUI>                            
                         </ViewUI>                      
                     </Pressable>
                 </ViewUI>                
             ) }            
+
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI>    
+
         </ScrollViewUI>
     );
 }        

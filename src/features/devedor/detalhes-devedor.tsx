@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Dialog from 'react-native-dialog';
 
-import { faEdit, faList, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faList, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 
 import { StackParamsList } from '../../shared/screens/StackParamsList';
 
@@ -19,19 +19,24 @@ import { MessageError } from '../../core/error/MessageError';
 
 import { handleError } from '../../shared/error/error-handler';
 
-import SnackbarUI from '../../shared/ui/SnackbarUI';
 import ButtonIconUI from '../../shared/ui/ButtonIconUI';
 import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import TitleUI from '../../shared/ui/TitleUI';
 import SimpleFieldUI from '../../shared/ui/SimpleFieldUI';
 import TextUI from '../../shared/ui/TextUI';
 import ViewUI from '../../shared/ui/ViewUI';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
   
 const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'DetalhesDevedor'> ): React.JSX.Element => {
-    
-    const [devedor, setDevedor] = useState<Devedor>(new Devedor()); 
+  
     const [removido, setRemovido] = useState<boolean>(false);
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);
+    
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
+    
+    const [devedor, setDevedor] = useState<Devedor>(new Devedor()); 
     const isFocused = useIsFocused();
     const db = useSQLiteContext();
 
@@ -40,8 +45,9 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
         try {
           let devedor = await devedorService.getDevedorPorId( db, route.params.id );
           setDevedor( devedor! );
-        } catch ( error : any ) {
-          handleError( error );
+          setRemovido( false );
+        } catch ( error ) {
+          handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
       }
     }, [route.params.id] );
@@ -55,17 +61,19 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
       setRemoverDialogVisivel( false );
 
       try {
-        let id = route.params.id;
-        if ( id <= 0 )
-          throw new MessageError( 'Nenhum devedor selecionado para remoção.' );
-        
+          let id = route.params.id;
+          if ( id <= 0 )
+            throw new MessageError( 'Nenhum devedor selecionado para remoção.' );
+          
           await devedorService.deletaDevedorPorId( db, id );
           setRemovido( true );
 
-          SnackbarUI.showInfo( 'Devedor removido com sucesso.' );
-      } catch ( error : any ) {
-        handleError( error );
-      }      
+          setMessageContent( 'Devedor removido com sucesso.' );
+          setMessageType( 'info' );
+          setMessageVisible( true );
+      } catch ( error ) {
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
+      }    
     };
   
     return (
@@ -113,7 +121,18 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
               </TextUI>              
             }
             
-            <ViewUI isRow={true} marginVertical={10}>                            
+            <ViewUI isRow={true} marginVertical={10} flex={5} justifyContent="center">                                          
+              <ViewUI flex={2}></ViewUI>
+              <ButtonIconUI 
+                  label='+/-'
+                  icon={faAdd}
+                  flex={1}                
+                  onPress={() => navigation.navigate( 'AddOuSubDebitoDevedor', { id: route.params.id } )}
+              />               
+              <ViewUI flex={2}></ViewUI>
+            </ViewUI>
+
+            <ViewUI isRow={true}>
               <ButtonIconUI 
                   label='Novo'
                   icon={faPlus}
@@ -137,8 +156,7 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
                   variant='danger'
                   disable={removido}
                   onPress={() => setRemoverDialogVisivel( !removerDialogVisivel )}
-              />
-            
+              />            
             </ViewUI>          
         </ViewUI>
 
@@ -150,6 +168,12 @@ const DetalhesDevedor = ( { navigation, route  } : NativeStackScreenProps<StackP
             <Dialog.Button label="Remover" onPress={removerOnPress} />
             <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
         </Dialog.Container>
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
 
       </ScrollViewUI>
     );

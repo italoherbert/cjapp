@@ -1,5 +1,7 @@
 import * as SQLite from 'expo-sqlite/next';
 
+import * as numberUtil from '../../util/number-util';
+
 import * as devedorRepository from '../repository/devedor-repository';
 import { Devedor } from '../model/devedor';
 
@@ -8,7 +10,10 @@ import { MessageError } from '../../error/MessageError';
 export const salvaDevedor = async ( db : SQLite.SQLiteDatabase, devedor : Devedor ) => {
     if ( devedor.nome.trim().length == 0 )
         throw new MessageError( "O nome é um campo de preenchimento obrigatório." );
-    
+
+    if ( devedor.valor < 0 )
+        throw new MessageError( "O valor informado deixaria o débito negativo." );
+
     await db.withTransactionAsync( async () => {
         let dev = await devedorRepository.findById( db, devedor.id );
         if ( dev === null ) {

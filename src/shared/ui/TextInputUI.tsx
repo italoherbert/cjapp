@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { 
     StyleSheet,
     TextInput 
 } from "react-native";
 
+import * as Types from './types/types';
+
 export type TextInputProps = {
     placeholder? : string,
     defaultValue : string,
     setValue : Function,
+    size?: Types.Size
 };
 
-function TextInputUI( { placeholder, defaultValue, setValue } : TextInputProps ) : React.JSX.Element {
+function TextInputUI( { placeholder, defaultValue, setValue, size } : TextInputProps ) : React.JSX.Element {
+
+    const [fontSize, setFontSize] = useState<number|undefined>(undefined);
+
+    useEffect( () => {
+        setFontSize( Types.getFontSize( size! ) );
+    }, [size] );
+
     return (
         <TextInput 
-            style={styles.textInput}
+            style={[styles.textInput, {
+                fontSize: fontSize
+            }]}
             placeholderTextColor={styles.placeholder.color}
             defaultValue={defaultValue}
             onChangeText={(text) => setValue( text )}

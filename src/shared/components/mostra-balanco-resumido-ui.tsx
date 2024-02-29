@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { Lancamento } from '../../core/persistence/model/lancamento';
 import ViewUI from '../ui/ViewUI';
 import BoxFieldUI from '../ui/BoxFieldUI';
 import TextUI from '../ui/TextUI';
+import MessageUI, { MessageType } from '../ui/MessageUI';
 
 import { handleError } from '../error/error-handler';
 
 import * as numberUtil from '../../core/util/number-util';
 
+import { Lancamento } from '../../core/persistence/model/lancamento';
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 export type MostraBalancoProps = {
@@ -16,6 +17,10 @@ export type MostraBalancoProps = {
 }
 
 function MostraBalancoResumidoUI( props : MostraBalancoProps ): React.JSX.Element {
+
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const [creditoTotalGeral, setCreditoTotalGeral] = useState<number>(0);
     const [debitoTotalGeral, setDebitoTotalGeral] = useState<number>(0);
@@ -34,9 +39,9 @@ function MostraBalancoResumidoUI( props : MostraBalancoProps ): React.JSX.Elemen
             setCreditoTotalGeral( lancTotais.creditoTotalGeral );
             setDebitoTotalGeral( lancTotais.debitoTotalGeral );
             setTotalGeral( lancTotais.totalGeral );
-          } catch ( error ) {
-            handleError( error )
-          }        
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
+        }        
     };
 
     useEffect( () => {
@@ -95,6 +100,13 @@ function MostraBalancoResumidoUI( props : MostraBalancoProps ): React.JSX.Elemen
                 </TextUI>
               </BoxFieldUI>  
             </BoxFieldUI>
+
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI> 
+
         </ViewUI>          
     );
     

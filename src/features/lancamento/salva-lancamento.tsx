@@ -24,9 +24,14 @@ import * as lancamentosGrupoService from '../../core/persistence/service/lancame
 import {Lancamento} from '../../core/persistence/model/lancamento';
 import { handleError } from '../../shared/error/error-handler';
 import { MessageError } from '../../core/error/MessageError';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackParamsList, 'SalvaLancamento'> ): React.JSX.Element => {
     
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
+
     const [descricao, setDescricao] = useState<string>(''); 
     const [valor, setValor] = useState<string>(''); 
     const [dataLanc, setDataLanc] = useState<Date>(new Date());
@@ -49,7 +54,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
           setDinheiroTipo( lancamento.emContaCorrente == true ? 'conta' : 'especie' );
           setDeOndeTipo( lancamento.doJogo == true ? 'do-jogo' : 'outro' );
         } catch ( error : any ) {
-          handleError( error );
+          handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
       } else {
         setDescricao( '' );
@@ -96,7 +101,7 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
 
         navigation.navigate( 'DetalhesLancamento', { id : lancamento.id } );
       } catch ( error ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
   
@@ -149,7 +154,14 @@ const SalvaLancamento = ( { navigation, route  } : NativeStackScreenProps<StackP
           <ButtonClickUI
               label='Salvar'
               onPress={salvarOnPress}
-          />                       
+          />                
+
+          <MessageUI type={messageType} 
+                  visible={messageVisible}
+                  setVisible={setMessageVisible}>
+              {messageContent}
+          </MessageUI> 
+
       </ScrollViewUI>
     );
     

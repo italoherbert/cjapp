@@ -5,7 +5,7 @@ export const insere = async ( db : SQLite.SQLiteDatabase, devedor : Devedor ) =>
     let result = await db.runAsync( 
         'insert into devedor ( nome, data_debito, valor, antigo ) values (?, ?, ?, ?)', [   
             devedor.nome, 
-            devedor.dataDebito.toISOString(), 
+            new Date( devedor.dataDebito ).toISOString(), 
             devedor.valor,
             devedor.antigo
         ] 
@@ -17,7 +17,7 @@ export const atualiza = async ( db : SQLite.SQLiteDatabase, devedor : Devedor ) 
     await db.runAsync( 
         'update devedor set nome=?, data_debito=?, valor=?, antigo=? where id=?', [
             devedor.nome,
-            devedor.dataDebito.toISOString(),
+            new Date( devedor.dataDebito ).toISOString(),
             devedor.valor,
             devedor.antigo,
             devedor.id

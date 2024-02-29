@@ -13,7 +13,7 @@ export type SimpleFieldProps = React.PropsWithChildren<{
     marginVertical? : number,
     padding?: number,
     variant?: Types.Color,
-    size?: string
+    size?: Types.Size
 }>;
 
 function TextUI ( 

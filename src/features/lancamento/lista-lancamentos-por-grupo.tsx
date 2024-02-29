@@ -21,9 +21,14 @@ import { Lancamento } from '../../core/persistence/model/lancamento';
 import { LancamentosGrupo } from '../../core/persistence/model/lancamentos-grupo';
 
 import { handleError } from '../../shared/error/error-handler';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps<StackParamsList, 'ListaLancamentosPorGrupo'> ): React.JSX.Element {
     
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
+
     const [lancamentosGrupoAberto, setLancamentosGrupoAberto] = useState<LancamentosGrupo>(new LancamentosGrupo());
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
     const [carregados, setCarregados] = useState<boolean>(false);
@@ -45,7 +50,7 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
           setCarregados( false );
         }
       } catch ( error ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -80,6 +85,13 @@ function ListaLancamentosPorGrupo({ route, navigation } : NativeStackScreenProps
                 navitateToMostraBalanco={ ( lancs : Lancamento[] ) => navigation.navigate( 'MostraBalanco', { lancamentos : lancs })}
             />           
         }
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
+
       </ScrollViewUI>
     );
     

@@ -25,8 +25,13 @@ import * as devedorService from '../../core/persistence/service/devedor-service'
 import {Devedor} from '../../core/persistence/model/devedor';
 
 import { handleError } from '../../shared/error/error-handler';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 'TelaDevedores'> ): React.JSX.Element {
+
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const [devedores, setDevedores] = useState<Devedor[]>([]);
     const [nomeLike, setNomeLike] = useState<string>('');
@@ -43,7 +48,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data );       
       } catch ( error : any ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -54,7 +59,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, antigo );
         setDevedores( data ); 
       } catch ( error : any ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -67,7 +72,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, false );
         setDevedores( data );
       } catch ( error : any ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -80,7 +85,7 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
         let data = await devedorService.filtraDevedores( db, nmLike, true );
         setDevedores( data );
       } catch ( error : any ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -129,6 +134,13 @@ function TelaDevedores({ navigation } : NativeStackScreenProps<StackParamsList, 
                 </Pressable>
             ) }           
         </ViewUI>        
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
+
       </ScrollViewUI>
     );
     

@@ -18,11 +18,16 @@ import ButtonIconUI from "../../shared/ui/ButtonIconUI";
 import { handleError } from "../../shared/error/error-handler";
 
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
+import MessageUI, { MessageType } from "../../shared/ui/MessageUI";
 
 function NovoLancamentosGrupo ( 
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'NovoLancamentosGrupo'> ) : React.JSX.Element {
 
     const [removerDialogVisivel, setRemoverDialogVisivel] = useState<boolean>(false);   
+
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const db = useSQLiteContext();
 
@@ -31,7 +36,7 @@ function NovoLancamentosGrupo (
             let grupo = await lancamentosGrupoService.novoGrupo( db );
             navigation.navigate( 'DetalhesLancamentosGrupo', { id : grupo.id } );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -61,6 +66,12 @@ function NovoLancamentosGrupo (
                 <Dialog.Button label="Cancelar" onPress={() => setRemoverDialogVisivel( false )} />                  
             </Dialog.Container>
 
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI> 
+            
         </ScrollViewUI>
     );
 }

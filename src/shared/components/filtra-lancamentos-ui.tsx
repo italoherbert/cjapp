@@ -3,12 +3,16 @@ import {
   Pressable
 } from 'react-native';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+
 import * as dateUtil from '../../core/util/date-util';
 import * as numberUtil from '../../core/util/number-util';
 
 import TextUI from '../ui/TextUI';
 import ViewUI from '../ui/ViewUI';
 import TitleUI from '../ui/TitleUI';
+import MessageUI, { MessageType } from '../ui/MessageUI';
 
 import MostraBalancoResumidoUI from './mostra-balanco-resumido-ui';
 
@@ -17,8 +21,6 @@ import {LancamentosGrupo} from '../../core/persistence/model/lancamentos-grupo';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { handleError } from '../error/error-handler';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 export type FiltraLancamentosProps = {
     lancamentosGrupoAberto? : LancamentosGrupo,
@@ -31,6 +33,10 @@ export type FiltraLancamentosProps = {
 const MAX_SHOW_REGS : number = 200;
 
 function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Element {
+
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const [dataIni, setDataIni] = useState<Date>(new Date());
     const [dataFim, setDataFim] = useState<Date>(new Date());
@@ -70,7 +76,7 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
           let lancs = lancamentoLogica.selectLancsAteAData( props.lancamentos, dataDia );
           props.navitateToMostraBalanco( lancs );
         } catch ( error ) {
-          handleError( error );
+          handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     }
 
@@ -165,7 +171,14 @@ function FiltraLancamentosUI( props : FiltraLancamentosProps ): React.JSX.Elemen
                 </ViewUI>                
               )
             } )}          
-        </ViewUI>        
+        </ViewUI>  
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
+
       </ViewUI>
     );
     

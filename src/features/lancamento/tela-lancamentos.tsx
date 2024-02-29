@@ -14,6 +14,7 @@ import ScrollViewUI from '../../shared/ui/ScrollViewUI';
 import ViewUI from '../../shared/ui/ViewUI';
 import TextUI from '../../shared/ui/TextUI';
 import TitleUI from '../../shared/ui/TitleUI';
+import MessageUI, { MessageType } from '../../shared/ui/MessageUI';
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
@@ -25,6 +26,10 @@ import { handleError } from '../../shared/error/error-handler';
 
 function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackParamsList, 'TelaLancamentos'> ): React.JSX.Element {
     
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
+
     const [lancamentosGrupoAberto, setLancamentosGrupoAberto] = useState<LancamentosGrupo>(new LancamentosGrupo());
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
     const [carregados, setCarregados] = useState<boolean>(false);
@@ -41,10 +46,11 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
           setLancamentosGrupoAberto( grupo );
           setCarregados( true );
         } else {
+          setLancamentos( [] );
           setCarregados( false );
         }
       } catch ( error ) {
-        handleError( error );
+        handleError( error, setMessageContent, setMessageVisible, setMessageType );
       }
     };
 
@@ -90,6 +96,13 @@ function TelaLancamentos({ route, navigation } : NativeStackScreenProps<StackPar
                 navitateToMostraBalanco={ ( lancs : Lancamento[] ) => navigation.navigate( 'MostraBalanco', { lancamentos : lancs })}
             />           
         }
+
+        <MessageUI type={messageType} 
+                visible={messageVisible}
+                setVisible={setMessageVisible}>
+            {messageContent}
+        </MessageUI> 
+
       </ScrollViewUI>
     );
     

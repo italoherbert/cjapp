@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
+import ViewUI from '../ui/ViewUI';
+import BoxFieldUI from '../ui/BoxFieldUI';
+import TextUI from '../ui/TextUI';
+import LineUI from '../ui/LineUI';
+import MessageUI, { MessageType } from '../ui/MessageUI';
+
+import { handleError } from '../error/error-handler';
+
 import * as numberUtil from '../../core/util/number-util';
 
 import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 import { Lancamento } from '../../core/persistence/model/lancamento';
-import ViewUI from '../ui/ViewUI';
-import TitleUI from '../ui/TitleUI';
-import BoxFieldUI from '../ui/BoxFieldUI';
-import TextUI from '../ui/TextUI';
-import { handleError } from '../error/error-handler';
+
 import { LancTotais } from '../../core/logica/model/lanc-totais';
-import LineUI from '../ui/LineUI';
 
 export type MostraBalancoProps = {
     lancamentos : Lancamento[]
 }
 
 function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
+
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
     const [totais, setTotais] = useState<LancTotais>(new LancTotais());
 
@@ -26,9 +33,9 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
 
             let lancTotais = await lancamentoLogica.carregaTotais( lancs );        
             setTotais( lancTotais );
-          } catch ( error ) {
-            handleError( error );
-          }        
+        } catch ( error ) {
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
+        }        
     };
 
     useEffect( () => {
@@ -135,7 +142,14 @@ function MostraBalancoUI( props : MostraBalancoProps ): React.JSX.Element {
                   {numberUtil.formatBRL( totais.lucroTotal )}
                 </TextUI>
               </BoxFieldUI>  
-            </BoxFieldUI>
+            </BoxFieldUI>            
+
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI>
+
         </ViewUI>          
     );
     

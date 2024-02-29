@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite/next";
 
@@ -15,16 +15,15 @@ import ViewUI from "../../shared/ui/ViewUI";
 import TitleUI from "../../shared/ui/TitleUI";
 import ButtonClickUI from "../../shared/ui/ButtonClickUI";
 import ButtonIconUI from "../../shared/ui/ButtonIconUI";
-import TextUI from "../../shared/ui/TextUI";
 
 import MostraBalancoResumidoUI from "../../shared/components/mostra-balanco-resumido-ui";
+import MessageUI, { MessageType } from "../../shared/ui/MessageUI";
 
 import { handleError } from "../../shared/error/error-handler";
 import { MessageError } from "../../core/error/MessageError";
 
 import * as lancamentoService from '../../core/persistence/service/lancamento-service';
 import * as lancamentosGrupoService from '../../core/persistence/service/lancamentos-grupo-service';
-import * as lancamentoLogica from '../../core/logica/lancamento-logica';
 
 import { LancamentosGrupo } from "../../core/persistence/model/lancamentos-grupo";
 import { Lancamento } from "../../core/persistence/model/lancamento";
@@ -33,7 +32,10 @@ function FechaLancamentosGrupo (
         { navigation, route } : NativeStackScreenProps<StackParamsList, 'FechaLancamentosGrupo'> ) : React.JSX.Element {
 
     const [fecharDialogVisivel, setFecharDialogVisivel] = useState<boolean>(false);
-    const [grupoFechado, setGrupoFechado] = useState<boolean>(false);
+    
+    const [messageContent, setMessageContent] = useState<string>('');
+    const [messageType, setMessageType] = useState<MessageType>('info');
+    const [messageVisible, setMessageVisible] = useState<boolean>(false);
     
     const [grupo, setGrupo] = useState<LancamentosGrupo>( new LancamentosGrupo() );
     const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
@@ -52,18 +54,21 @@ function FechaLancamentosGrupo (
             setLancamentos( lancs );
             setGrupo( grp );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
     const fecharGrupoOnPress = async () => {
         try {                              
             await lancamentosGrupoService.fechaGrupo( db, grupo.id );                       
-            
-            setGrupoFechado( true );
-            setFecharDialogVisivel( false );
+                        
+            setFecharDialogVisivel( false );        
+           
+            setMessageContent( 'Grupo fechado com sucesso.')
+            setMessageType( 'info' );
+            setMessageVisible( true );
         } catch ( error ) {
-            handleError( error );
+            handleError( error, setMessageContent, setMessageVisible, setMessageType );
         }
     };
 
@@ -87,12 +92,6 @@ function FechaLancamentosGrupo (
 
             <MostraBalancoResumidoUI lancamentos={lancamentos} />
 
-            { grupoFechado === true && 
-                <TextUI marginVertical={10} variant="primary">
-                    Grupo fechado.
-                </TextUI>
-            }
-
             <ViewUI marginTop={10}>
                 <ButtonClickUI
                     label="Fechar grupo aberto" 
@@ -104,9 +103,15 @@ function FechaLancamentosGrupo (
                 <Dialog.Description>
                     Tem certeza que deseja fechar o grupo?
                 </Dialog.Description>
-                <Dialog.Button label="Fechar grupo" onPress={fecharGrupoOnPress} />
+                <Dialog.Button label="Fechar grupo" onPress={() => fecharGrupoOnPress() } />
                 <Dialog.Button label="Cancelar" onPress={() => setFecharDialogVisivel( false )} />                  
             </Dialog.Container>
+
+            <MessageUI type={messageType} 
+                    visible={messageVisible}
+                    setVisible={setMessageVisible}>
+                {messageContent}
+            </MessageUI> 
 
         </ScrollViewUI>
     );
